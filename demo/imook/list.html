@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>imook</title>
+	<link rel="stylesheet" href="css/imook.css" type=text/css />
+	<script type="text/javascript" src="js/jquery-3.1.0.js"></script>
+	<script type="text/javascript" src="js/imook.js"></script>
+	<script type="text/javascript" src="js/setHomeSetFav.js"></script>
+</head>
+<body>
+	<div class="top">
+		<div class="top_content">
+			<ul>
+				<li><a href="#">联系我们</a></li>
+				<li><a href="#" onclick="AddFavorite(window.location, document.title)">加入收藏</a></li>
+				<li><a href="#" onclick="SetHome(window.location)">设为首页</a></li>
+			</ul>
+		</div><!--top_content结束-->
+	</div><!--top结束-->
+	<div class="wrap">
+		<div class="logo">
+			<div class="logo_left">
+				<img src="images/logo.jpg" alt="imook's logo">
+			</div><!--logo_left结束-->
+			<div class="logo_right">
+				<img src="images/tel.jpg" alt="服务热线">24小时服务热线：<span class="tel">123-456-789</span>
+			</div><!--logo_right结束-->
+		</div><!--logo结束-->
+
+		<div class="nav">
+			<div class="nav_left"></div><!--nav_left结束-->
+			<div class="nav_mid">
+				<div class="nav_mid_left">
+					<ul>
+						<li><a href="imook.html">首页</a></li>
+						<li><a href="#">关于慕课</a></li>
+						<li><a href="#">新闻动态</a></li>
+						<li><a href="#">课程中心</a></li>
+						<li><a href="#">在线课程</a></li>
+						<li><a href="#">人才招聘</a></li>
+					</ul>
+				</div><!--nav_mid_left结束-->
+				<div class="nav_mid_right">
+					<form action="" method="post">
+						<input type="text" />
+					</form>
+				</div><!--nav_mid_right结束-->	
+			</div><!--nav_mid结束-->
+			<div class="nav_right"></div><!--nav_right结束-->
+		</div><!--nav结束-->
+
+		<div class="ad" id="picBox" style="height:243px;">
+			<img src="images/ad.jpg" />
+		</div><!--ad结束-->
+
+		<div class="list_main">
+			<div class="news_type">
+				<h2>新闻中心</h2>
+				<div class="news_type_content">
+					<ul>
+						<li><a href="news.html">公司新闻</a></li>
+						<li><a href="industry.html">行业新闻</a></li>
+						<li><a href="media.html">媒体报道</a></li>
+						<li><a href="#">活动专题</a></li>
+						<li><a href="#">精彩视频</a></li>
+						<li><a href="#">资源下载</a></li>
+						<li><a href="#">公司内刊</a></li>
+					</ul>
+				</div><!--news_type_content结束-->
+			</div><!--news_type结束-->
+			<div class="list_box">
+				<h2>新闻中心</h2>
+				<div class="news_list">
+					<ul>
+						<li><span>2014-06-01</span><a href="#">【慕客访谈 用户篇】“有为屌丝”在路上</a></li>
+						<li><span>2014-06-01</span><a href="#">【有奖活动】给父亲的三行书信</a>
+						<li><span>2014-06-01</span><a href="#">《程序猿，请晒出你的童年》活动获奖公告</a></li>
+						<li><span>2014-06-01</span><a href="#">【慕课访谈】破茧成蝶—美女程序员的蜕变史</a></li>
+						<li><span>2014-06-01</span><a href="#">【慕客访谈 用户篇】“有为屌丝”在路上</a></li>
+						<li><span>2014-06-01</span><a href="#">【有奖活动】给父亲的三行书信</a>
+						<li><span>2014-06-01</span><a href="#">《程序猿，请晒出你的童年》活动获奖公告</a></li>
+						<li><span>2014-06-01</span><a href="#">【慕课访谈】破茧成蝶—美女程序员的蜕变史</a></li>
+						<li><span>2014-06-01</span><a href="#">【慕客访谈 用户篇】“有为屌丝”在路上</a></li>
+					</ul>
+				</div><!--—news_list结束-->
+				<div class="page">
+					<a href="1">首页</a>
+					<a href="2">2</a>
+					<a href="3">3</a>
+					<a href="more">...</a>
+					<a href="next">下一页</a>
+					<a href="end">末页</a>
+				</div>
+			</div><!--list_box结束-->
+		</div><!--list_main结束-->
+	</div><!--wrap结束-->
+	<div class="copyright">
+		<div class="copyright_content">
+			<ul>
+				<li><a href="#">关于</a>
+					<ul>
+						<li><a href="#">品牌故事</a></li>
+						<li><a href="#">联系我们</a></li>
+						<li><a href="#">加入我们</a></li>
+						<li><a href="#">版权声明</a></li>
+					</ul>
+				</li>
+
+				<li><a href="#">课程</a>
+					<ul>
+						<li><a href="#">PHP开发</a></li>
+						<li><a href="#">前端开发</a></li>
+						<li><a href="#">JAVA开发</a></li>
+						<li><a href="#">Android开发</a></li>
+					</ul>
+				</li>
+
+				<li><a href="#">关注</a>
+					<ul>
+						<li><a href="#">新浪微博</a></li>
+						<li><a href="#">腾讯微博</a></li>
+						<li><a href="#">企业微信</a></li>
+						<li><a href="#">QQ空间</a></li>
+					</ul>
+				</li>
+
+				<li><a href="#">留言</a>
+					<ul>
+						<li><a href="#">意见反馈</a></li>
+						<li><a href="#">问题留言</a></li>
+						<li><a href="#">媒体联络</a></li>
+						<li><a href="#">在线客服</a></li>
+					</ul>
+				</li>
+
+				<li class="weixin"><a href="#"><img src="images/weixin.png" />微信关注</a>
+				</li>
+				<li>
+					<img src="images/qrcode.jpg" />
+				</li>
+			</ul>
+		</div><!--copyright_content结束-->
+	</div><!--copyright结束-->
+</body>
+</html>

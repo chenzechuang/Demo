@@ -1,0 +1,564 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2017-02-22 00:17:11
+ * @version $Id$
+ */
+body {
+	
+	/* This property specifically for Mozilla browsers, which as of this writing don't 
+	support multiple backgrounds; this property also repeated in ie.css for
+	Internet Explorer, which ignores these background properties in 
+	succession like this */
+	background: #f1efe8 url(../img/bg-dark.jpg) repeat-x;
+	
+	/* These properties specifically for Safari, which does support multiple 
+	backgrounds */
+	background: url(../img/bg-dark.jpg) repeat-x center top, url(../img/bg-light.jpg) repeat-x left 239px;
+	background-color: #f1efe8;
+
+	font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Arial, sans-serif;
+	color: #36332a;
+}
+
+a:link, a:active, a:visited {
+	color: #af670a;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #227115;
+}
+
+a img {
+	border: none;
+}
+
+legend {
+	display: none;
+}
+
+/* Required with strict doctype or extra padding may mysteriously
+appear at the bottom of images */
+img {
+	display: block; 
+}		
+
+#wrapper {
+	width: 1070px;
+	margin: auto;
+	position: relative;
+}
+
+
+
+/* 
+@FONT-FACE ---------------------------- */
+
+@font-face {
+	font-family: "Museo Sans X";
+	src: url(../fonts/MuseoSans_500.otf);
+}
+
+#header ul a, #header h2, #home h3, #home h4, #main-video h3 {
+	font-family: "Museo Sans X", "Lucida Grande", "Lucida Sans Unicode", Arial, sans-serif; 
+}
+
+/* 
+HEADER ---------------------------- */
+
+#header ul {
+	margin: 20px 25px 63px ;
+}
+
+#header ul li {
+	float: left;
+}
+
+#header ul li a {
+	float: left;
+	margin-right: 25px;
+	padding: 0 0 3px;
+	color: #f0eee7;
+	text-transform: uppercase;
+	font-size: 11px;
+}
+
+#header ul a:hover {
+	padding-bottom: 2px;
+	border-bottom: 1px solid #423b2b;
+}	
+
+#header ul li em {
+	font-style: normal;
+	color: #7f7159;
+}
+
+#header h1 {
+	margin-left: 25px;
+	float: left;
+	width: 266px;
+}
+
+#header h1 a {
+	display: block;
+	width: 266px;
+	height: 27px;
+	text-indent: -9999px;
+	background: rgba(0,0,0,0) url(../img/logo.png) no-repeat scroll 0 0;
+}
+
+#header h2 {
+	float: left;
+	margin-left: 15px;
+	padding-top: 12px;
+	font-size: 10px;
+	text-transform: uppercase;
+	color: #7f7159;
+	width: 475px;
+}
+
+#header form {
+	float: right;
+	margin-right: 25px;
+	text-align: right;
+	width: 249px;
+}
+
+#header label {
+	position: absolute;
+	left: -9999px;
+}
+
+#header input[type="text"] {
+	display: block;
+	width: 180px;
+	height: 20px;
+	float: left;
+	margin: 0;
+	padding: 3px 0 3px 28px;
+	background: url(../img/search-bg.gif) no-repeat;
+	border: 0;
+	color: #333;
+}
+
+/* Attribute selector */
+#header form input[type="image"] {
+	float: left;
+}	
+
+
+/* 
+MAIN CONTENT (HOME) ---------------------------- */
+
+#main {
+	width: 710px;
+	float: left;
+	margin: 36px 10px 40px 0;
+}
+
+#main h3 {
+	color: #227115;
+	font-size: 14px;
+	text-transform: uppercase;
+}	
+
+
+
+#main-featurette {
+	min-height: 190px;
+	font-size: 11px;
+	line-height: 13px;
+	/* This property specifically for Mozilla browsers, which as of this writing don't 
+	support multiple backgrounds; this property also repeated in ie.css for
+	Internet Explorer, which ignores these background properties in 
+	succession like this */
+	background: #f1efe8 url(../img/bg-colosseo-overlay.jpg) no-repeat left 21px;
+	
+	/* These properties specifically for Safari, which does support multiple 
+	backgrounds */
+	background: url(../img/bg-colosseo-overlay.jpg) no-repeat left 21px, url(../img/bg-colosseo.jpg) no-repeat;
+	background-color: #f1efe8;
+}
+
+#main-featurette h4 {
+	margin-top: 14px;
+	font-size: 12px;
+	color: #af670a;	
+	text-transform: uppercase;
+}
+
+#main-featurette p {
+	margin-top: 6px;
+}
+
+
+#main-featurette ul {
+	margin-top: 10px;
+}
+
+#main-featurette li {
+	float: left;
+}
+
+#main-featurette li a {
+	margin-right: 15px;
+	padding-right: 8px; 
+	font-weight: bold;
+	background: url(../img/arrow-orange.png) no-repeat right center;
+}
+
+#featurette1 {
+	position: relative;
+	float: left;
+	margin: 23px 0 0 25px;
+	padding-left: 135px;
+	width: 175px;
+}
+
+#featurette1 p {
+	text-indent: -0.3em; /* for hanging punctuation on the quotation mark */
+}
+
+#featurette1 img {
+	position: absolute;
+	left: -5px;
+	top: -10px;
+}
+
+
+#featurette2 {
+	position: relative;
+	float: left;
+	margin: 23px 0 0 39px;
+	padding-left: 108px;
+	width: 202px;
+}
+#featurette2 img {
+	position: absolute;
+	left: -10px;
+	top: 10px;
+}
+
+#video, #interactive {
+	float: left;
+	margin-left: 25px;
+	width: 310px;
+}
+
+#video h3, #interactive h3 {
+	margin-bottom: 24px;
+}
+
+#interactive {
+	margin-left: 37px;
+}
+
+#video a {
+	position: relative;
+}
+
+/* The pseudo-property "content:" is not supported by IE, which 
+results in the play icon not showing in IE; also, the @-moz-document url-prefix(){}
+is used as a hack to hide the icon from Mozilla browsers, which don't 
+respect the negative value for absolute positioning on this 
+particular element */
+
+#video a:after {
+	content: 0 !important;
+	content: url(../img/play.png);
+	position: absolute;
+	top: -59px;
+	left: 17px;
+}	
+
+@-moz-document url-prefix() { 
+	#video a:after { 
+		content: none;
+	} 
+}
+
+
+#popular, #voices {
+	float: left;
+	width: 310px;
+	margin: 45px 0 0 25px;
+}
+
+#voices {
+	margin-left: 37px;
+}
+
+#popular ul {
+	float: left;
+	width: 50%;
+	margin-top: 13px;
+	font-size: 11px;
+	color: #36332a;
+}
+
+#popular ul li {
+	padding: 2px 0;
+}
+
+#popular a:link, #popular a:active, #popular a:visited {
+	color: #36332a;
+}	
+	
+#popular a:hover {
+	color: #227115;
+}	
+
+#popular ul li strong {
+	padding-right: 8px;
+	background: url(../img/arrow-black.gif) no-repeat right center;
+}
+
+#voices ul {
+	position: relative;
+	width: 310px;
+	height: 178px;
+	background: url(../img/bg-map.gif) no-repeat;
+}
+
+#voices ul li.l1, #voices ul li.l2 {
+	position: absolute;
+	padding-top: 16px;
+	background: url(../img/mapmarker-dot.png) no-repeat 2px top;
+}	
+
+#voices ul li.l2 {
+	background: url(../img/mapmarker-dot-alt.png) no-repeat 129px top;
+}	
+
+#voices ul li.l1 a, #voices ul li.l2 a {
+	display: block;
+	padding-left: 11px;
+	font: 11px/14px Georgia, serif;
+	color: #32312a;
+	-webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.35);
+	-moz-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.35);
+	background-color: rgba(255, 255, 255, 0.78);
+}	
+
+#voices ul li.l2 a {
+	padding-right: 11px;
+}
+
+#voices ul li.l1 a em, #voices ul li.l2 a em {
+	display: block;
+	padding: 7px 8px 3px 2px;
+	height: 19px;
+	text-indent: -0.3em;
+}
+
+#voices ul li.l2 a em {
+	padding: 7px 0 3px 10px;
+
+}
+
+/* CSS3 text-overflow 
+See http://www.css3.info/preview/text-overflow */
+#voices ul li.l1 a em, #voices ul li.l2 a em { 
+	white-space: nowrap; 
+	width: 135px; 
+	overflow: hidden; 
+	text-overflow: ellipsis; 
+	-o-text-overflow: ellipsis; 
+	-khtml-text-overflow: ellipsis; 
+	-moz-text-overflow: ellipsis; 
+	-webkit-text-overflow: ellipsis;
+}	
+
+#voices ul li.l1 a em:hover, #voices ul li.l2 a em:hover {
+	white-space: normal;
+	overflow: visible;
+	cursor: pointer;
+	background: #fff none;
+	height: 72px;
+}	
+
+#voices ul li.l1 a em:hover {
+	padding-left: 11px;
+	padding-bottom: 5px;
+	margin-left: -9px;
+}
+
+#voices ul li.l2 a em:hover {
+	padding-right: 11px;
+	padding-bottom: 5px;
+	margin-right: -11px;
+}	
+
+#voices p {
+	text-align: right;
+}	
+
+#voices p a {
+	margin-left: 10px;
+	font-size: 10px;
+	padding-right: 8px; 
+	background: url(../img/arrow-orange.png) no-repeat right center;
+}	
+
+
+#secondary {
+	width: 350px;
+	float: left;
+	margin-top: 36px;
+}
+
+#secondary-feature {
+	position: relative;
+	height: 320px;
+	background: #c27e28 url(../img/feature-orange.jpg) no-repeat;
+}
+
+#secondary-feature p {
+	position: absolute;
+	font: 18px/25px "Lucida Grande", "Lucida Sans Unicode", Arial, sans-serif;
+	top: 60px;
+	left: 36px;
+	width: 278px;
+	height: 158px;
+	text-indent: -9999px;
+	background: url(../img/quote-colossus.png) no-repeat;
+}
+
+#secondary-featurette {
+	padding: 15px 27px 0 27px;
+	margin-top: 21px;
+	height: 104px;
+	font-size: 11px;
+	background: url(../img/bg-noise.jpg) no-repeat;
+}
+
+#secondary-featurette h4 {
+	font-size: 12px;
+	color: #af670a;	
+	text-transform: uppercase;
+}
+
+#secondary-featurette form {
+	margin-top: 10px;
+}
+
+#secondary-featurette form label {
+	font-weight: bold;
+	padding-left: 10px;
+}
+
+#secondary-featurette form legend+label {
+	padding-left: 0 !important;
+}
+
+#secondary-featurette form img { 
+	display: inline;
+	vertical-align: -3px;
+}
+
+#secondary-featurette form input[type="text"] { 
+	width: 55px;
+	font-size: 10px;
+	line-height: 14px;
+}
+
+#secondary-featurette form input[type="image"] {	
+	padding-left: 13px;
+	vertical-align: top;
+}
+
+#secondary-featurette form fieldset {
+	margin: 10px 0;
+}	
+
+#secondary-featurette form legend {
+	display: none;
+}	
+
+#secondary-featurette form select {
+	width: 200px;
+}	
+
+.ui-datepicker-trigger { 
+	padding-left: 3px; 
+	cursor: hand; 
+	cursor: pointer; 
+}	
+
+
+#photos {
+	min-height: 500px;
+	float: left;
+	background: url(../img/bg-secondary.jpg) no-repeat;
+	padding: 50px 0px 0px 27px;
+}
+
+#photos h3 {
+	font-size: 14px;
+	margin-bottom: 18px;
+	color: #36332a;
+	text-transform: uppercase;
+}
+
+#photos a {
+	float: left;
+	padding: 10px 5px 10px 15px;
+	width: 122px;
+	height: 121px;
+
+}
+
+#photos img {
+	padding: 13px 15px 15px 14px;
+	background: url(../img/thumb-frame.png) no-repeat;
+}
+
+
+/* 
+FOOTER ---------------------------- */
+
+#footer {
+	clear: left;
+	padding: 40px 0 60px;
+	font-size: 10px;
+	color: #8a867c;
+	min-height: 0;
+	text-align: center;
+	background: url(../img/bg-footer.gif) no-repeat top center;
+}
+
+#footer p {
+	padding-bottom: 8px;
+}
+
+#footer-links {
+	margin-bottom: 10px;
+}
+
+#footer-links a {
+	padding: 0 10px;
+}
+
+#footer #cameronmoll {
+	width: 124px;
+	margin: 20px auto 0;
+}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+.clearfix {
+	display: block;
+}
+

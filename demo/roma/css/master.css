@@ -1,0 +1,12 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2017-02-22 00:15:56
+ * @version $Id$
+ */
+/* This master style sheet is used to aggregate other style sheets for the site */
+
+@import url("reset.css");
+@import url("screen.css");
+@import url("autocomplete.css");
