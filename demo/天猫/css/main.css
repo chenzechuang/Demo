@@ -363,6 +363,7 @@ body {
   margin-left: 20px;
   font-family: "微软雅黑";
 }
+
 .main-nav .main-nav-menu li {
   float: left;
   height: 36px;
@@ -400,7 +401,7 @@ body {
 
 #content .category {
   position: relative;
-  z-index: 1000;
+  z-index: 8;
 }
 
 #content .category-tab {
@@ -467,7 +468,7 @@ body {
   left: 200px;
   top: 0;
   background: #fff;
-  z-index: 100;
+  z-index: 9;
 }
 
 .content-list {
