@@ -119,7 +119,8 @@ addLoadEvent(showCategory);
 /* 轮播图 */
 function showCarousel() {
   var oBox = document.getElementById("Carousel"),
-      oImg = oBox.getElementsByTagName('div');
+      oImg = oBox.getElementsByTagName('img'),
+      oBgc = oBox.getElementsByTagName('div')[0],
       oUl = oBox.getElementsByTagName("ul")[0],
       oCount = oUl.getElementsByTagName("li"),
       play = null,
@@ -144,7 +145,7 @@ function showCarousel() {
   function autoPlay() {
     play = setInterval(function() {
       index++;
-      if (index >= oImg.length - 1) {
+      if (index >= oImg.length) {
         index = 0;
       }
       show(index);
@@ -157,19 +158,19 @@ function showCarousel() {
     var alpha = 0;
     switch(index) {
       case 0:
-        oImg[0].style.backgroundColor = "#E8E8E8";
+        oBgc.style.backgroundColor = "#E8E8E8";
         break;
       case 1:
-        oImg[0].style.backgroundColor = "#34B1E7";
+        oBgc.style.backgroundColor = "#34B1E7";
         break;
       case 2:
-        oImg[0].style.backgroundColor = "#53C3F1";
+        oBgc.style.backgroundColor = "#53C3F1";
         break;
       case 3:
-        oImg[0].style.backgroundColor = "#A1BB1C";
+        oBgc.style.backgroundColor = "#A1BB1C";
         break;
       case 4:
-        oImg[0].style.backgroundColor = "#E53C12";
+        oBgc.style.backgroundColor = "#E53C12";
         break;
     }
     for (var i = 0, l = oCount.length; i < l; ++i) {
@@ -178,7 +179,7 @@ function showCarousel() {
     oCount[index].className = "selected";
     clearInterval(timer);
 
-    for (var i = 1, l = oImg.length; i < l; ++i) {
+    for (var i = 0, l = oImg.length; i < l; ++i) {
       oImg[i].style.opacity = 0;
       oImg[i].style.filter = "alpha(opacity=0)";    
     }
@@ -186,8 +187,8 @@ function showCarousel() {
     timer = setInterval(function() {
       alpha += 2;
       alpha > 100 && (alpha = 100);
-      oImg[index + 1].style.opacity = alpha / 100;
-      oImg[index + 1].style.filter = "alpha(opacity = " + alpha + ")";
+      oImg[index].style.opacity = alpha / 100;
+      oImg[index].style.filter = "alpha(opacity = " + alpha + ")";
       alpha == 100 && clearInterval(timer);
     },20);
   }

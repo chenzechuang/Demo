@@ -363,7 +363,6 @@ body {
   margin-left: 20px;
   font-family: "微软雅黑";
 }
-
 .main-nav .main-nav-menu li {
   float: left;
   height: 36px;
@@ -401,7 +400,7 @@ body {
 
 #content .category {
   position: relative;
-  z-index: 8;
+  z-index: 1000;
 }
 
 #content .category-tab {
@@ -468,7 +467,7 @@ body {
   left: 200px;
   top: 0;
   background: #fff;
-  z-index: 9;
+  z-index: 100;
 }
 
 .content-list {
@@ -534,24 +533,24 @@ body {
 }
 
 .carousel .carousel-img {
-  opacity: 0;
-  filter: alpha(opacity=0);
-}
-
-.carousel .carousel-img.current {
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
-
-.carousel .carousel-img a {
   display: block;
   width: 1230px;
   padding-right: 30px;
   margin: 0 auto;
+  position: relative;
 }
 
-.carousel .carousel-img a img {
+.carousel .carousel-img img {
   position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+
+.carousel .carousel-img img.current {
+  opacity: 1;
+  filter: alpha(opacity=100);
 }
 
 .carousel .carousel-count {
