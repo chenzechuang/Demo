@@ -196,6 +196,8 @@ function showCarousel() {
 
 addLoadEvent(showCarousel);
 
+
+/* brandMaskShow */
 function brandMaskShow() {
   var brand_box = document.getElementById('HotBrand'),
       oLi = brand_box.getElementsByTagName('li'),
@@ -203,8 +205,8 @@ function brandMaskShow() {
   for (var i = 0, l = oLi.length; i < l; ++i) {
     oLi[i].index = i;
     oLi[i].onmouseover = function() {
-      oMask[this.index].style.opacity = 1;
-      oMask[this.index].style.filter = "alpha(opacity=100)";
+      oMask[this.index].style.opacity = 0.8;
+      oMask[this.index].style.filter = "alpha(opacity=80)";
     };
     oLi[i].onmouseout = function() {
       for (var j = 0, l = oMask.length; j < l; ++j) {
