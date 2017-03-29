@@ -4,7 +4,7 @@
 function getByClass(clsName, parent) {
   var oParent = parent ? document.getElementById(parent) : document;
   var eles = [];
-  elements = oParent.getElementsByTagName('*');
+  elements = oParent.getElementsByTagName("*");
   for (var i = 0, l = elements.length; i < l; i++) {
     if (elements[i].className == clsName) {
       eles.push(elements[i]);
@@ -121,8 +121,8 @@ function showCarousel() {
   var oBox = document.getElementById("Carousel"),
       oImg = oBox.getElementsByTagName('img'),
       oBgc = oBox.getElementsByTagName('div')[0],
-      oUl = oBox.getElementsByTagName("ul")[0],
-      oCount = oUl.getElementsByTagName("li"),
+      oUl = oBox.getElementsByTagName('ul')[0],
+      oCount = oUl.getElementsByTagName('li'),
       play = null,
       timer = null,
       index = 0;
@@ -158,37 +158,37 @@ function showCarousel() {
     var alpha = 0;
     switch(index) {
       case 0:
-        oBgc.style.backgroundColor = "#E8E8E8";
+        oBgc.style.backgroundColor = '#E8E8E8';
         break;
       case 1:
-        oBgc.style.backgroundColor = "#34B1E7";
+        oBgc.style.backgroundColor = '#34B1E7';
         break;
       case 2:
-        oBgc.style.backgroundColor = "#53C3F1";
+        oBgc.style.backgroundColor = '#53C3F1';
         break;
       case 3:
-        oBgc.style.backgroundColor = "#A1BB1C";
+        oBgc.style.backgroundColor = '#A1BB1C';
         break;
       case 4:
-        oBgc.style.backgroundColor = "#E53C12";
+        oBgc.style.backgroundColor = '#E53C12';
         break;
     }
     for (var i = 0, l = oCount.length; i < l; ++i) {
       oCount[i].className = "";
     }
-    oCount[index].className = "selected";
+    oCount[index].className = 'selected';
     clearInterval(timer);
 
     for (var i = 0, l = oImg.length; i < l; ++i) {
       oImg[i].style.opacity = 0;
-      oImg[i].style.filter = "alpha(opacity=0)";    
+      oImg[i].style.filter = 'alpha(opacity=0)';    
     }
 
     timer = setInterval(function() {
       alpha += 2;
       alpha > 100 && (alpha = 100);
       oImg[index].style.opacity = alpha / 100;
-      oImg[index].style.filter = "alpha(opacity = " + alpha + ")";
+      oImg[index].style.filter = 'alpha(opacity = ' + alpha + ')';
       alpha == 100 && clearInterval(timer);
     },20);
   }
@@ -206,15 +206,91 @@ function brandMaskShow() {
     oLi[i].index = i;
     oLi[i].onmouseover = function() {
       oMask[this.index].style.opacity = 0.8;
-      oMask[this.index].style.filter = "alpha(opacity=80)";
+      oMask[this.index].style.filter = 'alpha(opacity=80)';
     };
     oLi[i].onmouseout = function() {
       for (var j = 0, l = oMask.length; j < l; ++j) {
         oMask[j].style.opacity = 0;
-        oMask[j].style.filter = "alpha(opacity=0)";
+        oMask[j].style.filter = 'alpha(opacity=0)';
       }
     }
   }
 }
 
 addLoadEvent(brandMaskShow);
+
+/* 定位导航 */
+
+function showProducts() {
+  var menu = document.getElementById('fixedMenu'),
+  products = getByClass('shopProduct', 'content'), //获取所有类名为item的div
+  one_top = products[0].offsetTop,
+  items = menu.getElementsByTagName('a'),
+  fixedSearch = document.getElementById('fixedSearchBox'),
+  conID = '';
+  for(var i = 0; i < items.length; i++) {
+    items[i].index = i;
+    items[i].onclick = function() {
+      var top = products[this.index].offsetTop;
+      document.documentElement.scrollTop = document.body.scrollTop = top + 100;
+      for (var i = 0, l = items.length; i < l; ++i) {
+        items[i].className = '';
+      }   
+      this.className = 'current';
+      return false;
+    };  
+  }
+  function scroll() {
+    var scroll = document.documentElement.scrollTop || document.body.scrollTop;
+    if (scroll > one_top - 200) {
+      menu.style.display = 'block';
+      fixedSearch.style.display = 'block';
+    } else {
+      menu.style.display = 'none';
+      fixedSearch.style.display = 'none';
+    }
+    for (var i = 0, l = products.length; i < l; i++) { 
+      var top = products[i].offsetTop;  //遍历获取每一个div的offsetTOP值
+      if (scroll > top - 100) {  //如果滚动条到顶部的距离大于哪一个div的offsetTOP到顶部的距离就把items的ID复制给conID;
+        conID = products[i].id;
+      } else {
+        break;//退出循环
+      }
+    }
+
+    if (conID) {
+      for(var i = 0; i < items.length; i++) {
+        //获取a元素的链接，用#号分隔成数组
+        var href = items[i].href.split("#");
+        //如果数组的最后一项的值等于conID，那么给这个a赋值类名current
+        if (href[1] == conID) {
+          items[i].className = "current";
+        } else {
+          items[i].className = "";
+        }
+      }
+    }
+  }
+
+  window.onscroll = function () {
+    scroll();
+  };
+}
+
+addLoadEvent(showProducts);
+
+/* 返回顶部 */
+function toTop() {
+  var top_btn = document.getElementById('top');
+  top_btn.onmouseover = function() {
+    this.className = 'current';
+  };
+  top_btn.onmouseout = function() {
+    this.className = '';
+  };
+  top_btn.onclick = function() {
+    document.documentElement.scrollTop = document.body.scrollTop = 0;
+  };
+}
+
+addLoadEvent(toTop);

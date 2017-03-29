@@ -8,6 +8,7 @@
 /* common */
 body {
   font: 12px/1.5 tahoma,arial,"宋体";
+  background-color: #F5F5F5;
 }
 .glyphicon {
   color: #c40000;
@@ -55,7 +56,7 @@ body {
 }
 
 #quick-menu li {
-  display: inline-block;
+  float: left;
   line-height: 32px;
 }
 
@@ -73,6 +74,7 @@ body {
 
 #quick-menu .sitemap-menu {
   position: relative;
+  z-index: 20;
 }
 
 #quick-menu .sitemap-menu-title {
@@ -388,19 +390,19 @@ body {
 .main-nav a .hover-pic {
   position: absolute;
   display: none;
-  width: 40px;
+  width: 30px;
   height: 15px;
   top: -14px;
   left: 50%;
-  margin-left: -20px;
-  background: url(../image/hover-pic.png) 0 0 / 40px 15px no-repeat;
+  margin-left: -15px;
+  background: url(../image/hover-pic.png) 0 0 no-repeat;
 }
 
 /* category 左侧商品标题 */
 
 #content .category {
   position: relative;
-  z-index: 1000;
+  z-index: 9;
 }
 
 #content .category-tab {
@@ -593,7 +595,6 @@ body {
   overflow: hidden;
 }
 
-
 .hotBrand .brand-list {
   float: right;
   position: relative;
@@ -660,6 +661,211 @@ body {
   font-size: 12px;
   background-color: #ff0000;
 }
+
+/* shopProduct */
+
+.shopProduct {
+  position: relative;
+  height: 470px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.shopProductTab {
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+}
+
+.shopProductTab-title {
+  float: left;
+  height: 20px;
+  line-height: 20px;
+  margin-left: 10px;
+  font-size: 18px;
+  font-family: "微软雅黑";
+  color: #000;
+}
+
+.shopProductTab-title .color-icon {
+  display: inline-block;
+  vertical-align: top;
+  width: 5px;
+  height: 20px;
+  background-color: #0AA6E8;
+}
+
+.shopProductTab-title .eng-title {
+  height: 20px;
+  line-height: 20px;
+  margin-left: 10px;
+  font-size: 14px;
+  color: #000;
+}
+
+.shopProductTab-main {
+  float: right;
+}
+
+.shopProductTab-main li {
+  display: inline-block;
+  margin: 0 10px;
+  height: 20px;
+  line-height: 20px;
+}
+
+.shopProductTab-main li a {
+  display: block;
+  font-size: 14px;
+  color: #000;
+}
+
+.shopProductTab-main li a:hover {
+  text-decoration: underline;
+}
+
+.shopProductImg {
+  width: 100%;
+  margin-top: 10px;
+  height: 440px;
+}
+
+.shopProductImg .img-big {
+  position: relative;
+  float: left;
+  height: 440px;
+  width: 246px;
+}
+
+.shopProductImg .img-big img {
+  display: block;
+  width: 100%;
+}
+
+.shopProductImg .img-big img:hover {
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+
+.shopProductImg .scorll-text {
+  position: absolute;
+  bottom: 110px;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  background: #fff;
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+
+.shopProductImg .product-text {
+  height: 110px;
+  line-height: 110px;
+  background-color: #0AA6E8;
+  text-align: center;
+  font-size: 24px;
+  color: #fff;
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
+
+.shopProductImg-list {
+  float: left;
+  width: 984px;
+  height: 440px;
+}
+
+.shopProductImg-list a {
+  float: left;
+  display: block;
+  position: relative;
+  width: 244px;
+  height: 220px;
+  background-color: #fff;
+}
+
+.shopProductImg-list .list-title {
+  position: absolute;
+  width: 220px;
+  height: 24px;
+  left: 25px;
+  top: 25px;
+  line-height: 24px;
+  font-size: 18px;
+  color: #000;
+  z-index: 10;
+}
+
+.shopProductImg-list .list-subTitle {
+  position: absolute;
+  width: 220px;
+  height: 18px;
+  left: 25px;
+  top: 54px;
+  line-height: 18px;
+  font-size: 14px;
+  z-index: 10;
+}
+
+.shopProductImg-list a img {
+  width: 150px;
+  height: 150px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transition: right 0.3s ease 0s;
+}
+
+.shopProductImg-list a:hover img {
+  right: 5px;
+}
+
+/* 定位导航 */
+
+#fixedMenu {
+  display: none;
+  position: fixed;
+  left: 0;
+  bottom: 100px;
+  width: 36px;
+  text-align: center;
+  z-index: 20;
+}
+
+#fixedMenu li {
+  display: block;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  margin-top: 1px;
+  background: #444;
+  color: #fff;
+  font-size: 14px;
+  font-family: "微软雅黑";
+  cursor: pointer;
+}
+
+#fixedMenu li a {
+  display: block;
+  color: #fff;
+}  
+  
+#fixedMenu .nav {
+  background: #c40000;
+}
+
+#top {
+  background: #aeaeae;
+}
+
+#fixedMenu li a:hover, 
+#top.current,
+#fixedMenu li a.current {   
+  background: #0088bb;  
+}  
+
 
 /* footer */
 
@@ -768,4 +974,70 @@ body {
 
 #footer-copyright .copyright-img a {
   margin-right: 10px;
+}
+
+/* 定位搜索框 */
+
+#fixedSearchBox {
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background-color: #E61010;
+  color: #fff;
+  font-family: "微软雅黑";
+  z-index: 50;
+}
+
+#fixedSearchBox .common-width {
+  margin-top: 12px;
+}
+
+#fixedSearchBox .SearchBox-logo {
+  float: left;
+  height: 30px;
+  line-height: 30px;
+  font-size: 30px;
+}
+
+#fixedSearchBox .SearchBox-logo span {
+  font-size: 16px;
+  padding-left: 10px;
+}
+
+#fixedSearchBox .SearchBox-content {
+  width: 740px;
+  height: 30px;
+  margin: 0 auto;
+}
+
+.SearchBox-content fieldset {
+  height: 30px;
+}
+
+.SearchBox-content legend {
+  height: 0;
+  text-indent: -9999px;
+}
+
+.SearchBox-content input {
+  float: left;
+  width: 640px;
+  height: 30px;
+  line-height: 30px;
+  padding-left: 10px;
+  font-size: 14px;
+  background: #fff;
+  color: #000;
+}
+
+.SearchBox-content button {
+  width: 90px;
+  height: 32px;
+  font-size: 16px;
+  border: 0;
+  padding: 0;
+  background-color: #c40000;
 }
