@@ -41,7 +41,7 @@ function addLoadEvent(func) {
 
 function showNav() {
   var sitemap = getByClass('sitemap', 'quick-menu')[0],
-      site_content = sitemap.getElementsByTagName('div')[1];
+      site_content = sitemap.getElementsByTagName('div')[1],
       oldClass = sitemap.className;
   sitemap.onmouseover = function() {
     this.className = oldClass + ' hover';
@@ -223,7 +223,7 @@ addLoadEvent(brandMaskShow);
 
 function showProducts() {
   var menu = document.getElementById('fixedMenu'),
-  products = getByClass('shopProduct', 'content'), //获取所有类名为item的div
+  products = getByClass('shopProduct', 'content'),
   one_top = products[0].offsetTop,
   items = menu.getElementsByTagName('a'),
   fixedSearch = document.getElementById('fixedSearchBox'),
@@ -240,6 +240,8 @@ function showProducts() {
       return false;
     };  
   }
+
+
   function scroll() {
     var scroll = document.documentElement.scrollTop || document.body.scrollTop;
     if (scroll > one_top - 200) {
@@ -250,11 +252,11 @@ function showProducts() {
       fixedSearch.style.display = 'none';
     }
     for (var i = 0, l = products.length; i < l; i++) { 
-      var top = products[i].offsetTop;  //遍历获取每一个div的offsetTOP值
-      if (scroll > top - 100) {  //如果滚动条到顶部的距离大于哪一个div的offsetTOP到顶部的距离就把items的ID复制给conID;
+      var top = products[i].offsetTop; 
+      if (scroll > top - 100) {  //如果滚动条到顶部的距离大于哪一个div的offsetTop到顶部的距离就把items的ID复制给conID;
         conID = products[i].id;
       } else {
-        break;//退出循环
+        break;
       }
     }
 
