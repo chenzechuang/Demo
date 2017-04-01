@@ -248,6 +248,7 @@ function showProducts() {
   //滚动监听高亮
   function scroll() {
     var scroll = document.documentElement.scrollTop || document.body.scrollTop;
+    var height = document.documentElement.clientHeight || document.body.clientHeight;
     if (scroll > one_top - 200) {
       menu.style.display = 'block';
       fixedSearch.style.display = 'block';
@@ -259,11 +260,12 @@ function showProducts() {
       var product_img = products[i].getElementsByTagName('img');
       var top = products[i].offsetTop;
       if (scroll > top - 100) {  //如果滚动条到顶部的距离大于哪一个div的offsetTop到顶部的距离就把items的ID复制给conID;
+        conID = products[i].id;
+      } else if (scroll + height > top) {
         for (var j = 0, n = product_img.length; j < n; ++j) {
           var img_src = product_img[j].getAttribute('xsrc');
           product_img[j].src = img_src;
         }
-        conID = products[i].id;
       } else {
         break;
       }
