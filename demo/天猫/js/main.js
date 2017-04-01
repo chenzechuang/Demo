@@ -44,7 +44,7 @@ function showNav() {
       site_content = sitemap.getElementsByTagName('div')[1],
       oldClass = sitemap.className;
   sitemap.onmouseover = function() {
-    this.className = oldClass + ' hover';
+    addClass(this, 'hover');
     site_content.style.display = 'block';
   };
   sitemap.onmouseout = function() {
@@ -94,6 +94,7 @@ function showCategory() {
       for (var j = 0, n = oDiv.length; j < n; ++j) {
         oDiv[j].count = j;
         oDiv[j].onmouseover = function() {
+          //鼠标移动到右侧列表，左侧列表依旧高亮
           oLi[this.count].className = 'hover';
           this.style.display = 'block';
         };
@@ -141,7 +142,7 @@ function showCarousel() {
   oBox.onmouseout = function() {
     autoPlay();
   };
-
+  //自动播放
   function autoPlay() {
     play = setInterval(function() {
       index++;
@@ -153,9 +154,11 @@ function showCarousel() {
   }
   autoPlay();
 
+  //渐变显示
   function show(a) {
     index = a;
     var alpha = 0;
+    //更换背景颜色
     switch(index) {
       case 0:
         oBgc.style.backgroundColor = '#E8E8E8';
@@ -230,6 +233,7 @@ function showProducts() {
   conID = '';
   for(var i = 0; i < items.length; i++) {
     items[i].index = i;
+    //点击定位
     items[i].onclick = function() {
       var top = products[this.index].offsetTop;
       document.documentElement.scrollTop = document.body.scrollTop = top + 100;
@@ -241,7 +245,7 @@ function showProducts() {
     };  
   }
 
-
+  //滚动监听高亮
   function scroll() {
     var scroll = document.documentElement.scrollTop || document.body.scrollTop;
     if (scroll > one_top - 200) {
