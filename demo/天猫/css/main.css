@@ -766,6 +766,9 @@ body {
 }
 
 .shopProductImg .product-text {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   height: 110px;
   line-height: 110px;
   background-color: #0AA6E8;
