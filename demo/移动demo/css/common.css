@@ -1,0 +1,452 @@
+@charset "UTF-8";
+
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2017-03-29 21:06:34
+ * @version $Id$
+ */
+
+/* 禁用iPhone中Safari的字号自动调整 */
+html {
+  -webkit-text-size-adjust: none; 
+}
+/* 设置HTML5元素为块 */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block; 
+}
+/* 设置图片视频等自适应调整 */
+img {
+  max-width: 100%; 
+  height: auto; 
+  width: auto\9; /* ie8 */ 
+}
+.video embed, .video object, .video iframe {
+  width: 100%; 
+  height: auto; 
+}
+ 
+ 
+body {
+  font: 12px/22px "Georgia", Helvetica, Arial, sans-serif; 
+  background: #fff; 
+  color: #595959; 
+  overflow-y: scroll; 
+  overflow-x: hidden; 
+  *overflow-y: auto !important; 
+}
+a {
+  text-decoration: none; 
+  cursor: pointer; 
+}
+li {
+  list-style: none; 
+}
+a {
+  text-decoration: none; 
+  color: #555756; 
+}
+a:hover {
+  color: #141414; 
+  text-decoration: none; 
+}
+a img {
+  border: none; 
+}
+a > img {
+  vertical-align: bottom; 
+}
+.mh {
+  min-height: 0; 
+  height: auto; 
+  _height: 0; 
+  overflow: hidden; 
+  _overflow: visible; 
+}
+.db{
+  display: block;
+}
+.pr{
+  position:relative;
+}
+.pa{
+  position:absolute;
+}
+.ofh {
+  overflow: hidden; 
+}
+
+
+/* 页面代码 */
+html{
+  height: 100%;
+  overflow: hidden;
+}
+body{
+  height: 100%;
+  margin: 0;
+  overflow: auto;
+}
+
+/* header */
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1.3888889rem;
+  z-index: 1;
+  background-color: #009ff0;
+}
+
+.header .h-scan {
+  float: left;
+  height: 1.3888889rem;
+  width: 15%;
+  background: url("../img/scan.png") no-repeat scroll center / 0.8rem;
+}
+
+.header .h-form {
+  float: left;
+  width: 70%;
+  height: 1rem;
+  margin-top: 0.2rem;
+  background-color: #a0dbf9
+}
+
+.header .h-label {
+  float: left;
+  width: 15%;
+  height: 1rem;
+  background: url("../img/sousuo.png") no-repeat scroll 0.3rem 0.2rem / 0.6rem;
+}
+
+.header .h-search {
+  float: left;
+  width: 85%;
+  height: 1rem;
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  font-size: 14px;
+}
+.header .h-message {
+  float: left;
+  height: 1.3888889rem;
+  width: 15%;
+  background: url("../img/message.png") no-repeat scroll center / 0.7rem;
+}
+
+/* content */
+.content {
+  margin: 1.3888889rem 0;
+  overflow: hidden;
+}
+
+/* c-banner */
+.c-banner nav {
+  position: absolute;
+  width: 1.25rem;
+  height: 0.25rem;
+  bottom: 0.25rem;
+  right: 0.25rem;
+}
+
+.c-banner nav a {
+  float: left;
+  width: 0.25rem;
+  height: 0.25rem;
+  box-sizing: border-box;
+  margin-right: 0.05555555rem;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+  border: 0.025rem solid #fff;
+}
+
+.c-banner nav a.current {
+  background: #fff;
+}
+
+/* c-sort */
+.c-sort {
+  margin-bottom: 0.25rem;
+}
+
+.c-sort a {
+  width: 25%;
+  float: left;
+}
+
+/* .c-sort2 */
+.c-sort2 {
+  border-top: 0.01rem solid #e0e0e0;
+} 
+
+.c-sort2 a {
+  float: left;
+  width: 33.3%;
+  box-sizing: border-box;
+  border-right: 0.01rem solid #e0e0e0;
+  border-bottom: 0.01rem solid #e0e0e0;
+}
+
+
+/* c-headline */
+.c-headline {
+  margin: 0.15rem 0;
+}
+
+.c-headline h3 {
+  float: left;
+  width: 20%;
+  height: 1.3888889rem;
+  box-sizing: border-box;
+  border-right: 0.01rem solid #dededf;
+}
+
+.c-headline h3 a {
+  display: block;
+  height: 1.3888889rem;
+  background: url("../img/headline.png") no-repeat scroll center / 1.25rem;
+}
+
+.c-headline .ch-right {
+  float: left;
+  width: 80%;
+  height: 1.3888889rem;
+  box-sizing: border-box;
+  padding: 0 0.25rem;
+}
+
+.c-headline .ch-right span {
+  color: #ff5b45;
+  padding-right: 0.125rem;
+}
+
+.c-headline .ch-right a {
+  display: block;
+  color: #6c6e6f;
+  line-height: 0.6944444rem;
+  font-family: "宋体";
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 分割线 */
+.c-fenge{
+  width: 100%;
+  height: 0.15rem;
+  background: #f2f3f4;
+  border-top: 0.01rem solid #e0e0e0;
+  border-bottom: 0.01rem solid #e0e0e0;
+}
+
+/* c-bargains */
+
+.c-bargains {
+  width: 100%;
+  margin: 0.125rem 0;
+}
+
+.c-bargains .bargains-content {
+  width: 98%;
+  margin: 0 auto;
+}
+.c-bargains a {
+  float: left;
+  margin-right: 1.5%;
+}
+
+.c-bargains .ct-title {
+  font-size: 1.2em;
+  left: 0.25rem;
+  top: 0.2rem;
+  color: #07B2F0;
+}
+
+.c-bargains .ct-text {
+  color: #333333;
+  font-family: "微软雅黑";
+  left: 0.25rem;
+  top: 0.85rem;
+}
+
+.c-bargains .traver {
+  background: #f7f7f7 url("../img/bargains1.png") no-repeat scroll 80% bottom / 3rem; 
+  width: 45%;
+  height: 3rem;
+}
+
+.traver .ct-title {
+  color: #F95E5E;
+}
+.c-bargains .air-ticket, .c-bargains .grogshop {
+  width: 26%;
+  height: 3rem;
+}
+.c-bargains .air-ticket {
+  background: #f7f7f7 url("../img/air-ticket.png") no-repeat scroll center bottom / 2.25rem;
+}
+
+.c-bargains .grogshop {
+  margin-right: 0;
+  background: #f7f7f7 url("../img/grogshop.png") no-repeat scroll center bottom / 2.25rem;
+}
+
+
+
+
+/* footer */
+.footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1.3888889rem;
+  background-color: #f3f5f6;
+}
+
+.footer a {
+  float: left;
+  width: 25%;
+  height: 1.3888889rem;
+}
+
+.footer .page {
+  background: url("../img/foot-page.jpg") no-repeat scroll center / 2.5rem 1.3888889rem;
+}
+.footer .discover {
+  background: url("../img/foot-discover.jpg") no-repeat scroll center / 2.5rem 1.3888889rem;
+}
+.footer .journey {
+  background: url("../img/foot-journey.jpg") no-repeat scroll center / 2.5rem 1.3888889rem;
+}
+.footer .me {
+  background: url("../img/foot-me.jpg") no-repeat scroll center / 2.5rem 1.3888889rem;
+}
+
+/*
+ * -----------------------------------------
+ *  320 ~ 480
+ * -----------------------------------------
+ */
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+ 
+}
+ 
+/*
+ * -----------------------------------------
+ *  ~ 320  宽小于320的设备
+ * -----------------------------------------
+ */
+@media only screen and (max-width: 320px) {
+}
+ 
+/*
+ * -----------------------------------------
+ *  ~ 480  宽小于480的设备
+ * -----------------------------------------
+ */
+@media only screen and (max-width: 480px) {
+  body {
+    font-size: 12px;
+  }
+}
+ 
+/* medium screens (excludes iPad & iPhone) */
+/*
+ * -----------------------------------------
+ * 481 ~ 767  宽大于480且小于767的iPad和iPhone
+ * -----------------------------------------
+ */
+@media only screen and (min-width: 481px) and (max-width: 767px) {
+  body {
+    font-size: 14px;
+  }  
+}
+ 
+/* ipads (portrait and landscape) */
+/*
+ * -----------------------------------------
+ * 768 ~ 1024  宽大于768且小于1024的iPad和iPhone
+ * -----------------------------------------
+ */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  body {
+    font-size: 16px;
+  }
+}
+ 
+/* ipads (landscape) */
+/*
+ * -----------------------------------------
+ * 768 ~ 1024  宽大于480且小于1024的iPad和iPhone
+ * -----------------------------------------
+ */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+  body {
+    font-size: 16px;
+  }
+}
+ 
+/* ipads (portrait) */
+/*
+ * -----------------------------------------
+ * 768 ~ 1024  宽大于480且小于1024的iPad和iPhone
+ * -----------------------------------------
+ */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+  body {
+    font-size: 16px;
+  }
+}
+ 
+/*
+ * -----------------------------------------
+ *  1024 ~   宽大于1024的设备
+ * -----------------------------------------
+ */
+@media only screen and (min-device-width: 1025px) {
+  body {
+    font-size: 18px;
+  }
+}
+/*
+ * -----------------------------------------
+ * 1444 ~ 1824  宽大于1444且小于1824的设备
+ * -----------------------------------------
+ */
+@media only screen and (min-width: 1444px) and (max-width: 1824px) {
+  }
+ 
+/*
+ * -----------------------------------------
+ * 1824 ~  宽大于1824的设备
+ * -----------------------------------------
+ */
+@media only screen and (min-width: 1824px) {
+  }
+ 
+/*
+ * -----------------------------------------
+ * 2224 ~  宽大于2224的设备
+ * -----------------------------------------
+ */
+@media only screen and (min-width: 2224px) {
+  }
+ 
+/* iphone 4 and high pixel ratio (1.5+) devices */
+/*
+ * -----------------------------------------
+ * iphone4 ~
+ * -----------------------------------------
+ */
+@media only screen and (-webkit-min-device-pixel-ratio : 1.5), only screen and (min-device-pixel-ratio : 1.5) {
+  }
+/* iphone 4 and higher pixel ratio (2+) devices (retina) */
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+  }
