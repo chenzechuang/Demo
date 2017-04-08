@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>danmu</title>
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <style>
+      .move {
+        position: absolute;
+        display: block;
+        font-size: 20px;
+      }
+
+      .wallpaper {
+        height: 400px;
+        border: 1px solid #9A9FB3;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        background-color: #FCF7F7; 
+        overflow: hidden;
+      }
+
+      .setpad {
+        padding: 0 15px 0 0;
+      }
+    </style>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+ 
+
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row">
+         <div class="wallpaper col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2"></div>
+      </div> 
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-1 col-md-3 col-md-offset-2">
+          <input type="text" class="form-control" placeholder="弹幕内容" id="danmu">
+        </div>
+        <div class="col-sm-3 col-md-2 setpad">
+          <button class="form-control btn btn-primary" id="send">发射弹幕</button>
+        </div>
+        <div class="col-sm-3 col-md-2 setpad">
+          <button class="form-control btn btn-danger" id="clear">清屏</button>
+        </div>
+      </div>
+    </div>
+    <script src="jquery-3.1.0.js"></script>
+    <script>
+      // 创建一个div
+      $("#send").click(function() {
+        var $div = $('<div></div>'),
+          value = $('#danmu').val();
+        $div.addClass('move').html(value)
+          .appendTo($('.wallpaper'));
+        init($div);
+        move($div);
+      })
+      // 清除弹幕
+      $("#clear").click(function() {
+        for (var i = 0; i < timers.length; i++) {
+          clearInterval(timers[i]);
+        }
+        $(".move").remove();
+      })
+
+      // 初始化div 设置div宽度，字体颜色，
+      function init(div) {
+        var g = Math.floor(Math.random* 254);
+        var b = Math.floor(Math.random* 254);
+        var a = Math.floor(Math.random* 254);
+        div.css({
+          "color": "gba(" + g + ',' + b + ',' + a + ')';
+          right: -div.width(),
+          width: div.width()
+        });
+      }
+
+      // 把每一个setInterval 放到数组中
+      var timers = [];
+      // div 移动
+      function move(div) {
+        var i = 0;
+        var timer = setInterval(function() {
+          div.css({
+            right: (i += 1) + "px"
+          });
+          if ((div.offset().left + div.width()) < $(".wallpaper").offset().left) {
+            div.remove();
+            clearInterval(timer);
+          }
+        }, 10)
+        timers.push(timer)
+      }
+      
+    </script>
+</body>
+
+</html>
