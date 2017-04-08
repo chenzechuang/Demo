@@ -75,11 +75,12 @@
 
       // 初始化div 设置div宽度，字体颜色，
       function init(div) {
-        var g = Math.floor(Math.random* 254);
-        var b = Math.floor(Math.random* 254);
-        var a = Math.floor(Math.random* 254);
+        var r = Math.floor(Math.random() * 254);
+        var g = Math.floor(Math.random() * 254);
+        var b = Math.floor(Math.random() * 254);
         div.css({
-          "color": "gba(" + g + ',' + b + ',' + a + ')';
+          "color": "rgb(" + r + ',' + g + ',' + b + ')',
+          top : Math.floor(Math.random() * $('.wallpaper').height()) + 'px',
           right: -div.width(),
           width: div.width()
         });
