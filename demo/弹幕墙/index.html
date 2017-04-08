@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,8 +32,6 @@
       <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
- 
-
   </head>
 
   <body>
@@ -56,6 +53,8 @@
     </div>
     <script src="jquery-3.1.0.js"></script>
     <script>
+
+      var wallpaper = $('.wallpaper');
       // 创建一个div
       $("#send").click(function() {
         var $div = $('<div></div>'),
@@ -80,7 +79,7 @@
         var b = Math.floor(Math.random() * 254);
         div.css({
           "color": "rgb(" + r + ',' + g + ',' + b + ')',
-          top : Math.floor(Math.random() * $('.wallpaper').height()) + 'px',
+          top : Math.floor(Math.random() * wallpaper.height() - 20) + 'px',
           right: -div.width(),
           width: div.width()
         });
@@ -93,14 +92,14 @@
         var i = 0;
         var timer = setInterval(function() {
           div.css({
-            right: (i += 1) + "px"
-          });
-          if ((div.offset().left + div.width()) < $(".wallpaper").offset().left) {
+            right: (i += 1) + 'px'
+          })
+          if (div.offset().left + div.width() < wallpaper.offset().left) {
             div.remove();
             clearInterval(timer);
           }
-        }, 10)
-        timers.push(timer)
+        }, 10);
+        timers.push(timer);
       }
       
     </script>
