@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ajax案例一</title>
+    <meta charset="utf-8" />
+    <script src="../jquery-1.12.0.min.js"></script>
+  </head>
+  <body>
+    <!-- 二级联动 -->
+    <select id="province">
+      <option>请选择</option>
+      <option>山东省</option>
+      <option>辽宁省</option>
+      <option>吉林省</option>
+    </select>
+    <select id="city">
+      <option>请选择</option>
+    </select>
+
+    <script>
+      // 1. 为<select>元素绑定change事件
+      $(document).ready(function() {
+        var $provinceEle = $("#province"),
+            cities = [],
+            city = $("#city")[0];
+        $provinceEle.change(function() {
+          // 将id为city的元素内容清空
+          city.length = 0;
+          // 2. post方法发送用户当前选择的省份名称
+          // 3. 创建对应的城市列表 - 数组
+          $.post('check.php', {
+              province: $provinceEle.val()
+            }, function(data, textStatus, xhr) {
+              cities = data.split(',');
+              for(var i = 0; i < cities.length; i++) {
+                city[i] = new Option(cities[i], cities[i]);
+              }
+          });
+        });
+      });
+ 
+    </script>
+  </body>
+ 
+</html>

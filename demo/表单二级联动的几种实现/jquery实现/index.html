@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>二级联动</title> 
+  <script type="text/javascript" src="../jquery-1.12.0.min.js"></script>
+  <script type="text/javascript"> 
+    $(document).ready(function() {
+      $('.city:gt(0)').hide();
+      var $province = $('#province');
+      $province.change(function(event) {
+        $('#province option').each(function(i, o) {
+          if ($(this).prop('selected')) {
+            $('.city').hide();
+            $('.city').eq(i).show();
+          }
+        })
+      });
+    });
+  </script> 
+</head> 
+ 
+<body> 
+  <select id="province"> 
+    <option>----请选择省份----</option> 
+    <option>北京</option> 
+    <option>上海</option> 
+    <option>天津</option> 
+  </select> 
+  <select class="city"> 
+    <option>----请选择城市----</option> 
+  </select> 
+  <select class="city"> 
+    <option>东城</option> 
+    <option>西城</option> 
+    <option>崇文</option> 
+    <option>宣武</option> 
+    <option>朝阳</option> 
+    <option>丰台</option> 
+    <option>石景山</option> 
+    <option>海淀</option> 
+    <option>门头沟</option> 
+    <option>房山</option>
+    <option>通州</option> 
+    <option>顺义</option> 
+    <option>昌平</option> 
+    <option>平谷</option> 
+    <option>怀柔</option>
+    <option>密云</option> 
+    <option>延庆</option> 
+  </select> 
+  <select class="city"> 
+    <option>黄浦</option> 
+    <option>卢湾</option> 
+    <option>徐汇</option> 
+    <option>长宁</option> 
+    <option>静安</option> 
+    <option>普陀</option> 
+    <option>闸北</option> 
+    <option>虹口</option> 
+    <option>杨浦</option> 
+    <option>闵行</option> 
+    <option>宝山</option> 
+    <option>嘉定</option> 
+    <option>浦东</option> 
+    <option>金山</option> 
+    <option>松江</option>
+    <option>青浦</option> 
+    <option>南汇</option> 
+    <option>奉贤</option> 
+    <option>崇化</option> 
+  </select> 
+  <select class="city"> 
+    <option>和平</option> 
+    <option>东丽</option> 
+    <option>河东</option> 
+    <option>西青</option> 
+    <option>河西</option>
+    <option>津南</option> 
+    <option>南开</option> 
+    <option>北辰</option> 
+    <option>河北</option> 
+    <option>武清</option>
+    <option>红挢</option> 
+    <option>塘沽</option> 
+    <option>汉沽</option>
+    <option>大港</option> 
+    <option>宁河</option> 
+    <option>静海</option> 
+    <option>宝坻</option> 
+    <option>蓟县</option> 
+  </select> 
+</body> 
+ 
+</html>
