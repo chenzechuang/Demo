@@ -4,9 +4,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap 101 Template</title>
+    <title>技术产品官网</title>
     <link href="css/reset.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+
+    <script src="js/jquery-3.1.0.js"></script>
+    <script src="js/main.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -79,20 +82,81 @@
         <h3>查找新世界城市活动信息<i class="h3-line"></i></h3>
         <p>每个城市的有不同的活动信息，请自主查询您所需要了解的城市</p>
       </div>
-      <ul class="city-search-list clearfix">
-        <li class="search-item"><input type="text" name="countary" value="中国"></li>
-        <li class="search-item"><input type="text" name="province" value="省份">
-          <ul class="province-items">
-            <li class="province-item active">北京市</li>
-            <li class="province-item">天津市</li>
-            <li class="province-item">河北省</li>
-            <li class="province-item">陕西省</li>
-            <li class="province-item">辽宁省</li>
-          </ul>
-        </li>
-        <li class="search-item"><input type="text" name="city" value="城市"></li>
-        <li class="search-item"><a href="#search">搜&nbsp;&nbsp;&nbsp;索</a></li>
-      </ul>
+      <form class="city-search-list clearfix">
+        <select class="search-items">
+          <option class="select-item">中国</option>
+        </select>
+        <select class="search-items" id="province">
+          <option class="select-item">----请选择省份----</option>
+          <option class="select-item">北京</option>
+          <option class="select-item">上海</option>
+          <option class="select-item">天津</option>
+        </select>
+        <select class="search-items city">
+          <option>----请选择城市----</option>
+        </select>
+        <select class="search-items city"> 
+          <option class="select-item">东城</option> 
+          <option class="select-item">西城</option> 
+          <option class="select-item">崇文</option> 
+          <option class="select-item">宣武</option> 
+          <option class="select-item">朝阳</option> 
+          <option class="select-item">丰台</option> 
+          <option class="select-item">石景山</option> 
+          <option class="select-item">海淀</option> 
+          <option class="select-item">门头沟</option> 
+          <option class="select-item">房山</option>
+          <option class="select-item">通州</option> 
+          <option class="select-item">顺义</option> 
+          <option class="select-item">昌平</option> 
+          <option class="select-item">平谷</option> 
+          <option class="select-item">怀柔</option>
+          <option class="select-item">密云</option> 
+          <option class="select-item">延庆</option> 
+        </select> 
+        <select class="search-items city"> 
+          <option class="select-item">黄浦</option> 
+          <option class="select-item">卢湾</option> 
+          <option class="select-item">徐汇</option> 
+          <option class="select-item">长宁</option> 
+          <option class="select-item">静安</option> 
+          <option class="select-item">普陀</option> 
+          <option class="select-item">闸北</option> 
+          <option class="select-item">虹口</option> 
+          <option class="select-item">杨浦</option> 
+          <option class="select-item">闵行</option> 
+          <option class="select-item">宝山</option> 
+          <option class="select-item">嘉定</option> 
+          <option class="select-item">浦东</option> 
+          <option class="select-item">金山</option> 
+          <option class="select-item">松江</option>
+          <option class="select-item">青浦</option> 
+          <option class="select-item">南汇</option> 
+          <option class="select-item">奉贤</option> 
+          <option class="select-item">崇化</option> 
+        </select> 
+        <select class="search-items city"> 
+          <option class="select-item">和平</option> 
+          <option class="select-item">东丽</option> 
+          <option class="select-item">河东</option> 
+          <option class="select-item">西青</option> 
+          <option class="select-item">河西</option>
+          <option class="select-item">津南</option> 
+          <option class="select-item">南开</option> 
+          <option class="select-item">北辰</option> 
+          <option class="select-item">河北</option> 
+          <option class="select-item">武清</option>
+          <option class="select-item">红挢</option> 
+          <option class="select-item">塘沽</option> 
+          <option class="select-item">汉沽</option>
+          <option class="select-item">大港</option> 
+          <option class="select-item">宁河</option> 
+          <option class="select-item">静海</option> 
+          <option class="select-item">宝坻</option> 
+          <option class="select-item">蓟县</option> 
+        </select> 
+        <a href="#search">搜&nbsp;&nbsp;&nbsp;索</a>
+      </form>
     </div>
 
     <!-- city-activity -->
@@ -155,16 +219,29 @@
         <p class="img-tips"></p>
       </div>
       <div class="newworld-text">
-        <ul>
-          <li class="text-title">新世界／<span>01</span></li>
-          <li class="text-content">新世界是个新世界新世界是个新世界新世界是个新世界 新世界是个新世界新世界是个新世界新世界是个新世界 新世界是个新世界新世界是个新世界新世界是个新世界 新世界是个新世界新世界是个新世界</li>
-          <li class="text-more">更多详情</li>
-          <li class="btn-group">
-            <a href="" class="btn active"></a>
-            <a href="" class="btn"></a>
-            <a href="" class="btn"></a>
-          </li>
-        </ul>
+        <div class="text-item">   
+          <ul class="active">
+            <li class="text-title">新世界／<span>01</span></li>
+            <li class="text-content">新世界是个新世界新世界是个新世界新世界是个新世界 新世界是个新世界新世界是个新世界新世界是个新世界 新世界是个新世界新世界是个新世界新世界是个新世界 新世界是个新世界新世界是个新世界</li>
+            <li class="text-more">更多详情</li>
+          </ul>
+          <ul>
+            <li class="text-title">新世界／<span>02</span></li>
+            <li class="text-content">新世界是个新世界新世界是个新世界新世界是个新世界 新世界是个新世界新世界是个新世界新世界是个新世界 新世界是个新世界新世界是个新世界新世界是</li>
+            <li class="text-more">更多详情</li>
+          </ul>
+          <ul>
+            <li class="text-title">新世界／<span>03</span></li>
+            <li class="text-content">新世界是个新世界新世界是个新世界新世界是个新世界 新世界是个新世界新世界是个新世界新世界是个新世界 新世界是个新世界新世界是个新世界新世界是个新世界新世界新世界新世界   新世界是个新世界新世界是个新世界</li>
+            <li class="text-more">更多详情</li>
+          </ul>
+        </div>
+        <div class="btn-group">
+          <a href="#" class="btn selected"></a>
+          <a href="#" class="btn"></a>
+          <a href="#" class="btn"></a>
+        </div>
+               
       </div>
     </div>
 
@@ -182,7 +259,6 @@
         <a href="">查看更多</a>
       </div>
       <div class="newage-img">
-        <img src="images/newage.jpg" alt="">
         <p class="img-tips"></p>
       </div>
     </div>
