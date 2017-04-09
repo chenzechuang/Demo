@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Examples</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <style>
+      body,p{margin:0;padding:0;}
+      body{color:#333;font:12px/1.5 Tahoma;padding-top:10px;}
+      #outer{width:300px;margin:0 auto;}
+      #outer div{margin-bottom:10px;}
+      button{margin-right:5px;}
+      label{width:5em;display:inline-block;text-align:right;}
+      input{padding:3px;font-family:inherit;border:1px solid #ccc;}
+      #div1{color:#fff;width:180px;height:180px;background:#000;margin:0 auto;padding:10px;}
+    </style>
+  </head>
+  <body>
+    
+    <div id="outer">
+      <div><label>属性名：</label><input value="background" type="text"></div>
+      <div><label>属性值：</label><input value="blue" type="text"></div>
+      <div><label></label><button>确定</button><button>重置</button></div>
+    </div>
+    <div id="div1">在上方输入框输入"属性名"及"属性值"，点击确定按钮查看效果。</div>
+
+    <script>
+      var changeDiv = function(ele, name ,value) {
+        ele.style[name] = value;
+      }
+      window.onload = function() {
+        var oInput = document.getElementsByTagName('input'),
+            oBtn = document.getElementsByTagName('button');
+            oDiv1 = document.getElementById('div1');
+        oBtn[0].onclick = function() {
+          changeDiv(oDiv1, oInput[0].value, oInput[1].value);
+        }
+        oBtn[1].onclick = function() {
+          oDiv1.removeAttribute('style');
+        }
+      }
+    </script>    
+  </body>
+</html>

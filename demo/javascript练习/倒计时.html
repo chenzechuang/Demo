@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Examples</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <style>
+      body,div{margin:0;padding:0;}
+      body{color:#fff;font:16px/1.5 \5fae\8f6f\96c5\9ed1;}
+      #countdown{width:300px;text-align:center;background:#1a1a1a;margin:10px auto;padding:20px 0;}
+      input{border:0;width:283px;height:50px;cursor:pointer;margin-top:20px;background:#0EB81D;font-size:30px;line-height:30px;color:#fff;}
+      input.cancel{background:#9F2B2C }
+      span{color:#000;width:80px;line-height:2;background:#fbfbfb;border:2px solid #b4b4b4;margin:0 10px;padding:0 10px;}
+      
+    </style>
+  </head>
+  <body>   
+    <div id="countdown">
+      <span>01</span>分钟<span>40</span>秒
+      <input value="启动" type="button">
+    </div>
+
+    <script>
+      window.onload = function () {
+        var oCountDown = document.getElementById("countdown"),  
+            aInput = oCountDown.getElementsByTagName("input")[0],
+            timer = null;
+
+        aInput.onclick = function() {
+          this.className == "" ? (timer = setInterval(updateTime, 1000)) : (clearInterval(timer));
+          this.className = this.className == '' ? "cancel" : ''; 
+          this.value = this.value == '启动' ? '取消' : '启动';
+        };
+
+        function format(a) {
+          return a.toString().replace(/^(\d)$/,'0$1');
+        }
+
+        function updateTime() {
+          var aSpan = oCountDown.getElementsByTagName('span');
+          var oRemain = aSpan[0].innerHTML.replace(/^0/,'') * 60 + parseInt(aSpan[1].innerHTML.replace(/^0/,''));
+          if(oRemain <= 0) {
+            clearInterval(timer);
+            return;
+          }
+          oRemain--;
+          aSpan[0].innerHTML = format(parseInt(oRemain / 60));
+          oRemain %= 60;
+          aSpan[1].innerHTML = format(parseInt(oRemain));
+        }
+      }
+     
+      </script>    
+  </body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Examples</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link rel="stylesheet" href="css/green.css">
+    <style>
+
+      body,ul,li{margin:0;padding:0;}
+      html,body{height:100%;}
+      body{font:12px/1.5 Tahoma;text-align: center;}
+      li{list-style-type:none;}
+      a:link,a:visited{text-decoration:none;}
+      a:hover{text-decoration:underline;}
+      #outer{width:500px;margin:0 auto;overflow:hidden;zoom:1;}
+      #skin,#nav{overflow:hidden;zoom:1;}
+      #skin{margin:10px 0;}
+      #skin li{float:left;width:6px;height:6px;cursor:pointer;overflow:hidden;margin-right:10px;text-indent:-9999px;border-width:4px;border-style:solid;}
+      #skin li.current{background:#fff!important;}
+      #red{border-color:red;background:red;}
+      #green{border-color:green;background:green;}
+      #black{border-color:black;background:black;}
+      #nav{border:1px solid #fff;}
+      #nav li{float:left;width:82px;line-height:25px;text-align:center;border-right:1px solid #fff;}
+      #nav li.last{width:83px;border-right-width:0;}
+      #nav li a{color:#fff;}
+
+      input{border:1px solid #ccc;padding:3px;}
+      button{cursor:pointer;}
+    </style>
+    <script>
+      window.onload = function() {
+        var oLink = document.getElementsByTagName('link')[0],
+            oSkin = document.getElementById('skin').getElementsByTagName('li');
+
+        for (var i = 0, l = oSkin.length; i < l; ++i) {
+          oSkin[i].onclick = function() {
+            var oSkin_siblings = siblings(this);
+            for(var j = 0; j < oSkin.length ; j++) {
+              oSkin[j].className = "";
+            }
+            this.className = "current"; 
+            oLink['href'] = "css/" + this.id + ".css"; 
+          }
+        }
+
+        var oInput = document.getElementsByTagName('input'),
+            oBtn = document.getElementsByTagName('button')[0];
+        oBtn.onclick = function() {
+          myFn(oInput[0], oInput[1])
+        }
+      }
+      function siblings(ele) {
+        var a = [],       
+            b = ele.parentNode.children;
+        for(var i = 0; i < b.length; i++) {
+          if(b[i] !== ele) {
+            a.push(b[i]);
+          }   
+        }
+        return a;
+      }
+
+      var myFn = function(a, b) {
+        alert(a.value);
+        alert(b.value);
+      };
+    </script> 
+  </head>
+  <body>
+    
+    <div id="outer">
+      <ul id="skin">
+        <li id="red" title="红色">红</li><li id="green" class="current" title="绿色">绿</li><li id="black" title="黑色">黑</li>
+      </ul>
+      <ul id="nav">
+        <li><a href="javascript:;">新闻</a></li>
+        <li><a href="javascript:;">娱乐</a></li>
+        <li><a href="javascript:;">体育</a></li>
+        <li><a href="javascript:;">电影</a></li>
+        <li><a href="javascript:;">音乐</a></li>
+        <li class="last"><a href="javascript:;">旅游</a></li>
+      </ul>
+    </div>
+    
+
+    <p><input value="北京市" type="text"></p>
+    <p><input value="朝阳区" type="text"></p>
+    <p><button>传参</button></p>
+
+
+
+   
+  </body>
+</html>

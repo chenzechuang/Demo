@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Examples</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <style>
+      #outer{width:500px;margin:0 auto;padding:0;text-align:center;}
+      #div1{width:100px;height:100px;background:black;margin:10px auto;display:block;}
+    </style>
+  </head>
+  <body>
+    <div id="outer">
+      <input value="变宽" type="button">
+      <input value="变高" type="button">
+      <input value="变色" type="button">
+      <input value="隐藏" type="button">
+      <input value="重置" type="button">
+      <div id="div1"></div>
+    </div>
+
+    <script>
+      var changeStyle = function(ele, attr, value) {
+        ele.style[attr] = value;
+      };
+
+      window.onload = function() {
+        var oBtn = document.getElementsByTagName('input'),
+            oDiv = document.getElementById('div1'),
+            oAttr = ["width","height","background","display","display"],
+            oVal = ["200px","200px","red","none","block"];
+
+        for (var i = 0, l = oBtn.length; i < l; ++i) {
+          oBtn[i].index = i;
+          oBtn[i].onclick = function() {
+            this.index == oBtn.length - 1 && (oDiv.style.cssText = "");
+            changeStyle(oDiv, oAttr[this.index], oVal[this.index]);
+          }
+        }
+      };
+    </script>    
+  </body>
+</html>
