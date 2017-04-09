@@ -349,6 +349,8 @@ body {
 .main-nav-title {
   float: left;
   width: 200px;
+  height: 36px;
+  line-height: 36px;
   background-color: #c60a0a;
 }
 
@@ -578,6 +580,8 @@ body {
   margin-left: 10px;
   background: url(../image/banner-btn.png) no-repeat;
   cursor: pointer;
+  _zoom: 1;
+  _display: inline;
 }
 
 .carousel .carousel-count li.selected {
