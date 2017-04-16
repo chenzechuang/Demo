@@ -212,17 +212,25 @@ img {
   margin-top: 10px;
 }
 
-.productMenu .menu-content {
+.productMenu .menuContent {
   float: left;
   width: 220px;
-  padding-right: 20px;
+  margin-right: 15px;
+  margin-bottom: 10px;
+  border: 2px solid #fff;
+}
+
+.productMenu .menuContent:hover {
+  border: 2px solid #c40000;
 }
 
 .productMenu .product-list {
+  float: left;
   width: 210px;
   padding: 4px;
   border-radius: 3px;
   border: 1px solid #ccc;
+  overflow: hidden;
 }
 
 .productMenu .product-bigImg {
@@ -250,6 +258,83 @@ img {
   text-align: center;
   font-size: 0;
 }
-.productMenu .product-smallImg a:hover {
+.productMenu .product-smallImg a.selected {
   border-color: #c40000;
+}
+
+.productMenu .product-price {
+  float: left;
+  height: 30px;
+  line-height: 30px;
+  margin: 0 0 5px;
+  font-family: arial;
+  font-weight: 400;
+  font-size: 20px;
+  color: #C40000;
+}
+
+.productMenu .product-price b {
+  font-size: 14px;
+  font-weight: normal;
+  padding-right: 2px;
+}
+
+.productMenu .product-title {
+  float: left;
+  height: 14px;
+  line-height: 14px;
+  margin-bottom: 3px;
+}
+
+.productMenu .product-title a {
+  display: block;
+  color: #666;
+}
+
+.productMenu .product-mall {
+  float: left;
+  height: 22px;
+  line-height: 22px;
+  margin-bottom: 5px;
+}
+
+.productMenu .product-mall a {
+  color: #999;
+}
+
+.productMenu .product-title a:hover, .productMenu .product-mall a:hover {
+  color: #c40000;
+  text-decoration: underline;
+}
+
+.productMenu .product-status {
+  float: left;
+  width: 100%;
+  height: 32px;
+  border-top: 1px solid #eee;
+  color: #999;
+}
+
+.productMenu .product-status span {
+  display: inline-block;
+  width: 39%;
+  padding: 10px 1px;
+  margin-right: 6px;
+  text-align: left;
+  line-height: 12px;
+  border-right: 1px solid #eee;
+}
+
+.productMenu .product-status em {
+  padding: 2px 2px 0;
+  color: #b57c5b;
+  font-size: 12px;
+}
+
+.productMenu .product-status .wangwang {
+  width: 8%;
+  padding: 10px 0;
+  margin-right: 0;
+  line-height: 12px;
+  border-right: none;
 }

@@ -1,8 +1,5 @@
 /* search page */
 
-
-/*common js*/
-
 function getByClass(clsName, parent) {
   var oParent = parent ? document.getElementById(parent) : document;
   var eles = [];
@@ -100,13 +97,67 @@ $(document).ready(function() {
   });
 });
 
+/* 小图切换大图 */
+
+$(document).ready(function() {
+  $('.productMenu').on('click', '.product-smallImg a', function() {
+    var index = $(this).parents('.menuContent').index();
+    $(this).addClass('selected')
+    .siblings().removeClass('selected');
+    var smallImg_src = $(this).find('img')[0].src;
+    var img_count = smallImg_src.split('_');
+    $('.product-bigImg img')[index].src = 'image/big_product_' + img_count[2];
+    return false;
+  });
+});
+
+
+/* 商品排序 */
+
 $(document).ready(function() {
   var sort_button = $('.filterForm a');
+  var $shop_item = $('.menuContent');
   var sortDirection = true;
-  sort_button.click(function() {
+  $(sort_button[1]).click(function() {
     sort_button.removeClass('sorted-asc sorted-desc');
-    $(this).addClass(sortDirection == true ? 'sorted-asc' : 'sorted-desc');
-    sortDirection = !sortDirection;
+    if(sortDirection == true) {
+      $(this).addClass('sorted-asc');
+      $shop_item.remove().sort(function(a, b) {
+        return $(a).find('.product-price').text().slice(1) - $(b).find('.product-price').text().slice(1);
+      }).each(function(i, el) {
+        $('.productMenu').append(el);
+      });
+      sortDirection = !sortDirection;
+    } else {
+      $(this).addClass('sorted-desc');
+      $shop_item.remove().sort(function(a, b) {
+        return $(b).find('.product-price').text().slice(1) - $(a).find('.product-price').text().slice(1);
+      }).each(function(i, el) {
+        $('.productMenu').append(el);
+      });
+      sortDirection = !sortDirection;
+    }
+    return false;
+  });
+  $(sort_button[0]).click(function() {
+    sort_button.removeClass('sorted-asc sorted-desc');
+    if(sortDirection == true) {
+      $(this).addClass('sorted-asc');
+      $shop_item.remove().sort(function(a, b) {
+        return $(a).find('.shop-sales').text().slice(3,6) - $(b).find('.shop-sales').text().slice(3,6);
+      }).each(function(i, el) {
+        $('.productMenu').append(el);
+      });
+      sortDirection = !sortDirection;
+    } else {
+      $(this).addClass('sorted-desc');
+      $shop_item.remove().sort(function(a, b) {
+        return $(b).find('.shop-sales').text().slice(3,6) - $(a).find('.shop-sales').text().slice(3,6);
+      }).each(function(i, el) {
+        $('.productMenu').append(el);
+      });
+      sortDirection = !sortDirection;
+    }
     return false;
   });
 });
