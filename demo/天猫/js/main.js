@@ -309,3 +309,29 @@ function toTop() {
 addLoadEvent(toTop);
 
 
+/* search page */
+
+/* banner more */
+
+$(document).ready(function() {
+  var $banner_more = $('.bannerForm ul').find('li:gt(15)'),
+      more_button = $('.bannerForm .valueMore').find('a'),
+      button_text = more_button.text();
+  $banner_more.hide();
+  more_button.click(function() {
+    $banner_more.toggle();
+    if (button_text == '更多') {
+      more_button.text('收起');
+      $('<i></i>').appendTo(more_button);
+      more_button.find('i').css({
+        backgroundPosition: '-2px -72px'
+      })
+    } else {
+      more_button.text('更多');
+      $('<i></i>').appendTo(more_button);
+      more_button.find('i').css({
+        backgroundPosition: '-2px -66px'
+      })
+    }
+  });
+});

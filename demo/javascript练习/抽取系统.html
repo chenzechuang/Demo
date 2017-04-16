@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Examples</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <style>
+      #title {
+        width: 400px;
+        margin: 30px auto;
+        text-align: center;
+        font-size: 24px;
+        color: #f00;
+        font-weight: bold;
+      }
+
+      .btns {
+        width: 180px;
+        margin: 0 auto;
+        overflow: hidden;
+      }
+
+      .btns span {
+        float: left;
+        width: 80px;
+        height: 30px;
+        line-height: 30px;
+        margin-right: 10px;
+        text-align: center;
+        font-size: 14px;
+        background: #456;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="title" class="title">抽奖开始啦</div> 
+    <div class="btns">
+      <span id="play">开始</span>
+      <span id="stop">停止</span>
+    </div>
+
+    <script>
+      var data = ['1','2','3','4','5','6'],
+          timer = null,
+          flag = 0;
+
+      window.onload = function() {
+        var play = document.getElementById('play'),
+            stop = document.getElementById('stop');
+
+        //点击开始
+        play.onclick = playFun;
+        //点击停止
+        stop.onclick = stopFun;
+
+        //键盘事件 flag标识开始、停止
+        document.onkeyup = function(event) {
+          event = event || window.event;
+          if(event.keyCode == 13) {
+            if(flag == 0) {
+              playFun();
+              flag = 1;
+            } else {
+              stopFun();
+              flag = 0;
+            }
+          }
+        }
+        function playFun() {
+          var title = document.getElementById('title');
+
+          //间歇调用
+          timer = setInterval(function(){
+            var random = Math.floor(Math.random() * data.length);
+            title.innerHTML = data[random];
+          }, 50);
+
+          play.onclick = null; //避免重复点击
+          play.style.backgroundColor = '#999';
+          flag = 1;  //单击事件响应鼠标事件
+        }
+
+        function stopFun() {
+          clearInterval(timer);
+          play.onclick = playFun;
+          play.style.backgroundColor = '#456';
+          flag = 0;
+        }
+      }
+    </script>
+  </body>
+</html>

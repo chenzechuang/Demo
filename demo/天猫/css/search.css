@@ -1,0 +1,255 @@
+body {
+  background-color: #fff;
+}
+img {
+  max-width: 100%;
+}
+#header .header-content {
+  width: 1190px !important;
+}
+
+#content .main {
+  width: 1190px;
+  margin: 0 auto;
+}
+
+.main .breadcrumbNav {
+  position: relative;
+  height: 38px;
+  margin-bottom: 8px;
+  border-top: 1px solid #ededed;
+}
+
+.main .crumbMenu {
+  width: 100%;
+  height: 30px;
+  margin: 3px 180px 0 25px;
+}
+
+.main .menu-content {
+  line-height: 30px;
+  margin-left: -10px;
+}
+
+.main .crumb-list {
+  float: left;
+  margin-left: 10px;
+}
+
+.main .crumb-list-text, .main .crumb-list-icon {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 12px;
+  color: #666;
+}
+
+.main .crumb-list-text:hover {
+  text-decoration: underline;
+  color: #c40000;
+}
+
+.main .crumb-list-icon {
+  background: url(../image/icon-sprite.png) no-repeat;
+  background-position: -15px -5px;
+  height: 9px;
+  margin-left: 3px;
+  text-indent: -999999px;
+  width: 5px;
+}
+
+.main .crumbTitle {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+  height: 20px;
+  line-height: 22px;
+  overflow: hidden;
+  color: #999;
+}
+
+.main .crumbTitle span {
+  font-family: Arial;
+  font-weight: 700;
+  margin: 0 5px;
+}
+
+#content .selectForm {
+  position: relative;
+}
+
+.selectForm .selectForm-content {
+  border-top: 1px solid #ededed;
+}
+
+.selectForm .bannerForm, .categoryForm, .attrForm {
+  background-color: #f7f5f5;
+  border: 1px solid #ededed;
+  margin-top: -1px;
+}
+
+.selectForm .form-key {
+  float: left;
+  width: 10%;
+  text-indent: 12px;
+  padding-top: 10px;
+  color: #b0a59f;
+}
+
+.selectForm .form-value {
+  float: left;
+  position: relative;
+  width: 90%;
+  background-color: #fff;
+  padding-top: 6px;
+  overflow: hidden;
+}
+
+.selectForm .value-content {
+  position: relative;
+  margin-left: 25px;
+  margin-right: 100px;
+  overflow: hidden;
+}
+
+.selectForm .value-content li {
+  float: left;
+}
+
+.selectForm .valueMore {
+  position: absolute;
+  right: 0;
+  top: 6px;
+  width: 100px;
+  text-align: right;
+}
+
+.selectForm .valueMore a {
+  display: inline-block;
+  height: 25px;
+  line-height: 25px;
+  padding-right: 24px;
+  color: #806f66;
+  vertical-align: middle;
+}
+.selectForm .valueMore i {
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  top: 11px;
+  width: 9px;
+  height: 5px;
+  line-height: 5px;
+  overflow: hidden;
+  background: url(../image/icon-sprite1.png) no-repeat;
+  background-position: -2px -66px;
+}
+
+.bannerForm .value-content li {
+  width: 104px;
+  height: 52px;
+  border: 1px solid #ededed;
+  overflow: hidden;
+  margin-right: 2px;
+  margin-bottom: 2px;
+}
+
+.categoryForm .value-content li {
+  display: block;
+  width: 180px;
+  height: 22px;
+  margin: 0 5px 8px 0;
+  overflow: hidden;
+  border: 0;
+}
+.categoryForm .value-content a, .attrForm .value-content a {
+  display: inline-block;
+  line-height: 22px;
+  color: #806f66;
+}
+
+.attrForm .value-content li {
+  width: 100px;
+  height: 22px;
+  margin: 0 25px 6px 0;
+}
+
+.filterForm {
+  position: relative;
+  margin: 10px 0;
+  padding: 5px;
+  background: #faf9f9;
+  color: #806f66;
+}
+
+.filterForm a {
+  display: inline-block;
+  width: 30px;
+  height: 22px;
+  line-height: 20px;
+  padding-left: 20px;
+  margin-right: 5px;
+  background: url("../image/sort-icons.png") no-repeat 3px 4.5px;
+  border: 1px solid #ccc;
+  color: #806f66;
+  text-decoration: none;
+}
+
+.filterForm a:hover {
+  background-color: #ddd;
+}
+.filterForm a.sorted-asc {
+  background-position: 3px -95px;
+}
+
+.filterForm a.sorted-desc {
+  background-position: 3px -47px;
+}
+
+#content .productMenu {
+  width: 1210px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-top: 10px;
+}
+
+.productMenu .menu-content {
+  float: left;
+  width: 220px;
+  padding-right: 20px;
+}
+
+.productMenu .product-list {
+  width: 210px;
+  padding: 4px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+.productMenu .product-bigImg {
+  width: 100%;
+  height: 210px;
+  margin: 0 0 5px;
+}
+
+.productMenu .product-smallImg {
+  float: left;
+  width: 185px;
+  height: 34px;
+  margin-bottom: 5px;
+  padding-top: 5px;
+  position: relative;
+  overflow: hidden;
+}
+.productMenu .product-smallImg a {
+  float: left;
+  width: 30px;
+  height: 30px;
+  margin-right: 3px;
+  padding: 1px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-size: 0;
+}
+.productMenu .product-smallImg a:hover {
+  border-color: #c40000;
+}
