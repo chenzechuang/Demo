@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Examples</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link href="" rel="stylesheet">
+  <script>
+
+    //将对象序列化
+    function params(data) {
+      var arg = [];
+      for (var i in data) {
+        arr.push(encodeURIComponent(i) + '=' + encodeURIComponent(data[i]));
+      }
+      return arr.join('&');
+    }
+
+    //封装ajax
+    function ajax(obj) {
+      //创建xhr对象;
+      obj.xhr = new XMLHttpRequest();
+      //后面随机数防止浏览器缓存
+      obj.url = url + "?rand=" + Math.random();
+      //序列化对象
+      obj.data = params(obj.data);
+      //当是get请求时
+      if (obj.method = 'get') {
+        //当前面没设置随机数时
+        obj.url += obj.url.indexOf('?') == -1 ? '?' +obj.data : '&' + obj.data;
+      }
+      //异步调用
+      if (obj.async == true) {
+        //监听响应状态
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            callback();
+          }
+        };
+      }
+      //启动HTTP请求
+      xhr.open(obj.method, obj.url, obj.aysnc);
+      //当是post请求时
+      if(obj.method === 'post') {
+        //模仿表单提交
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        //发送HTTP请求-post
+        xhr.send(obj.data);
+      } else {
+        //发送HTTP请求-get
+        xhr.send(null);
+      }
+      //同步调用
+      if (obj.async == false) {
+        callback();
+      }
+      //回调函数传参
+      function callback() {
+        if (xhr.atatus == 200) {
+          obj.success(xhr.responseText);
+        } else {
+          alert("失败，失败状态码：" + xhr.status);
+        }
+      }
+    }
+
+    document.addEventListener('click', function() {
+      ajax({
+        method: 'get',
+        url: 'demo3.php',
+        data: {
+          'name' = 'Lee',
+          'age' = 100
+        },
+        success: function(text) {
+          alert(text);
+        },
+        async = true
+      });
+    }, false);
+  </script>
+</head>
+<body>
+    
+</body>
+</html>

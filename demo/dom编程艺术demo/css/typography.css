@@ -1,0 +1,16 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2016-05-24 19:54:37
+ * @version $Id$
+ */
+body {
+	font-family: "Helvetica","Arial",sans-serif;
+	font-size: 10pt;
+}
+abbr {
+	text-decoration: none;
+	border: 0;
+	font-style: normal;
+}

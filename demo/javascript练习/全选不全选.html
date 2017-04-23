@@ -1,0 +1,127 @@
+<!Doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>js</title>
+
+</head>
+
+<body>
+<!Doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>js</title>
+
+</head>
+
+<body>
+  <h1 id="myHead" onclick="getValue()">
+    看看三种获取节点的方法?
+  </h1>
+  <p>
+    点击标题弹出它的值。
+  </p>
+  <input type="button" onclick="getElements()" value="看看name为sex的节点有几个?" />
+  <Br>
+  <input type="button" onclick="getTagElements()" value="看看标签名为input的节点有几个?" />
+
+  <form>
+    请选择你爱好:<br>
+    <input type="checkbox" name="hobby" id="hobby1">  音乐
+    <input type="checkbox" name="hobby" id="hobby2">  登山
+    <input type="checkbox" name="hobby" id="hobby3">  游泳
+    <input type="checkbox" name="hobby" id="hobby4">  阅读
+    <input type="checkbox" name="hobby" id="hobby5">  打球
+    <input type="checkbox" name="hobby" id="hobby6">  跑步 <br>
+    <input type="button" value = "全选" onclick = "checkall();">
+    <input type="button" value = "全不选" onclick = "clearall();">
+    <p>请输入您要选择爱好的序号，序号为1-6:</p>
+    <input id="wb" name="wb" type="text" >
+    <input name="ok" type="button" value="确定" onclick = "checkone();">
+  </form>
+      
+
+  <ul>
+     <li>javascript</li>
+     <li>HTML/CSS</li>
+     <li>jQuery</li>     
+  </ul>
+
+
+  <div id="con">
+    <p>javascript</p>
+    <div>jQuery</div>
+    <h5>PHP</h5>
+  </div>
+
+
+  <ul id="con">
+    <li id="lesson1">javascript
+      <ul> 
+        <li id="tcon"> 基础语法</li>
+        <li>流程控制语句</li>
+        <li>函数</li>
+        <li>事件</li>
+        <li>DOM</li>
+      </ul>
+    </li>
+    <li id="lesson2">das</li>
+    <li id="lesson3">dadf</li>
+    <li id="lesson4">HTML/CSS 
+      <ul>
+        <li>文字</li>
+        <li>段落</li>
+        <li>表单</li>
+        <li>表格</li>  
+      </ul> 
+    </li>
+  </ul>
+
+  <script type="text/javascript">
+
+
+    function checkall(){
+      var hobby = document.getElementsByTagName("input");
+      for(var i = 0,len= hobby.length; i<len; i++) {
+        hobby[i].checked = true;
+      }
+    }
+
+    function clearall(){
+      var hobby = document.getElementsByName("hobby");
+        
+      for(var i = 0,len= hobby.length; i<len; i++) {
+        hobby[i].checked = false;
+      }     
+        
+    }
+    
+    var wb =  document.getElementById("wb");
+    function checkone(){
+      var j = wb.value;
+      var int_j = parseInt(j);
+
+      if(int_j<1 || int_j>6) {
+         wb.value = "";
+         alert("请重新输入");
+         wb.focus();
+      } else {
+        clearall();
+        var select_input = document.getElementById("hobby"+int_j);
+        select_input.checked = true;
+      }
+    }
+      
+    var mylist = document.getElementById("tcon"); 
+    var parent = mylist.parentNode.parentNode.parentNode;
+    while(parent.lastChild.nodeType != 1) {
+     parent.removeChild(parent.lastChild);
+    }
+    document.write(parent.lastChild.childNodes[0].nodeValue) ;
+
+  </script>
+</body>
+</html>
+</body>
+</html>

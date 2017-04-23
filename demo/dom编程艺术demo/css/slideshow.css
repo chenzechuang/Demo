@@ -1,0 +1,16 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2016-05-30 13:25:19
+ * @version $Id$
+ */
+#slideshow {
+	width: 100px;
+	height: 100px;
+	position: relative;
+	overflow: hidden;
+}
+#preview {
+	position: absolute;
+}

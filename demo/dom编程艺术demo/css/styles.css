@@ -1,0 +1,21 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2016-05-26 12:48:02
+ * @version $Id$
+ */
+body {
+	background-color: blue;
+}
+p#example {
+	color: grey;
+	font: 12px "Arial",sans-serif; 
+}
+.intro {
+	font-weight: bold;
+	font-size: 1.2em;
+}
+.nojs {
+
+}

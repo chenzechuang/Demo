@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Examples</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <script src="js/jquery-3.1.0.js"></script>
+  <script>
+    (function($) {
+      $.fn.extend({
+        "highLight": function(options) {
+          //检查用户传进来的参数是否合法
+          if(!isValue(options) {return this;})
+          //使用jQuery.extend()覆盖插件默认属性
+          var opts = $.extend({}, defaults, options);
+          //this指调用方法的jQuery对象, 
+          //return语句返回jQuery对象，为了支持链式调用
+          return this.each(function() {
+            //遍历所有DOM 
+            var $this = $(this); //获取当前dom的jQuery对象，this指当前循环的dom
+            //根据参数设置dom的样式
+            $this.css({
+              backgroundColor: opts.background,
+              color: opts.foreground
+            });
+          });
+        }
+      });
+
+      //默认参数
+      var defaults = {
+        background: 'yellow',
+        foreground: 'red'
+      };
+
+       //公共的格式化方法. 默认是加粗，用户可以通过覆盖该方法达到不同的格式化效果。
+      $.fn.highLight.format = function(str) {
+        return "<strong>" + str + "</strong>";
+      }
+
+      //私有方法，检测参数是否合法
+      function isValue(options) {
+        return !options || (options && typeof options === 'object') ? true : false;
+      }
+    })(jQuery);
+  </script>
+</head>
+  <body>
+      
+  </body>
+</html>
