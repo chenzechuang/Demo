@@ -6,8 +6,13 @@
 
 /* header */
 .header {
+  position: fixed;
+  top: 0;
+  width: 100%;
   height: 56px;
+  background-color: #fff;
   border-bottom: 1px solid #e4e4e4;
+  z-index: 100;
 }
 .header-logo {
   float: left;
