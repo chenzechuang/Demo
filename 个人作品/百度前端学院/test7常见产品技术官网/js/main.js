@@ -18,7 +18,7 @@ $(document).ready(function() {
       $province.html(html);
       select_2();
     }
-
+ 
     function select_2(n) {//构造第二个select
       var n = n || 0;
       var html = '';
