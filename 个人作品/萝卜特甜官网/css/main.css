@@ -1,0 +1,651 @@
+@charset "UTF-8";
+
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2017-03-29 21:06:34
+ * @version $Id$
+ */
+
+/* 禁用iPhone中Safari的字号自动调整 */
+html {
+ -webkit-text-size-adjust: none; 
+}
+
+/* 设置图片视频等自适应调整 */
+img {
+  max-width: 100%; 
+  height: auto; 
+  width: auto\9; /* ie8 */ 
+}
+.video embed, .video object, .video iframe {
+  width: 100%; 
+  height: auto; 
+}
+a {
+  text-decoration: none; 
+}
+a:hover {
+  color: #141414; 
+}
+a img {
+  border: none; 
+}
+ 
+
+.wrapper {
+ width: 100%; 
+ padding: 0; 
+ margin: 0; 
+}
+
+
+.mh {
+  min-height: 0; 
+  height: auto; 
+  _height: 0; 
+  overflow: hidden; 
+  _overflow: visible; 
+}
+.pa {
+ position: absolute; 
+}
+.pr {
+ position: relative; 
+}
+.oh {
+ overflow: hidden; 
+}
+/* For modern browsers */
+.cf:before,
+.cf:after {
+    content:"";
+    display:table;
+}
+.cf:after {
+    clear:both;
+}
+/* For IE 6/7 (trigger hasLayout) */
+.cf {
+    zoom:1;
+}
+
+
+/* 页面代码 */
+body {
+  font: 16px/22px Microsoft YaHei, Helvetica, Arial, sans-serif; 
+  color: #595959; 
+  overflow-y: scroll; 
+  overflow-x: hidden; 
+  *overflow-y: auto !important; 
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-style: normal;
+  margin: 0 0 20px;
+}
+
+
+.main-menu:hover {
+  width: 180px;
+  overflow: hidden;
+  background-color: #000;
+}
+
+.main-menu {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 55px;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  -webkit-transition: width .2s linear;
+  transition: width .2s linear;
+  z-index: 4000;
+}
+
+.main-menu > ul {
+  margin: 15px 0;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.main-menu li {
+  position: relative;
+  display: block;
+  width: 180px;
+}
+
+.main-menu li i {
+  position: relative;
+  display: table-cell;
+  width: 55px;
+  height: 36px;
+  text-align: center;
+  top: 12px; 
+  font-size: 20px;
+}
+
+.main-menu li > a {
+  display: block;
+  position: relative;
+  width: 180px;
+  font-family: 'Strait', sans-serif;
+  font-size:  14px;
+  color: #777;
+  -webkit-transition: all .14s linear;
+  transition: all .14s linear;
+}
+
+.main-menu .nav-text  { 
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+  width: 125px;
+  color: #fff;
+}
+
+.main-menu li:hover > a {
+  color: #fff;
+  background-color: #00bbbb;
+  text-decoration: none;
+  text-shadow: 0px 0px 0px; 
+  outline: 0 none;
+}
+
+.color-white {
+  color: #fff;
+}
+
+
+.navbar {
+  line-height: 100px; 
+  height: 100px; 
+}
+
+.navbar-brand {
+  line-height: 50px;
+  padding: 0;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.navbar-toggle {
+  padding: 0;
+  margin: 0;
+  width: 80px;
+}
+
+.navbar-toggle span {
+  color: #fff;
+}
+
+h1 a.navbar-brand {
+  color: #fff;
+  font-size: 24px;
+  line-height: 90px;
+  margin-left: 15px;
+}
+
+.navbar .navbar-collapse {
+  float: right;
+  margin-top: 5px !important;
+}
+
+.navbar-nav {
+  margin-top: 20px;
+}
+
+.nav > li > a {
+  display: block;
+  height: 100%;
+  line-height: 100%;
+  font-size: 18px;
+  color: #fff;
+  letter-spacing: 0.1em;
+}
+
+.nav > li > a:hover {
+  color: #79CDC0;
+  background-color: transparent;
+}
+
+.home-top, .home-top1 {
+  padding-top: 200px;
+}
+
+
+
+#mice {
+  bottom: -27px;
+  display: inline-block;
+  height: 9px;
+  left: 50%;
+  margin: 0 auto;
+  padding-bottom: 8em;
+  position: absolute;
+  text-align: center;
+  text-decoration: none;
+  transform: translateX(-50%);
+  z-index: 5;
+}
+
+#mice span {
+  border-bottom: 2px solid white;
+  border-right: 2px solid white;
+  display: block;
+  height: 15px;
+  margin: 5px 0 3px 6px;
+  transform: rotate(45deg);
+  width: 15px;
+}
+.unu, .doi {
+  animation: 1s ease 0s normal none infinite running mouse-scroll;
+}
+.unu {
+  animation-delay: 0.1s;
+  animation-direction: alternate;
+}
+.doi {
+  animation-delay: 0.2s;
+  animation-direction: alternate;
+}
+
+@keyframes mouse-wheel {
+0% {
+    opacity: 1;
+    transform: translateY(0px);
+}
+100% {
+    opacity: 0;
+    transform: translateY(6px);
+}
+}
+@keyframes mouse-wheel {
+  0% {
+    top: 1px;
+  }
+  50% {
+    top: 2px;
+  }
+  100% {
+    top: 3px;
+  }
+}
+
+@keyframes mouse-scroll {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+section.section {
+  margin: 0;
+  padding: 80px 0 60px 0;
+}
+
+.section-header {
+  font-size: xx-large;
+  line-height: normal;
+}
+
+.section-subheader {
+  font-size: x-large;
+  line-height: normal;
+}
+
+.section-header:before {
+  content: "";
+  display: block;
+  margin: auto;
+  width: 150px;
+  height: 51px;
+  background: url(../img/title-top.png) no-repeat;
+}
+
+.mar-top40 {
+  margin-top: 40px;
+}
+
+a.scrollup {
+  height: 32px;
+  width: 32px;
+  color: #fff;
+  background: #35a49c;
+  font-size: 18px;
+  line-height: 32px;
+  text-align: center;
+  text-decoration: none;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 9999;
+  opacity: 0.5;
+}
+ 
+/*幻灯片*/
+/*--------------------------------------------------  CAROUSEL SLIDER---------------------------------------------------*/
+.car-image2 {
+  -webkit-animation-duration: 2s;
+  -moz-animation-duration: 2s;
+  -o-animation-duration: 2s;
+  animation-duration: 2s;
+  -webkit-animation-delay: 0.3s;
+  -moz-animation-delay: 0.3s;
+  -o-animation-delay: 0.3s;
+  animation-delay: 0.3s;
+}
+
+.car-middlecircle span {
+  position: absolute;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 120px;
+  width: 120px;
+  margin: 0 auto;
+  right: 0;
+  font-weight: 100;
+  font-size: 19px;
+}
+
+.carouselText2 {
+  font-size: xx-large;
+  color: #404040;
+  padding: 10px 20px;
+  display: inline-block;
+  letter-spacing: 0.2em;
+  font-weight: lighter;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  font-family: "Microsoft YaHei";
+}
+
+.carouselText3 {
+  color: #404040;
+  padding: 10px 20px;
+  display: inline-block;
+  letter-spacing: 0.2em;
+  font-weight: lighter;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  font: 25px/32px "Microsoft Yahei";
+}
+
+.carouselText4 {
+  font-size: x-large;
+  color: white;
+  /*letter-spacing: 1em;*/
+  font-weight: lighter;
+}
+.carousel .item {
+  padding: 0 0;
+  height: 700px;
+  overflow: hidden;
+  -webkit-background-size: cover !important;
+  -moz-background-size: cover !important;
+  -o-background-size: cover !important;
+  background-size: cover !important;
+}
+
+.carousel p {
+  color: #fff;
+  line-height: 30px;
+}
+
+.carousel-fade .carousel-inner .item {
+  opacity: 1;
+  -webkit-transition-property: opacity;
+  -moz-transition-property: opacity;
+  -o-transition-property: opacity;
+  transition-property: opacity;
+}
+
+.carousel-fade .carousel-inner .active {
+    opacity: 1;
+}
+
+.carousel-fade .carousel-inner .active.left, .carousel-fade .carousel-inner .active.right {
+  left: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+.carousel-fade .carousel-inner .next.left, .carousel-fade .carousel-inner .right {
+  opacity: 1;
+}
+
+.car-four {
+  margin-top: 80px;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.car-four i {
+    margin-bottom: 20px;
+    font-size: 5em;
+}
+
+@media only screen and (max-width: 1024px) {
+
+  .carouselText2 {
+    font-size: large;
+    padding: 0 0;
+    display: inline-block;
+    letter-spacing: 0.2em;
+    font-weight: lighter;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 0;
+    font-family: "Microsoft YaHei";
+  }
+
+  .carouselText3 {
+
+    font-size: small;
+    padding: 0 0;
+    display: inline-block;
+    letter-spacing: 0.2em;
+    font-weight: lighter;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 0;
+    font-family: "Microsoft Yahei";
+  }
+
+  .car-image2 {
+    display: none;
+  }
+
+  .carouselText4 {
+    font-size: large;
+    color: white;
+    /*letter-spacing: 1em;*/
+    font-weight: lighter;
+  }
+
+  .car-four {
+    margin-top: 20px;
+  }
+
+  .car-four i {
+    margin-bottom: 10px;
+    font-size: 3em;
+  }
+
+  .carouselText1 {
+    margin-bottom: 10px;
+    font-size: x-small;
+    line-height: 10px;
+  }
+
+  .carousel p {
+    color: #fff;
+    line-height: 10px;
+  }
+
+  .carousel .item {
+    height: 350px;
+  }
+}
+ 
+ 
+/* 底部 */
+#footer { bottom: 0; height: 40px; width: 100%; z-index: 101; background: #333333; }
+#footer ul li { width: 33%; height: 40px; margin: 0 0 0 0.25%; float: left; line-height: 40px; text-align: center; }
+#footer ul li a { color: #fff; }
+#footer ul li { background: #ccc; }
+
+/*
+ * -----------------------------------------
+ *  320 ~ 480
+ * -----------------------------------------
+ */
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+}
+ 
+/*
+ * -----------------------------------------
+ *  321 ~   宽大于321的设备
+ * -----------------------------------------
+ */
+@media only screen and (min-width: 321px) {
+}
+ 
+/*
+ * -----------------------------------------
+ *  ~ 320  宽小于320的设备
+ * -----------------------------------------
+ */
+@media only screen and (max-width: 320px) {
+}
+ 
+/*
+ * -----------------------------------------
+ *  ~ 480  宽小于480的设备
+ * -----------------------------------------
+ */
+@media only screen and (max-width: 480px) {
+}
+ 
+/* medium screens (excludes iPad & iPhone) */
+/*
+ * -----------------------------------------
+ * 481 ~ 767  宽大于480且小于767的iPad和iPhone
+ * -----------------------------------------
+ */
+@media only screen and (min-width: 481px) and (max-width: 767px) {
+}
+ 
+@media only screen and (max-width: 768px) {
+
+  .main-menu {
+    width: 0;
+  }
+
+  .navbar {
+    background-color: rgba(0, 0, 0, 1);
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  h1 a.navbar-brand {
+    line-height: 50px;
+  }
+  .navbar .navbar-collapse {
+    float: none;
+  }
+  .navbar .navbar-collapse  ul {
+    margin-top: 0;
+  }
+  .navbar .navbar-collapse li a {
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid #FFF;
+
+  }
+  .home-top {
+    padding-top: 150px;
+  }
+
+  .home-top1 {
+    padding-top: 80px;
+  }
+}
+ 
+
+/* ipads (portrait and landscape) */
+/*
+ * -----------------------------------------
+ * 768 ~ 1024  宽大于480且小于1024的iPad和iPhone
+ * -----------------------------------------
+ */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+}
+ 
+/* ipads (landscape) */
+/*
+ * -----------------------------------------
+ * 768 ~ 1024  宽大于480且小于1024的iPad和iPhone
+ * -----------------------------------------
+ */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+}
+ 
+/* ipads (portrait) */
+/*
+ * -----------------------------------------
+ * 768 ~ 1024  宽大于480且小于1024的iPad和iPhone
+ * -----------------------------------------
+ */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+}
+ 
+/*
+ * -----------------------------------------
+ * 1444 ~ 1824  宽大于1444且小于1824的设备
+ * -----------------------------------------
+ */
+@media only screen and (min-width: 1444px) and (max-width: 1824px) {
+}
+ 
+/*
+ * -----------------------------------------
+ * 1824 ~  宽大于1824的设备
+ * -----------------------------------------
+ */
+@media only screen and (min-width: 1824px) {
+}
+ 
+/*
+ * -----------------------------------------
+ * 2224 ~  宽大于2224的设备
+ * -----------------------------------------
+ */
+@media only screen and (min-width: 2224px) {
+}
+ 
+/* iphone 4 and high pixel ratio (1.5+) devices */
+/*
+ * -----------------------------------------
+ * iphone4 ~
+ * -----------------------------------------
+ */
+@media only screen and (-webkit-min-device-pixel-ratio : 1.5), only screen and (min-device-pixel-ratio : 1.5) {
+}
+/* iphone 4 and higher pixel ratio (2+) devices (retina) */
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+}
