@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>管理后台</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+        <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+        <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+        <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+        <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <link href="Public/admin/css/dashboard.css" rel="stylesheet">
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">管理后台</a>
+        </div>
+        <include file="./Public/admin/navbar.html" keywords="1" />
+          
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <include file="./Public/admin/menu.html" keywords="1" />
+        <!--正式内容开始-->
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">后台管理系统</h1>
+
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="./Public/admin/images/User.png" class="img-responsive">
+              <h4>会员数</h4>
+              <span class="text-muted">{$count}个/VIP {$countVIP}个</span>
+            </div>
+              
+             <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="./Public/admin/images/Member.png" class="img-responsive">
+              <h4>主持资源数</h4>
+              <span class="text-muted">{$countDetail}个</span>
+            </div>
+              
+              <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="./Public/admin/images/Calendar.png" class="img-responsive">
+              <h4>通告数</h4>
+              <span class="text-muted">共{$countAnn}/一手{$countAnnT0}/二手{$countAnnT1}</span>
+            </div>
+              
+              
+              <div style="width:85%;">
+                <canvas id="canvas"></canvas>
+            </div>
+              <p></p>
+            <div style="width:85%;">
+                <canvas id="canvas2"></canvas>
+            </div>
+          </div>
+
+        </div>
+        <!--正式内容结束-->
+      </div>
+    </div>
+<script src="Public/Chart/Chart.bundle.min.js"></script>
+<script>
+    var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        
+        
+        //设置日期，当前日期的前七天
+        var myDate = new Date(); //获取今天日期
+        myDate.setDate(myDate.getDate() - 7);
+        var dateArray = []; 
+        var dateTemp; 
+        var flag = 1; 
+        for (var i = 0; i < 7; i++) {
+            dateTemp = (myDate.getMonth()+1)+"-"+myDate.getDate();
+            dateArray.push(dateTemp);
+            myDate.setDate(myDate.getDate() + flag);
+        }
+//        console.log(dateArray);
+        
+        var randomScalingFactor = function() {
+            return Math.round(Math.random() * 100);
+            //return 0;
+        };
+        var randomColorFactor = function() {
+            return Math.round(Math.random() * 255);
+        };
+        var randomColor = function(opacity) {
+            return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
+        };
+
+        var config = {
+            type: 'line',
+            data: {
+                labels: dateArray,
+                datasets: [{
+                    label: "取消关注",
+                    data: [0,0,0,0,0,0,0],
+                    fill: false,
+                    borderDash: [5, 5],
+                }, {
+                    label: "新增关注",
+                    data: [0,0,0,0,0,0,0],
+                }]
+            },
+            options: {
+                responsive: true,
+                title:{
+                    display:true,
+                    text:'一周关注概况'
+                },
+                tooltips: {
+                    mode: 'label',
+                    callbacks: {
+                        // beforeTitle: function() {
+                        //     return '...beforeTitle';
+                        // },
+                        // afterTitle: function() {
+                        //     return '...afterTitle';
+                        // },
+                        // beforeBody: function() {
+                        //     return '...beforeBody';
+                        // },
+                        // afterBody: function() {
+                        //     return '...afterBody';
+                        // },
+                        // beforeFooter: function() {
+                        //     return '...beforeFooter';
+                        // },
+                        // footer: function() {
+                        //     return 'Footer';
+                        // },
+                        // afterFooter: function() {
+                        //     return '...afterFooter';
+                        // },
+                    }
+                },
+                hover: {
+                    mode: 'dataset'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            show: true,
+                            labelString: 'Month'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            show: true,
+                            labelString: 'Value'
+                        },
+                        ticks: {
+                            suggestedMin: 0,
+                            suggestedMax: 0,
+                        }
+                    }]
+                }
+            }
+        };
+
+
+        window.onload = function() {
+            var ctx = document.getElementById("canvas").getContext("2d");
+            window.myLine = new Chart(ctx, config);
+            //
+            var ctx = document.getElementById("canvas2").getContext("2d");
+            window.myLine = new Chart(ctx, config);
+        };
+        
+        
+        $.ajax({
+            type: 'POST',
+            url: "?m=Center&c=Admin&a=main",
+            data: {'action':'get7DaysData'},
+            success: function(result){
+//                console.log(result);
+                config.data = {
+                    labels: dateArray,
+                    datasets: [{
+                        label: "取消关注",
+                        data: result.unsubscribe,
+                        fill: false,
+                    }, {
+                        label: "新增关注",
+                        fill: false,
+                        data: result.subscribe,
+                    }]
+                };
+                
+                config.options={
+                    scales:{
+                        yAxes: [{ticks: {
+                                suggestedMin: 0,
+                                suggestedMax: result.max+10,
+                            }
+                        }]
+                    }
+                }
+                //
+                $.each(config.data.datasets, function(i, dataset) {
+                    dataset.borderColor =  "rgba(0,166,233,0.5)";
+                    dataset.backgroundColor = "rgba(9,9,250,0.5)";
+                    dataset.pointBorderColor = "rgba(240,56,48,0.5)"
+                    dataset.pointBackgroundColor = "rgba(22,80,121,0.5)";
+                    dataset.pointBorderWidth = 1;
+                });
+                window.myLine.update();
+                
+                //
+            },
+            beforeSend: function(){
+            },
+            dataType: 'json'
+        }); 
+
+    
+</script>
+    </body>
+</html>

@@ -1,0 +1,9 @@
+Application/Runtime/
+Caches/
+Application/Common/Conf/
+Uploads/
+QRcode/
+app/
+ACManager/
+py/*.txt
+py/*.pyc

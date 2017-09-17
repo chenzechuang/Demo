@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>管理后台</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+        <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+        <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+        <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+        <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <link href="Public/admin/css/dashboard.css" rel="stylesheet">
+    </head>
+    <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">管理后台</a>
+        </div>
+        <include file="./Public/admin/navbar.html" keywords="1" />
+
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+         <div class="col-sm-3 col-md-2">
+        <include file="./Public/admin/menu.html" keywords="1" />
+         </div>
+        <!--正式内容开始-->
+        <div class="col-sm-9 col-md-10  main">
+            <h1 class="page-header">增加麦币金币</h1>
+
+            <form class="form-horizontal" role="form" action="" enctype="multipart/form-data" method="post">
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">用户ID号</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="userID"  name="userid" type="text" >
+                                [ 用户名：<span class="userName" style="color: #008000;"></span> |  身份：<span class="userSF" style="color: #008000;"></span> ]
+                            </div>
+                    </div>
+                
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">增加金币</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput"  name="coin" type="text" >
+                            </div>
+                    </div>
+                
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">增加麦子</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput"  name="deposit" type="text" >
+                            </div>
+                    </div>
+                
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">输入密码</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput"  name="pwd" type="password" >
+                            </div>
+                    </div>  
+
+
+                
+                <div class="col-sm-3 col-sm-offset-1">
+                    <button type="submit" value="Submit">Submit</button>
+                </div>
+            </form>
+
+
+        </div>
+        <!--正式内容结束-->
+      </div>
+    </div>
+        <script>
+            $(document).ready(function(){
+              $("#userID").change(function(){
+                    var userid = $("#userID").val();
+                    $.post("index.php?m=Center&c=admin&a=setUserBank",{
+                      userid:userid
+                    },
+                    function(data,status){
+                       if(status == "success"){
+                           if(data == "null"){
+                               alert('没用户信息！');
+                           }else{
+                              var data = eval("("+data+")");
+                               $(".userName").text(data.name);
+                               var sf = "";
+                               if(data.role_id=="1"){
+                                   sf = "麦主";
+                               }else{
+                                   sf = "用户";
+                               }
+                               $(".userSF").text(sf);
+                           }
+                       }else{
+                           alert("获取用户信息失败！")
+                       }
+                    });
+              });
+            });
+        </script>
+    </body>
+</html>

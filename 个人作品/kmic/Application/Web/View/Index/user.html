@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>会员升级</title>
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css"> 
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">  
+        <link rel="stylesheet" href="./Public/css/index.css">
+        
+        <!--组件依赖css begin-->
+        <link rel="stylesheet" type="text/css" href="./Public/css/widget/slider/slider.css" />
+        <link rel="stylesheet" type="text/css" href="./Public/css/widget/slider/slider.default.css" /> <!--皮肤文件，若不使用该皮肤，可以不加载-->
+        <!--组件依赖css end-->
+        <!--组件依赖js begin-->
+        <script type="text/javascript" src="./Public/js/zepto.js"></script>
+        <script type="text/javascript" src="http://gmu.baidu.com/demo/mobileevent2pc.js"></script>      <!--此js为在PC端方便查看效果，用在手机上，可去掉此js-->
+        <script type="text/javascript" src="./Public/js/touch.js"></script>      <!--新版zepto合并版中不包括touch.js-->
+        <script type="text/javascript" src="./Public/js/zepto.extend.js"></script>
+        <script type="text/javascript" src="./Public/js/zepto.ui.js"></script>
+        <script type="text/javascript" src="./Public/js/widget/slider.js"></script>
+        <!--组件依赖js end-->
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            
+            wx.ready(function(){
+                    wx.onMenuShareTimeline({
+                        title: '开麦通告页面', // 分享标题
+                        link: 'http://www.kmic168.com/index.php?m=web', // 分享链接,将当前登录用户转为puid,以便于发展下线
+                        desc: '全国主持人通告，每日实时更新',
+                        imgUrl: 'http://www.kmic168.com/Public/share1.jpg', // 分享图标
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        },
+                        trigger: function (res) {
+//                            alert("分享到朋友圈按钮点击");        
+                        },
+                        fail: function (res) {
+//                            alert(JSON.stringify(res));
+                        }
+                    });
+                    
+                    wx.onMenuShareAppMessage({
+                        title: '开麦通告页面', // 分享标题
+                        desc: '全国主持人通告，每日实时更新', // 分享描述
+                        link: 'http://www.kmic168.com/index.php?m=web', // 分享链接
+                        imgUrl: 'http://www.kmic168.com/Public/share1.jpg', // 分享图标
+                        type: 'link', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                });
+        </script>
+    </head>
+
+    <body>
+        
+        <header class="detail-header">
+            <div class="back">
+               <i class="fa fa-angle-left"></i>
+            </div>
+            <div class="header-title">
+                <p>详情</p>
+            </div>
+            
+        </header>
+
+        <section class="artist-detail">
+            <!-- 头部 -->
+            <div class="col-xs-12 detail-item artist-detail-title">
+                <img class="img-circle img-responsive head-img" src="./Public/img/2.jpg">
+                <div class="detail-title-content">
+                    <span class="artist-name"></span>
+                    <span class="artist-id"></span>
+                </div>
+            </div>
+
+            <!-- 形象照 -->
+            <div class="col-xs-12 detail-item artist-detail-img">
+                <div class="item">
+                    形象照
+                </div>
+                <div id="slider" class="img-slider"></div>
+            </div>
+            
+            <!-- 个人信息 -->
+            <div class="col-xs-12 detail-item artist-detail-message">
+                <div class="item title">
+                    个人信息
+                </div>  
+                
+                <div class="row item">
+                    <div class="col-xs-3">身高</div>
+                    <div class="col-xs-9 stature text"></div>
+                </div>
+                <hr>  
+                <div class="row item">
+                    <div class="col-xs-3">从业年限</div>
+                    <div class="col-xs-9 experience text"></div>
+                </div>
+                <hr> 
+                <div class="row item">
+                    <div class="col-xs-3">工作单位</div>
+                    <div class="col-xs-9 organization text"></div>
+                </div>
+                <hr> 
+                <div class="row item">
+                    <div class="col-xs-3">毕业学校</div>
+                    <div class="col-xs-9 school text"></div>
+                </div>
+                <hr> 
+                <div class="row item">
+                    <div class="col-xs-3">曾获荣誉</div>
+                    <div class="col-xs-9 honour text"></div>
+                </div>
+                <hr> 
+                <div class="row item">
+                    <div class="col-xs-3">个人介绍</div>
+                    <div class="col-xs-9 info text"></div>
+                </div>
+            </div>  
+            
+            <!-- 声音 -->
+            <div class="col-xs-12 detail-item artist-detail-voice">
+                <div class="item">
+                    TA的声音
+                </div>
+                <div class="item voice">
+                    <a href="#"><i class="fa fa-play-circle"></i>点击播放</a>
+                    <audio id="mp3Btn"  src="./Public/忧伤还是快乐.mp3">
+                    </audio>
+                </div>
+            </div>     
+             
+            <!-- 主持经历 -->               
+            <div class="col-xs-12 detail-item artist-detail-activity">
+                <div class="item title">
+                    <div>主持经历</div>
+                </div> 
+                
+                <div class="activity-item">
+                    <div class="item activity-title">
+                            <i></i><span class="time"></span><span class="name"></span>
+                    </div> 
+                    <div id="slider1" class="img-slider"></div>
+                </div>
+                <div class="activity-item">
+                    
+                    <div class="item activity-title">
+                            <i></i><span class="time"></span><span class="name"></span>
+                    </div> 
+                    <div id="slider2" class="img-slider"></div>
+                </div>
+                <div class="activity-item">
+                    
+                    <div class="item activity-title">
+                            <i></i><span class="time"></span><span class="name"></span>
+                    </div> 
+                    <div id="slider3" class="img-slider"></div>
+                </div>
+                <div class="activity-item">
+                    
+                    <div class="item activity-title">
+                            <i></i><span class="time"></span><span class="name"></span>
+                    </div> 
+                    <div id="slider4" class="img-slider"></div>
+                </div>
+                <div class="activity-item">
+                    
+                    <div class="item activity-title">
+                            <i></i><span class="time"></span><span class="name"></span>
+                    </div> 
+                    <div id="slider5" class="img-slider"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 底部 -->
+        <div class="col-xs-12 detail-item detail-item-enroll">
+            <div class="row">
+                <div class="col-xs-6 price">
+                    期望酬劳：
+                </div>
+                <div class="col-xs-6 btn">
+                    <button type="button" class="btn" onclick="open_f(event,'会议','自报','22个小时前','12966',0,'-','./Public/Kmic/noPic.png',0);">联系她
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        
+        <script>
+            //创建slider组件
+            var slider = $.ui.slider('#slider', {
+                autoPlay:false,
+                showArr:false,
+                viewNum:3,
+                content:[
+                    {
+                        href: "#",
+                        pic: "",
+                        title:''
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }
+                ]
+            });
+            var slider1 = $.ui.slider('#slider1', {
+                autoPlay:false,
+                showArr:false,
+                viewNum:3,
+                content:[
+                    {
+                        href: "#",
+                        pic: "",
+                        title:''
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    },
+                    {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }
+                ]
+            });
+            var slider2 = $.ui.slider('#slider2', {
+                autoPlay:false,
+                showArr:false,
+                viewNum:3,
+                content:[
+                    {
+                        href: "#",
+                        pic: "",
+                        title:''
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    },
+                    {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }
+                ]
+            });
+            var slider3 = $.ui.slider('#slider3', {
+                autoPlay:false,
+                showArr:false,
+                viewNum:3,
+                content:[
+                    {
+                        href: "#",
+                        pic: "",
+                        title:''
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    },
+                    {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }
+                ]
+            });
+            var slider4 = $.ui.slider('#slider4', {
+                autoPlay:false,
+                showArr:false,
+                viewNum:3,
+                content:[
+                    {
+                        href: "#",
+                        pic: "",
+                        title:''
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    },
+                    {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }
+                ]
+            });
+            var slider5 = $.ui.slider('#slider5', {
+                autoPlay:false,
+                showArr:false,
+                viewNum:3,
+                content:[
+                    {
+                        href: "#",
+                        pic: "",
+                        title:''
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    },
+                    {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }, {
+                        href: "#",
+                        pic: "",
+                        title: ""
+                    }
+                ]
+            });
+            
+        </script>        
+        
+<!--         <script>
+    slider._data.content.push({
+        href: "#",
+        pic: "./Public/img/pic_1.jpg",
+        title:''
+    })
+    console.log(slider._data.content);
+</script> -->
+        <script src="./Public/timeFormat.js"></script>
+        <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+        <script src="./Public/js/index.js"></script> 
+    </body>
+</html>

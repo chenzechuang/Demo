@@ -1,0 +1,42 @@
+<div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+              <!--[keywords]  class="active"  (current)</span>-->
+<!--              {$Think.ACTION_NAME}-->
+        <li <eq name="Think.ACTION_NAME" value="main">class="active"</eq>><a href="{:U(main)}">开始</a></li>
+            <li <eq name="Think.ACTION_NAME" value="agent">class="active"</eq>
+                <eq name="Think.ACTION_NAME" value="memberList">class="active"</eq>><a href="{:U(memberList)}">会员管理</eq></a></li>
+            
+            <ol <eq name="Think.ACTION_NAME" value="memberList">class="active"</eq>><a href="{:U(memberList)}">会员列表</a></ol>
+            <ol <eq name="Think.ACTION_NAME" value="agent">class="active"</eq>><a href="{:U(agent)}">推广量信息</a></ol>
+          </ul> 
+    <ul class="nav nav-sidebar">
+        <li <eq name="Think.ACTION_NAME" value="order">class="active"</eq>>
+                <a href="{:U(order)}">订单管理</eq></a></li>
+            
+            <ol <eq name="Think.ACTION_NAME" value="order">class="active"</eq>><a href="{:U(order)}">订单查询</a></ol>
+    </ul>
+    
+    <ul class="nav nav-sidebar">
+        <li <eq name="Think.ACTION_NAME" value="aticle">class="active"</eq>
+            <eq name="Think.ACTION_NAME" value="articleList">class="active"</eq>
+            <eq name="Think.ACTION_NAME" value="ann">class="ann"</eq>>
+                <a href="{:U(articleList)}">文章管理</eq></a></li>
+            
+            <ol <eq name="Think.ACTION_NAME" value="article">class="active"</eq>><a href="{:U(article)}">添加文章</a></ol>
+            <ol <eq name="Think.ACTION_NAME" value="ann">class="active"</eq>><a href="{:U(ann)}">通告发布信息</a></ol>
+    </ul>
+    
+    <ul class="nav nav-sidebar">
+        <li <eq name="Think.ACTION_NAME" value="announcement">class="active"</eq>>
+                <a href="{:U(announcement)}">通告管理</eq></a></li>
+            
+            <ol <eq name="Think.ACTION_NAME" value="announcement">class="active"</eq>><a href="{:U(announcement)}">通告列表</a></ol>
+            <ol <eq name="Think.ACTION_NAME" value="announcement">class="active"</eq>><a href="{:U(announcementCount)}">通告统计</a></ol>
+    </ul>    
+          <ul class="nav nav-sidebar">
+            <li><a href="{:U(logout)}">登出</a></li>
+          </ul>
+        <ul class="nav nav-sidebar">
+            <li><a href="">版权:jeiry</a></li>
+          </ul>
+        </div>   

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>帮助</title>
+        <link rel="stylesheet" href="./Public/Profile/css/frozen.css">
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <script src="./Public/wxmenu.js"></script>
+    </head>
+    <body ontouchstart>
+        <input type="hidden" name="openid" value="{$Think.get.openid}" />
+<header class="ui-header ui-header-positive ui-border-b" style="background-color: #fb2e39; ">
+            <i class="ui-icon-return" onclick="location.href= '?m=Center&c=Profile';"></i><h1>帮助</h1>
+            <button class="ui-btn index" style="color: #fb2e39;">回首页</button>
+        </header>
+        <section class="ui-container" >
+        
+            <ul class="ui-list ui-list-pure ui-border-tb">
+                <li class="ui-border-t">
+                    <p><span>1.分享获得积分 </span><span class="date"> 16/01/28</span></p>
+                    <h4>只要用户通过您的二维码关注本公众号，你将会得到5积分。</h4>
+                    <h5>1.积分可用于现金换现(开发中)。</h5>
+                    <h5>2.积分可在主持学堂中使用。</h5>
+                </li>
+                <li class="ui-border-t">
+                    <p><span>1.分享赚钱 </span><span class="date"> 16/01/28</span></p>
+                    <h4>只要用户通过您的二维码关注并成为VIP，你将会得到现金奖励，直接红包提现。</h4>
+                    <h5>1.一级【一级奖励】：直接通过您分享的二维码关注并成为会员；奖励5元现金。（如果有10人直接通过您分享的二维码成为会员，奖励50元现金。如此类推，人数不受限制。）</h5>
+                    <h5>2.二级【二级奖励】：通过您下级分享的二维码成为会员，奖励2元现金。（如果有20人通过此分享成为会员，奖励40元现金，如此类推，人数不受限制。）</h5>
+                </li>
+            </ul>
+        </section>
+        
+        <script>
+            $('.pay').click(function(){
+                location.href= '?m=Center&c=Profile&a=member&action=pay';
+            });
+            $('.index').click(function(){
+                location.href= '?m=Center&c=Profile';
+            });
+        $('.qrcode').click(function(){
+            
+            $.ajax({
+                type: 'GET',
+                url: "?m=Center&c=Index&a=getQRcode",
+                data: {'openid':$("input[name='openid']").val()},
+                success: function(result){
+                                    alert(result);
+                },
+                dataType: 'html'
+            }); 
+        });
+        
+        var openid = '{$Think.session.openid}';
+        </script>
+         <script src="./Public/UnionInfo.js"></script>
+    </body>
+</html>

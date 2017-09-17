@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>约麦</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="stylesheet" href="./Public/css/index.css">  
+        <link rel="stylesheet" href="./Public/css/square.css">  
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+
+        <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="./Public/js/YMPlayer.js"></script>
+        <script src="./Public/js/function.js"></script>
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wx9251f2bd07058e97', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}', // 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'hideMenuItems'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+
+            wx.ready(function () {
+                wx.onMenuShareTimeline({
+                    title: title, // 分享标题
+                    link: 'http://ym.yuemai168.com/index.php?m=web&c=article&a=articleContent&articleId={$Think.get.articleId}&mcsId={$Think.get.mcsId}', // 分享链接,将当前登录用户转为puid,以便于发展下线
+                    desc: name,
+                    imgUrl: "http://ym.yuemai168.com/" + headimg, // 分享图标
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    },
+                    trigger: function (res) {
+//                            alert("分享到朋友圈按钮点击");        
+                    },
+                    fail: function (res) {
+//                            alert(JSON.stringify(res));
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: title, // 分享标题
+                    desc:  name, // 分享描述
+                    link: 'http://ym.yuemai168.com/index.php?m=web&c=article&a=articleContent&articleId={$Think.get.articleId}&mcsId={$Think.get.mcsId}', // 分享链接
+                    imgUrl: "http://ym.yuemai168.com/" + headimg,
+                    type: 'link', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                wx.hideMenuItems({
+                    menuList: ["menuItem:copyUrl", "menuItem:openWithQQBrowser", "menuItem:openWithSafari", "menuItem:share:email"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+                });
+            });
+
+        </script>
+    </head>
+    <body class="bgf4">
+        <header class="article-header">
+            <div class="back">
+            </div>
+        </header>    
+        <div class="gq_list_article bgw">
+        </div>
+
+        <div class="mb10 user_html clearfix">
+        </div>
+        <div class="clearfix"></div>
+        
+        <div class="f_windown">
+            <div class="bg"></div>
+            <div class="ui-scroller">
+                <div id="f_close"><img src="./Public/img/data/close.png" width="30"/></div>
+                <div class="f_close_line"></div>
+                <div class="windown-info">
+                    <h1>下载约麦APP，体验全部功能。</h1>
+                    <!-- <p>下载APP可体验更多功能</p> -->
+                    <a href="">iOS版下载</a>
+                    <p>Android敬请期待</p>
+                </div>
+            </div>
+        </div> 
+
+        <div>
+            <div class="col-xs-12 replay_box bgw">
+                <div class="replay_box_tit">评论</div>
+                <div class="replay_box_shu">555</div>
+                <div class="clearfix"></div>
+            </div>
+            
+            <div class="content clearfix">
+                <div class="lists msg_list bgw clearfix">
+                    
+                </div>
+            </div>  
+        </div>
+         <div class="clearfix"></div>
+        <div class="h45"></div>
+        <div class="foot list_article_foot">
+            <div class="col-xs-7"><input class="SendMessage" type="text" placeholder="我也说两句" onclick="DLapp(event)" readonly></div>
+            <div class="col-xs-5 plr0 list_article_foot_menu">
+                <div class="btton" onclick="DLapp(event)">提交</div>
+                <div class="plr0" onclick="wx_share()"><img src="./Public/img/dd_11.png"></div>
+                <div class="plr0" onclick="Praise()"><img src="./Public/img/dd_d.png"><span class="praise">223</span></div>
+            </div>
+        </div>
+
+        <audio id="bgMusic">
+            <source src="" type="audio/mp3">
+        </audio>  
+
+        <div class="baio">
+            <img class="img-responsive" src="./Public/img/fenx.png">
+        </div>
+        <div class="bg" onclick="bgcolse()"></div>
+        <script src="./Public/dist/dropload.min.js"></script>
+        <!-- Initialize Swiper -->
+        <script>
+            $('.back').click(function() {
+                var voice = window.location.href.indexOf('voice');
+                var dynamic = window.location.href.indexOf('dynamic');
+                if (voice != -1) {
+                    window.location.href = './index.php?m=web&c=article&a=square&openid={$Think.get.openid}&backVoice'
+                } else if (dynamic != -1) {
+                    window.location.href = './index.php?m=web&c=article&a=square&openid={$Think.get.openid}&backArticle';
+                } else {
+                    window.history.back();
+                }
+            });
+
+            var praise = "";
+            var followClass = "";
+            var result = "";
+            var headimg = "";
+            var name = "";
+            var title = "";       
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: "index.php?m=api&c=Article&a=info&openid={$Think.get.openid}",
+                data:{
+                    create_time:'{$Think.get.create_time}',
+                    userid:'{$Think.get.openid}',
+                    uid:'{$Think.get.userid}'
+                },
+                error: function (request) {
+                    alert('提交超时，请稍候再试！');
+                },
+                success: function (data) {
+                    var data = eval('(' + data + ')')
+        
+                    
+                    var state = data.state;
+                    data = data.data.dynamic_list;
+                    console.log(data);
+                    var headimg = data.photo_url
+                    var name = data.nick
+                    
+                    var audio_lite = data.audio_lite;
+                    var audio_full = data.pics[0].pic;
+                    
+                    var topHTML = "<div class=\"gq_play\" onclick=\"clickListion("+data.userid+","+data.create_time+")\" id=\"playerControl"+data.topic_id+"\"><\/div><div class=\"top_img\"><img class=\"img-responsive\" src=\""+data.cover+"\"><\/div><div id=\"progress"+data.topic_id+"\"><\/div><audio id=\"player"+data.topic_id+"\"><\/audio>\n"
+                    $(".gq_list_article").html(topHTML);
+                    if(data.type == "1"){
+                        longAudio(data.topic_id,audio_lite,audio_full); 
+                        $("#bgMusic").html('<source src="' + data.pics[0].pic + '" type="audio/mp3">')
+                    }
+                    
+                   
+                    $(".praise").text(data.praise_count);
+                    $(".replay_box_shu").text(data.comment_count);
+                    praise = data.praise_count;
+                    
+                    if (state == "0") {
+                        var title = data.title;    
+                        //  alert(data.data[0].id); 
+                        var userResult ='';
+
+                        var follow_html = "";
+                        if (data.follow > 0) {
+                            follow_html += "<div onclick=\"chfollow('1',{$Think.get.openid}," + data.userid + ")\" class=\"follow follow" + data.userid + "\">\n";
+                            follow_html += "<img src =\"./Public/img/gz_06.png\"></div>";
+                        } else {
+                            follow_html += "<div onclick=\"follow('1',{$Think.get.openid}," + data.userid + ")\" class=\"follow follow" + data.userid + "\">\n";
+                            follow_html += "<img src =\"./Public/img/gz_03.png\"></div>";
+                        }
+
+                        var date = new Date(data.create_time * 1000);
+
+                        date = (date.getMonth() + 1) + "/" + date.getDate();
+
+                        userResult += " <div class=\"col-xs-12 bgw list_article_replay_title\">" + data.content + "<\/div>\n";
+
+                        userResult += " <div class=\"col-xs-12 bgw header\">\n";
+                        userResult += "     <img class=\"user-img img-circle\" src=\""+ data.photo_url +"\" alt=\"\">\n";
+                        userResult += "     <div class=\"header-msg\">\n";
+                        userResult += "         <p class=\"user-name\">"+ data.nick +"<\/p>\n";
+                        userResult += "         <p class=\"dynamic-info\"><span class=\"time\">"+ date +"<\/span> 发布 | <span class=\"listen\">"+ data.listen_count +"<\/span> 收听<\/p>\n";
+                        userResult += "     <\/div>\n";
+
+                        userResult += follow_html;
+
+                        userResult += "     <\/div>\n";
+
+                        $.ajax({
+                            async: false,
+                            type: 'POST',
+                            url: 'index.php?m=api&c=Article&a=userGift&openid={$Think.get.openid}',
+                            dataType: 'json',
+                            data:{
+                                topic_id: data.topic_id,
+                                type: '0',
+                                timestamp:'{$Think.get.create_time}',
+                                userid: data.userid,
+                                range : '0'
+                            },
+                            success: function (data) {
+                                var data =data.data
+                                console.log(data);
+                                
+                                userResult += " <div class=\"col-xs-12 bgw sendGift\">\n";
+                                userResult += " <ul class=\"user-menu\">\n";
+
+                                for (var i = data.giftList.length - 1; i >= 0; i--) {
+                                    userResult += " <li class=\"user-list\"><img class=\"img-circle\" src=\""+ data.giftList[i].photo_url +"\" alt=\"\"><\/li>\n";
+                                }
+
+                                userResult += " <\/ul>\n";
+                                userResult += " <a class=\"sendGift-btn\" onclick=\"DLapp(event)\">送礼物<\/a>\n";
+                                userResult += " <\/div>\n";
+                                    
+                                
+                                
+                            }
+
+                        });
+
+                        
+
+                        userResult += " <\/div>\n";
+
+                        $(".user_html").html(userResult);
+                    }
+
+                }
+
+            })
+            
+            
+
+            $(function () {
+                var itemIndex = 0;
+                var start = 0;
+                var dropload = $('.content').dropload({
+                    scrollArea: window,
+                    loadDownFn: function (me) {
+                        $.ajax({
+                            type: 'POST',
+                            url: 'index.php?m=api&c=Article&a=commentlist&openid={$Think.get.openid}',
+                            dataType: 'json',
+                            data:{
+                                create_time:'{$Think.get.create_time}',
+                                uid:'{$Think.get.userid}',
+                                range : start
+                            },
+                            success: function (data) {
+                                var data =data.data
+                                console.log(data);
+                                if (data.comment_list.length < 1) {
+                                    dropload.lock('down');
+                                    dropload.noData();
+                                }
+
+
+                                var result = '';
+                                for (var i = 0; i < data.comment_list.length; i++) {                             
+                                    var headimg = data.comment_list[i].comment_user.photo_url;
+
+                                    var name =  data.comment_list[i].comment_user.nick;
+                                   
+                                    var time_c = new Date(data.comment_list[i].comment_time * 1000);
+
+                                    time_c = (time_c.getMonth() + 1) + "/" + time_c.getDate();
+
+                                    
+                                    var audioHtml ="";
+                                    if(data.comment_list[i].comment_type == 1){
+                                          audioHtml ="<div class=\"col-xs-12 plr0\" onclick=\"initAudio("+data.comment_list[i].id+")\"><div class=\"list_article_mp3 pull-left\"><audio src=\""+data.comment_list[i].comment_mp3+"\" id=\"audio"+ data.comment_list[i].id+"\" class=\"audio\"><\/audio><\/div><div class=\"pull-left\">"+data.comment_list[i].comment_mp3_time+"'<\/div><\/div>\n";
+                                    }
+                                    
+                                    result += "<div class=\"col-xs-12 mb20\">\n";
+                                    result += "	<div class=\"col-xs-2 plr0 \">\n";
+                                    result += "		<img class=\"img-responsive imgr\" src=\"" + headimg + "\">\n";
+                                    result += "	<\/div>\n";
+                                    result += "	<div class=\"col-xs-10 plr0\">\n";
+                                    result += "		<div class=\"dd_box_headtit\">\n";
+                                    result += "			<div class=\"dd_box_headtit_t \">\n";
+                                    result += "				" + name + "\n";
+                                    result += "				<span>\n";
+                                    result += "					" + time_c + "\n";
+                                    result += "				<\/span>\n";
+                                    result += "			<\/div>\n";
+                                    result += ""+audioHtml+""
+                                    result += "			<div class=\"list_article_replay_iso\">\n";
+                                    result += "				 " + data.comment_list[i].comment_content + "\n";
+                                    result += "			<\/div>\n";
+                                    result += "		<\/div>\n";
+                                    result += "	<\/div>\n";
+                                    result += "<\/div>\n";
+                                }
+                                start = start + 1;
+                                // 为了测试，延迟1秒加载
+                                setTimeout(function () {
+                                    $('.lists').eq(itemIndex).append(result);
+                                    // 每次数据加载完，必须重置
+                                    me.resetload();
+                                }, 1000);
+                            }
+
+                        });
+
+
+                    }
+                });
+            });
+
+            // function follow(userid, mcid) {
+            //     $.ajax({
+            //         cache: true,
+            //         type: "POST",
+            //         url: "index.php?m=api&c=users&a=followAdd&openid={$Think.get.openid}",
+            //         data:{
+            //             userid: userid,
+            //             mcid:mcid
+            //         },
+            //         error: function (request) {
+            //             alert('提交超时，请稍候再试！');
+            //         },
+            //         success: function (data) {
+            //             //      console.log(data);
+            //             var data = eval('(' + data + ')');
+            //             if (data.status == 0) {
+            //                 $(".follow"+mcid+"").html('<img src =\"./Public/img/gz_06.png\">').attr('onclick', 'chfollow('+ userid +', '+ mcid +')');
+            //             }
+            //         }
+            //     })
+            // }
+ 
+    
+            // function chfollow(userid, mcid) {
+            //     $.ajax({
+            //         cache: true,
+            //         type: "POST",
+            //         url: "index.php?m=api&c=users&a=followDel&openid={$Think.get.openid}",
+            //         data:{
+            //             userid: userid,
+            //             mcid: mcid
+            //         },
+            //         error: function (request) {
+            //             alert('提交超时，请稍候再试！');
+            //         },
+            //         success: function (data) {
+            //             //      console.log(data);
+            //             var data = eval('(' + data + ')');
+            //             if (data.status == 0) {
+            //                 $(".follow"+mcid+"").html('<img src =\"./Public/img/gz_03.png\">').attr('onclick', 'follow('+ userid +', '+ mcid +')');
+            //             }
+            //         }
+            //     })
+            // }
+            
+            // function Praise() {
+            //     $.ajax({
+            //         cache: true,
+            //         type: "POST",
+            //         url: "index.php?m=api&c=Article&a=praise&openid={$Think.get.openid}",
+            //         data:{
+            //             userid:'{$Think.get.openid}',
+            //             uid:'{$Think.get.userid}',
+            //             create_time:'{$Think.get.create_time}',
+            //             action: 'click'
+            //         },
+            //         error: function (request) {
+            //             alert('提交超时，请稍候再试！');
+            //         },
+            //         success: function (data) {
+            //             //      console.log(data);
+            //             var data = eval('(' + data + ')');
+            //             if (data.status == 1) {
+            //                 alert('您已经赞过了！');
+            //             } else if (data.status == 0) {
+            //                 var praiseRow = Number("" + praise + "") + Number("1");
+            //                 $(".praise").text(praiseRow);
+            //             }
+            //         }
+            //     })
+            // }
+            
+            var viewTime = new Date();            
+            var MessageKey  = 0;
+
+            // function Message() {
+            //     if(MessageKey == 1){
+            //         var sendTime =new Date(); 
+            //         var compareTime = (sendTime - viewTime)/1000;
+            //         if(compareTime < 30 ){
+            //             alert('你刚评论过了，过一会再来吧！');
+            //             return false;
+            //         }                    
+            //     }
+
+            //     // var sendMessage = $(".SendMessage").val();
+            //     // if(sendMessage == ""){
+            //     //     alert('请填写评论内容！');
+            //     //     return false;
+            //     // }
+            //     $.ajax({
+            //         cache: true,
+            //         url: "index.php?m=api&c=article&a=comment",
+            //         data: {
+            //             commented_uid: '{$Think.get.userid}',
+            //             userid: '{$Think.get.openid}',
+            //             create_time:'{$Think.get.create_time}',
+            //             comment_type:'0',
+            //             comment_mp3:'',
+            //             comment_mp3_time:'',
+            //             comment_content: sendMessage
+            //         },
+            //         type: "POST",
+            //         dataType: 'json',
+            //         error: function (request) {
+            //             alert('提交超时，请稍候再试！');
+            //         },
+            //         success: function (data) {
+            //             alert('提交成功！');
+            //             MessageKey = '1';
+            //            $(".SendMessage").val(" ");
+            //          //  var user_msg = eval('('+ data +')');
+            //          var user_msg = data;
+            //             var user_msg_headimg = "";
+            //             if (user_msg.headimgurl_user == null) {
+            //                 user_msg_headimg = user_msg.headimgurl
+            //             } else {
+            //                 user_msg_headimg = user_msg.headimgurl_user
+            //             }
+
+            //             var user_msg_name = "";
+            //             if (user_msg.name_user == null) {
+            //                 user_msg_name = user_msg.name
+            //             } else {
+            //                 user_msg_name = user_msg.name_user
+            //             }  
+            //             var now = new Date();
+            //             var Msg_html = '';
+            //                 Msg_html += "<div class=\"row\">"
+            //                 Msg_html += "<div class=\"col-xs-12 mb10\">\n";
+            //                 Msg_html += "	<div class=\"col-xs-2 plr0\">\n";
+            //                 Msg_html += "		<img width =\"73%\" class=\"imgr\" src=\"" + user_msg_headimg + "\">\n";
+            //                 Msg_html += "	<\/div>\n";
+            //                 Msg_html += "	<div class=\"col-xs-10 plr0\">\n";
+            //                 Msg_html += "		<div class=\"\">\n";
+            //                 Msg_html += "			<div class=\"dd_box_headtit_t \">\n";
+            //                 Msg_html += "				" + user_msg_name + "\n";
+            //                 Msg_html += "				<div class=\"pull-right clrb2 font14\">\n";
+            //                 Msg_html += "					" + now.getHours() + ": "+now.getMinutes()+"\n";
+            //                 Msg_html += "				<\/div>\n";
+            //                 Msg_html += "			<\/div>\n";
+            //                 Msg_html += "			<div class=\"list_article_replay_iso\">\n";
+            //                 Msg_html += "				 " + sendMessage + "\n";
+            //                 Msg_html += "			<\/div>\n";
+            //                 Msg_html += "		<\/div>\n";
+            //                 Msg_html += "	<\/div>\n";
+            //                 Msg_html += "<\/div>\n";
+            //                 Msg_html += "<div class=\"clearfix\">\n";
+            //                 Msg_html += "<\/div>\n";
+            //                 Msg_html += "<div class=\"bc1c1 row mb20\">\n";
+            //                 Msg_html += "<\/div>\n";                       
+            //                 $(".lists").before(Msg_html);
+            //         }
+            //     })
+            // }
+            
+            
+           
+
+
+            function wx_share() {
+                $(".baio").css('display', 'block');
+                $(".bg").css('display', 'block');
+            }
+            function bgcolse() {
+                $(".baio").css('display', 'none');
+                $(".bg").css('display', 'none');
+            }
+            
+              // $(".SendMessage").focus(function(){
+              //   $(".list_article_foot").css("height","20%");
+              // });
+              // $(".SendMessage").blur(function(){
+              //   $(".list_article_foot").css("height","auto");
+              // });
+              
+              
+            /* MP3 */  
+            var audio = '';
+            var upAudio = "0";
+            var listenKey = 0;
+            function initAudio(val){
+
+                //初始化对象
+                if(val){ 
+          
+                    audio = document.getElementById('audio'+val);
+                   
+                }else{
+                   audio = document.getElementById('bgMusic');
+                   console.log(audio)
+                }
+                
+                 if(upAudio!="0" && upAudio != audio){ //如果上一音频不等于0，并且不是同个音频，则暂停播放
+                    var upAudioID  = upAudio.id.replace("audio",""); //取ID换图片
+                    $(".play_but"+upAudioID+"").html('<img class="img-responsive" src="./Public/img/dd_07.png">')
+                    upAudio.pause();
+                }               
+                playOrPaused(val);
+            }
+
+
+            //暂停或播放
+            var progressTimer;
+            function playOrPaused(){
+                
+                if(audio.paused){
+                    audio.play();
+                    upAudio = audio;
+                  //  progressTimer=window.setInterval(audioProgress,100);
+                //    document.getElementById("musicAudioPlayAndPause").setAttribute("src","img/shutdown.ico");
+                   // var audio_html = '<img onclick="initAudio()" class="img-responsive" src="./Public/img/dd_07_b.png">'
+                 
+                        if(listenKey == 0){ //添加收听数!
+                            $.ajax({
+                                cache: true,
+                                url: "index.php?m=web&c=article&a=articleListen",
+                                data: {
+                                    article_id: '{$Think.get.articleId}',
+                                    uid: '{$Think.get.openid}'
+                                },
+                                type: "POST",
+                                dataType: 'json',
+                                error: function (request) {
+                                    alert('提交超时，请稍候再试！');
+                                },
+                                success: function (data) {
+                                    listenKey = 1;
+                                }
+                            })   
+                        }
+                    return;
+                }
+                audio.pause();
+                  //  var audio_html = '<img onclick="initAudio()" class="img-responsive" src="./Public/img/dd_07.png">'
+               //     $(".gq_play").html(audio_html);               
+              //  document.getElementById("musicAudioPlayAndPause").setAttribute("src","img/wmp.ico")
+            }
+            
+
+                        
+        </script>
+    </body>
+</html>

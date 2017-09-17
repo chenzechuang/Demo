@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>管理后台</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+        <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+        <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+        <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+        <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>        
+        <link href="Public/admin/css/dashboard.css" rel="stylesheet">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+        
+    </head>
+    <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">管理后台</a>
+        </div>
+        <include file="./Public/admin/navbar.html" keywords="1" />
+
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+         <div class="col-sm-2 col-md-2">
+        <include file="./Public/admin/menu.html" keywords="1" />
+         </div>
+        <!--正式内容开始-->
+        <div class="col-sm-9 col-md-10  main">
+            <h1 class="page-header">麦主审核</h1>             
+            <table id="table" ></table> 
+        </div>
+        <!--正式内容结束-->
+      </div>
+    </div>
+        
+        
+  <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">拒绝内容</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="name"> 用户ID：</label>
+                    <input value="" class="form-control user_id" readonly="true" type="text" ><br>
+                </div>
+                <div class="form-group">
+                    <label for="name"> 拒绝内容：</label>
+                    <textarea class="form-control msg_content" ></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onClick="updata('0')">提交更改</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+  </div>
+  
+        <!-- 模态框（Modal）-->
+        <div class="modal fade  in" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="width: 800px; line-height: 25px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            相册图片
+                        </h4>
+                    </div>
+                    <div class="bodyTb">
+                        
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>         
+    <script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/bootstrap-table.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script type="text/javascript">
+        $('#table').bootstrapTable({
+            url:'./index.php?m=Center&c=mz&a=mzExamine',
+                 dataType: "json",
+               
+                silentSort:true,
+                pagination:true,
+                pageSize:50,
+                search:true,
+                showExport:true,
+                filterControl:true,
+                pageList: [10, 25, 50, 100],
+                showRefresh: true,                  //是否显示刷新按钮
+                clickToSelect: true,                //是否启用点击选中行
+                uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+                minimumCountColumns: 2,             //最少允许的列数
+                showColumns: true,//列选择按钮
+                /*
+                 *                 pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                strictSearch: true,
+                showColumns: true,                  //是否显示所有的列
+                showRefresh: true,                  //是否显示刷新按钮
+                minimumCountColumns: 2,             //最少允许的列数
+                clickToSelect: true,                //是否启用点击选中行
+                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+                showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
+                cardView: false,                    //是否显示详细视图
+                detailView: false,                   //是否显示父子表
+                 */
+            columns: [{
+                field: 'id',
+                title: 'id',
+                align : 'center',
+                valign : 'middle'
+            }, {
+                field: 'headimgurl',
+                title: '头像',
+                align : 'center',
+                valign : 'middle',
+                    formatter:function(value,row,index){   
+                        var img = '<img width="80" src ="'+row.headimgurl+'">';
+                        return img;  
+                    } 
+                
+            }, {
+                field: 'name',
+                title: '昵称',
+                align : 'center',
+                valign : 'middle'
+            },{
+                field: 'sex',
+                title: '性别',
+                align : 'center',
+                valign : 'middle',
+                    formatter:function(value,row,index){   
+                        var sex;
+                        if(row.sex == 1){
+                            sex = '男';
+                        }else{
+                            sex = '女';
+                        }
+                        return sex;  
+                    } 
+            },{
+                field: 'introduction',
+                title: '简介',
+                align : 'center',
+                valign : 'middle',
+                width:'250px',
+            },{
+                field: 'wx_id',
+                title: '微信号',
+                align : 'center',
+                valign : 'middle'
+            },{
+                field: 'audio',
+                title: '音频',
+                align : 'center',
+                valign : 'middle',
+                width:'50px',
+                    formatter:function(value,row,index){   
+                        var audio = '<audio controls="controls" src="'+row.audio+'">您的浏览器不支持 audio 标签。</audio>';
+                        return audio;  
+                    }
+            },{
+                field: 'state',
+                title: '审核状态',
+                align : 'center',
+                valign : 'middle',
+                    formatter:function(value,row,index){   
+                        var state;
+                            if(row.state == "0"){
+                                state = "未审核";
+                            }else if(row.state == "1"){
+                                check_status = "审核通过";
+                            }else if(row.state == "2"){
+                                state = "审核不通过";
+                            }else if(row.state == "3"){
+                                state = "审核中";
+                            }
+                        return state;  
+                    }
+            },{
+                field: 'check_msg',
+                title: '审核信息',
+                align : 'center',
+                valign : 'middle'
+            },{
+                field: 'real_name',
+                title: '真实名字',
+                align : 'center',
+                valign : 'middle'
+            },{
+                field: 'signature',
+                title: '个人签名',
+                align : 'center',
+                valign : 'middle'
+            },{
+                field: 'mob',
+                title: '手机',
+                align : 'center',
+                valign : 'middle'
+            },{
+                field: 'option',
+                title: '编辑',
+                align : 'center',
+                valign : 'middle',
+                formatter:function(value,row,index){  
+                    $(".user_id").val(row.id);
+                   var x = '<a data-toggle="modal" data-target="#myModal2" onclick="articInfo(' + JSON.stringify(row).replace(/"/g, '&quot;') + ')">相册图片</a> | ';
+                   var s = '<a href="#"  data-toggle="modal" data-target="#myModal" onclick="examine('+row.id+')" >'+'拒绝</a> | ';   
+                   var e = '<a href="#" onclick=updata("1",'+row.id+') >'+'通过</a>';   
+                        return x+s+e;  
+                    } 
+            }    
+            ]
+        });
+        
+
+        function examine(val){
+           $(".user_id").val(val);
+
+        }
+        
+        function updata(check,id){
+            var userID;
+             if(id){
+                 userID = id;
+             }else{
+                 userID = $(".user_id").val();
+             }
+             $.ajax({
+                 type: "POST",
+                 url: "index.php?m=Center&c=mz&a=mzExamine",
+                 data: {
+                     action:"mzExamine",
+                     userId:userID, 
+                     content:$(".msg_content").val(),
+                     check:check
+                 },
+                 dataType: "json",
+                 success: function(data){
+                     $('#table').bootstrapTable('refresh');       
+                 }
+             }); 
+        }
+        
+           function articInfo(val) {
+                console.log(val);
+              //  var audio = eval("(" + val.pics + ")");
+                
+                if (val.type =="1"){
+                    var otherHtml = '';
+                        otherHtml += "<div class=\"col-md-12 text-center form-group\">\n";
+                        otherHtml += "	<audio src=\"" + val.pics[0] + "\" controls=\"true\"><\/audio>\n";
+                        otherHtml += "<\/div>\n";
+                }else{
+                    var otherHtml = '';
+                    if(val.pics.length>0){
+                        otherHtml += "<div class=\"col-md-12 text-center form-group\">\n";
+                        for(var a=0; a<val.pics.length;a++){
+                            otherHtml += "<a target=_blank href="+val.pics[a]+"><img width='120' style='margin:5px;' src ="+val.pics[a]+"></a>";
+                        }
+                        
+                        otherHtml += "<\/div>\n";    
+                        otherHtml +='<div style="clear:both;"></div>';
+                    }    
+                }
+
+
+                var strVar = "";
+                strVar += ""+otherHtml+"";
+                $(".bodyTb").html(strVar);
+
+            }        
+    </script>
+    </body>
+</html>

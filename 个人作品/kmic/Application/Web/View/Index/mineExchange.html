@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>闲置</title>
+
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+
+        <link rel="stylesheet" href="./Public/bootstrap/bootstrap.css">
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+
+        <link rel="stylesheet" href="./Public/css/index.css">
+
+        <script src="./Public/json2.js"></script>
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/jquery.min.js"></script>
+        <script src="./Public/jquery.session.js"></script>
+        <!-- <script src="https://cdn.bootcss.com/hammer.js/2.0.8/hammer.min.js"></script> -->
+        <script src="./Public/bootstrap/bootstrap.min.js"></script>
+        <script src="https://cdn1.lncld.net/static/js/av-min-1.5.0.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            wx.ready(function(){
+                wx.onMenuShareTimeline({
+                    title: '开麦通告页面', // 分享标题
+                    link: 'http://www.kmic168.com/index.php?m=web', // 分享链接,将当前登录用户转为puid,以便于发展下线
+                    desc: '全国主持人通告，每日实时更新',
+                    imgUrl: 'http://www.kmic168.com/Public/share1.jpg', // 分享图标
+                    success: function () { 
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                        // 用户取消分享后执行的回调函数
+                    },
+                    trigger: function (res) {
+                    //alert("分享到朋友圈按钮点击");        
+                    },
+                    fail: function (res) {
+                    //alert(JSON.stringify(res));
+                    }
+                });
+                
+                wx.onMenuShareAppMessage({
+                    title: '开麦通告页面', // 分享标题
+                    desc: '全国主持人通告，每日实时更新', // 分享描述
+                    link: 'http://www.kmic168.com/index.php?m=web', // 分享链接
+                    imgUrl: 'http://www.kmic168.com/Public/share1.jpg', // 分享图标
+                    type: 'link', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () { 
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+            });
+        </script>
+        
+        <script>
+            var APP_ID = '29f9bXMjtcmOkhtzRCWtVlgM-gzGzoHsz';
+            var APP_KEY = 'FweIIrWPbdjifiD0GwQSEMna';
+            AV.init({
+              appId: APP_ID,
+              appKey: APP_KEY
+            });
+        </script>
+    </head>
+    <body ontouchstart=""><input type="hidden" name="openid" value="{$Think.session.openid}"> 
+        
+        <!-- header -->
+        <header class="detail-header">
+            <div class="back" onclick="window.location.href = '?m=Center&c=Profile&a=index&openid={$Think.get.openid}';">
+            </div>
+            <div class="header-title">
+                <p>闲置物品</p>
+            </div>
+            <div class="header-preview">
+                <a href="javascript:newGoods('{$Think.get.openid}');"><i class="fa fa-file"></i></a>
+            </div>
+        </header>
+        
+        <div class="f_windown mine-windown">
+            <div class="bg"></div>
+            <div class="ui-scroller">
+                <div id="f_close"><img src="./Public/Kmic/close.png" width="30"/></div>
+                <div class="f_close_line"></div>
+                <div class="windown-info">
+                    <p>物品卖出</p>
+                    <p>卖出的物品将不再显示在交易列表</p>
+                    <a href="javascript:;">确定</a>
+                </div>
+            </div>
+        </div> 
+
+        <!-- main -->
+        <section class="announce-menu mb0">
+
+            <ul class="isSelling">
+                <li class="hover selling">在卖</li>
+                <li class="sold">已卖</li>
+            </ul>     
+
+
+            <!-- announce -->
+            <ul class="ui-list list goods-list">
+            </ul>
+            
+
+            <!-- loading -->
+
+            <div class="ui-loading-block show">
+                <div class="ui-loading-cnt">
+                    <i class="ui-loading-bright"></i>
+                    <p>正在加载中...</p>
+                </div>
+            </div>
+
+        </section>
+
+        <script src="./Public/js/index.js"></script>  
+        
+        <script>
+            
+            $(window).scroll(function() {
+                if ($(document).scrollTop()!=0){
+                    sessionStorage.setItem("offsetTop", $(window).scrollTop());//保存滚动位置
+                } 
+                loaddata();
+            });
+
+            var el;
+            var totalheight = 0;     //定义一个总的高度变量
+            var isLoading = 0;
+            var city = "";
+            var province = "";
+            var where = new Array();
+            var page = 0;
+            var isEnd = 0;
+            var level = '{$Think.session.level}';
+            var openid = '{$Think.session.openid}';
+
+            where['is_show'] = 1;
+
+            getPage();
+
+
+            function getPage(){
+                var string = "";
+                
+                for (value in where){
+                    if (where[value] != null) {
+                        string += value+'='+where[value]+',';
+                        console.log(string);
+                    }
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    url: "?m=Web&a=mineExchange&openid={$Think.get.openid}&list",
+                    data: {'page':page,'where':string},
+                    complete:function(result){
+                    },
+
+                    success: function(result){
+                        $.each(result, function(i,val){
+                            console.log(val);
+                            var time = getDateDiff(val.modify_time);
+                            var size = '';
+                            if (val.size == -1) {
+                                size = '不限';
+                            } else if (val.size == 0) {
+                                size = '均码';
+                            } else if (val.size == 1) {
+                                size = 'S码';
+                            } else if (val.size == 2) {
+                                size = 'M码';
+                            } else if (val.size == 3) {
+                                size = 'L码';
+                            }
+
+                            var g_new = '';
+                            if (val.new == 10) {
+                                g_new = '全新';
+                            } else if (val.new == 1) {
+                                g_new = '偏旧';
+                            } else if (val.new == 8) {
+                                g_new = '8成新';
+                            } else if (val.new == 8.5) {
+                                g_new = '8.5成新';
+                            } else if (val.new == 9) {
+                                g_new = '9成新';
+                            } else if (val.new == 9.5) {
+                                g_new = '9.5成新';
+                            } else {
+                                g_new = 0;
+                            }
+
+                            var price_h = '';
+                            if (val.price_h != null) {
+                                if (val.price_h.length >1) {
+                                    price_h = "-"+val.price_h;
+                                }
+                            }
+                            var price = ''
+                            if (val.price  == -1 || val.price == 0) {
+                                price = '自报价格';
+                            } else {
+                                price = '{$Think.lang.L_CURRENCY_SIGN}'+val.price+price_h;
+                            }
+                            
+
+                            var strVar_html ='';
+                            if (level == '10') {
+                                strVar_html ='<div class="lx_button" onclick="deleteData(event,'+val.id+')">删除</div>';
+                            }
+  
+                            var strVar = "";
+                            strVar += "<li class=\"goods-list-item\" id=\"l"+val.id+"\" onclick=\"goodsDetails(\'"+openid+"\',\'"+val.id+"\',\'mine\');\">\n";
+                            strVar += "<div class=\"goods-title\">\n";
+
+                            if (g_new != 0) {
+                                strVar += "<p class=\"goods-name\">"+ val.title +" (" + g_new + ")<\/p>\n";
+                            } else {
+                                strVar += "<p class=\"goods-name\">"+ val.title +"<\/p>\n";
+                            }
+
+                            strVar += "<p class=\"goods-size\">"+ size +"<\/p><\/div>\n";
+                            // str += '<div class="list-menu" onclick="announcementPage(\''+openid+'\',\''+val.id+'\');" >';
+                            // str += strVar_html;
+                            if (val.exchange_pic) {
+                                strVar += "<div class=\"goods-img\">\n";
+                                for (var j = 0; j < val.exchange_pic.length; j++) {
+                                    strVar += "<img src=\""+ val.exchange_pic[j].value + "\" alt=\"\">\n";
+                                    if (j == 2) {
+                                        break;
+                                    }
+                                }
+                                strVar += "<\/div>\n";
+                            }
+                            strVar += "<div class=\"goods-info mine-goods-info\">\n";
+                            strVar += "<p class=\"goods-item-price\">"+ price +"<\/p>\n";
+                            if (val.is_show == 1) {
+                                strVar += "<a class=\"sell\" href=\"javascript:;\" onclick=\"sell(event,"+ val.id +")\">卖出</a>"
+                            } else {
+                                strVar += "<a class=\"sell hassold\" href=\"javascript:;\">已卖</a>"
+                            }
+                            
+                            strVar += "<\/div>\n";
+                            
+                            strVar += "<\/div>\n";
+                            strVar += "<\/li>";
+                            $('.list').append(strVar);
+
+                        });
+
+                       
+                        $(".list").find("#loading").remove(); 
+                        
+                        /*if (result.length > 0) {
+                            $(".list").append('<li class="ui-border-t" id="loading"><img src="Public/Images/loading.gif" width="50"/></li>');
+                        }*/
+                        if (result.length == 0){
+                            $(".list").append('<li class="ui-border-t" id="loading">没有更多</li>');
+                            isEnd = 1;
+                        }
+                        isLoading = 0;
+                        $('.show').fadeOut();
+                    },
+                    beforeSend: function(){
+                        $('.show').fadeIn();
+
+                    },
+                    dataType: 'json'
+                }); 
+            }
+            
+            function sell(event, id) {
+                event.stopPropagation();
+                $('.f_windown').css('display','block');
+                $('.bg').css('display','block');
+                $('.f_windown a').click(function(event) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "?m=web&a=mineExchange&openid={$Think.session.openid}",
+                        data: {'id':id,'action':'delete'},
+                        success: function(result){
+                            $('.show').fadeOut();
+                            console.log(result);
+                            window.location.href = './?m=web&c=index&a=mineExchange&openid={$Think.session.openid}';
+                        },
+                        beforeSend: function(){
+                            $('.show').fadeIn();
+                        },
+                        dataType: 'json'
+                    });
+                });
+
+            } 
+
+            $('.isSelling li').click(function() {
+                $(this).addClass('hover').siblings().removeClass('hover');
+                if ($(this).hasClass('sold')) {
+                    console.log('sold');
+                    $('.list').html('');
+                    page = 0;
+                    where['is_show'] = 0;
+                    getPage();
+
+                } else {
+                    console.log('selling');
+                    $('.list').html('');
+                    page = 0;
+                    where['is_show'] = 1;
+                    getPage();
+                }
+            });
+
+        </script>  
+        
+        <script src="./Public/ga.js"></script>
+    </body>
+</html>

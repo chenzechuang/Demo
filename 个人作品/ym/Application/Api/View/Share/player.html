@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>约麦</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="stylesheet" href="./Public/css/index.css">  
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+        <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="./Public/js/YMPlayer.js"></script>
+        <style>
+            audio{display: none;}
+            #playerControl{font-size: 30px;}
+            #checkStatus{font-size: 30px;}
+            #stop{font-size: 30px;}
+        </style>
+
+    </head>
+
+    <body class="bgf4">
+        <audio id="player1"></audio>
+        <div id="playerControl">control</div>
+        <div id="progress"></div>
+        <div id="checkStatus">check status</div>
+        <div id="stop">stop</div>
+        <div id="abc">a</div>
+        <script>
+            var Player = new YMPlayer({
+                id: '1',
+                urlLite: 'http://opgljb0gg.bkt.clouddn.com/1499842869.98_lite.mp3?13',
+                urlFull: 'http://opgljb0gg.bkt.clouddn.com/1499842869.98_full.mp3?13',
+                player: document.getElementById('player1'),
+                playerControl: {'div': '#playerControl',
+                    'playing': '播放中',
+                    'paused': '暂停',
+                    'loading': '加载中'},
+                progress: {'div': '#progress',
+                    'css': 'background-color: red; height: 5px;'}
+            });
+            
+            $("#checkStatus").click(function () {
+                console.log(Player.status()); //返回 paused 时 就是暂停      返回 playing 时 就是播放
+            })
+            $("#stop").click(function () {
+                Player.pause();
+            })
+        </script>
+    </body>
+</html>

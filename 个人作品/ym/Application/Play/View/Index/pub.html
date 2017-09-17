@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="">
+	<meta name="name" content="content">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>约麦-用声交换故事</title>
+
+	<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+    <script src="./Public/js/jquery.min.js"></script>
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+	<link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">
+	<link rel="stylesheet" href="./Public/css/play_reset.css">
+	<link rel="stylesheet" href="./Public/css/play_index.css">
+
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script>
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?24dfb61c1122e5f0b19f545c6cd07da7";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+
+
+        var toke = "{:S('token')->access_token}";
+        var openid  = "{$Think.get.openid}";
+	    wx.config({
+	        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	        appId: 'wx8ad1b47530e4c6a1', // 必填，公众号的唯一标识
+	        timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+	        nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+	        signature: '{$signature}',// 必填，签名，见附录1
+	        jsApiList: ['startRecord','stopRecord','onVoiceRecordEnd','playVoice','pauseVoice','stopVoice','onVoicePlayEnd','uploadVoice','downloadVoice','onMenuShareTimeline', 'onMenuShareAppMessage','hideMenuItems'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	    });
+        
+        wx.ready(function () {
+            wx.onVoicePlayEnd ({
+                complete: function (res) {
+                    $('.preview-record a').removeClass('selected');
+                }
+            });
+
+            wx.hideMenuItems({
+                menuList: ["menuItem:copyUrl", "menuItem:openWithQQBrowser", "menuItem:openWithSafari", "menuItem:share:email"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+            });
+        });
+
+	</script>
+</head>
+<body>
+
+    <div class="yuemai">
+        <div class="yuemai-logo">
+            <img src="./Public/img/icon@2x.png" alt="">
+            <p>约麦—用声交换故事</p>
+        </div>
+        <a id="yuemai_focus" onclick="_hmt.push(['_trackEvent', 'yuemai', 'click', 'focus']);" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzIxNzQ1MzIyOQ==&scene=124#wechat_redirect">关注</a>
+    </div>
+
+	<div id="wrapper">
+
+        <div class="mine-voice user-voice">
+            <div class="voice-title">
+                <div class="pub1Head"><img class="img-circle" src="{$data[info][headimgurl]}" alt=""></div>
+                <div id="changeWord" class="change-word">
+                    <p>换一个</p>
+                </div>             
+            </div>
+            <div class="voice-content">
+                <p class="words-menu"><span>“</span> <span>”</span></p>
+            </div>
+        </div>
+		<div class="tips item">
+			<p> 朋友想听你的语音，须回复特定的解锁语音</p>
+		</div>
+	</div>
+    <input type="hidden" class="themeID" value="">
+
+    <!-- 模态框（Modal） -->
+    <div class="textTab hide" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                              
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                                提示
+                        </h4>
+                </div>
+                <div class="modal-body text-center textTabContent">
+                        
+                </div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+        
+      
+ 	<div class="footer-btn">
+		<div class="recording">
+			<img src="./Public/img/voice/voice_0@2x.png" alt="">
+			<p>录音中</p>
+		</div>
+		
+		<div class="record-chioce">
+			<div class="send-record">
+				<a class="cancel" href="javascript:;">取消</a>
+				<a class="confirm"  onclick="WxUpload(toke,openid);" href="javascript:;">发送</a>
+			</div>
+			<div class="preview-record">
+				<a href="javascript:;" onclick="WxAudio()"><span class="record-count">56"</span></a>
+			</div>
+		</div>
+
+		<a class="record" ontouchstart = "return false;">按住说话</a>
+	</div>
+
+	<script src="./Public/js/play.js"></script>
+        <script>
+            _hmt.push(['_trackPageview', '/?m=play&c=index&a=pub']);
+             var clickRow = 1;
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: "?m=Play&c=index&a=pub&openid={$Think.get.openid}",
+                data: {'action':'getTheme'}, 
+                dataType: 'json',
+                error: function (request) {
+                    alert("读取话题出错！")
+                },
+                success: function (data) {
+                    if (data.code == 0) {
+                        themeJson = data;
+                        var themeHtml = themeJson.data[0]["content"];
+                        $(".words-menu")[0].childNodes[1].textContent = themeHtml;
+                        var themeID = themeJson.data[0]["id"];
+                        $(".themeID").val(themeID);
+                    }
+
+                    if (data.user_info) {
+                        $(".pub1Head").html('<img class="img-circle" src="'+ data.user_info.headimgurl +'" alt="">');
+                    }
+        //                                    console.log(data);
+                }
+            })  
+            
+            $('.change-word').click(function () {
+            //    console.log(themeJson.data);
+                _hmt.push(['_trackEvent', 'nav', 'click', 'changeWord']);
+                var themeHtml = themeJson.data[clickRow]["content"];
+                var themeID = themeJson.data[clickRow]["id"];
+                $(".themeID").val(themeID);
+                $(".words-menu")[0].childNodes[1].textContent = themeHtml;
+                clickRow = clickRow+1;
+                if(clickRow == themeJson.data.length){
+                    clickRow = 0;
+                }
+            })
+    
+            
+        </script>
+         <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

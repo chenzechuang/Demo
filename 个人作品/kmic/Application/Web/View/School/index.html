@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>主持学堂</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <link rel="stylesheet" href="Public/JQMobile/jquery.mobile-1.4.5.min.css">
+        <link rel="stylesheet" href="./Public/js/iosselect/iosSelect.css">
+        <link rel="stylesheet" href="Public/css/index.css" />
+        
+        <!-- 引入 jQuery 库 -->
+        <script src="Public/jquery.min.js"></script>
+
+        <!-- 引入 jQuery Mobile 库 -->
+        <script src="Public/JQMobile/jquery.mobile-1.4.5.min.js"></script>
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/js/index.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        
+        <!--<link rel="stylesheet" href="Public/noClick.css" />-->
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            
+            wx.ready(function(){
+                wx.onMenuShareTimeline({
+                    title: '开麦学堂', // 分享标题
+                    link: 'http://www.kmic168.com/?m=web&c=school', // 分享链接,将当前登录用户转为puid,以便于发展下线
+                    desc: '主持稿、主持技巧等丰富素材，尽在这里',
+                    imgUrl: 'http://www.kmic168.com/Public/img/logo.jpg', // 分享图标
+                    success: function () { 
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                        // 用户取消分享后执行的回调函数
+                    },
+                    trigger: function (res) {
+                        //  alert("分享到朋友圈按钮点击");        
+                    },
+                    fail: function (res) {
+                        //  alert(JSON.stringify(res));
+                    }
+                });
+                
+                wx.onMenuShareAppMessage({
+                    title: '开麦学堂', // 分享标题
+                    desc: '主持稿、主持技巧等丰富素材，尽在这里', // 分享描述
+                    link: 'http://www.kmic168.com/?m=web&c=school', // 分享链接
+                    imgUrl: 'http://www.kmic168.com/Public/img/logo.jpg', // 分享图标
+                    type: 'link', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () { 
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div data-role="page" id="base">
+            
+            <header class="detail-header">
+
+                <div class="header-title article-header">
+                    <form action="?m=web&c=school&a=getArticles" method="get">
+                        <input class="search" type="text" name="keyword" placeholder="请输入主持稿关键词">
+                        <button type="submit" class="search-btn"></button>
+                    </form>
+                    
+                </div>
+                <div class="filter">
+                    
+                    <div class="filter-content">
+                        <header class="detail-header">
+                            <div class="back">
+                            </div>
+                            <div class="header-title">
+                                <p>筛选</p>
+                            </div>
+                            <div class="filter-close type-close">
+                                
+                            </div>
+                        </header>
+                        <section class="filter-menu">
+                            <ul class="filter-list">
+                                <li class="type">
+                                    <p>依据类型筛选主持词</p>
+                                    <ul>
+                                        <li>
+                                            <div class="pc-box">        
+                                                <input type="hidden" name="new" id="c1Id" value="">
+                                                <a id="showc1">活动类型</a>
+                                            </div>  
+                                        </li>
+
+                                        <li>
+                                            <div class="pc-box">        
+                                                <input type="hidden" name="new" id="c2Id" value="">
+                                                <a id="showc2">行业</a>
+                                            </div>  
+
+                                        </li>
+
+                                        <li>
+                                            <div class="pc-box">        
+                                                <input type="hidden" name="new" id="c3Id" value="">
+                                                <a id="showc3">节日</a>
+                                            </div> 
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </section>
+                    </div>
+                    
+                </div>
+                
+            </header>
+            <!--nav-->
+
+            
+            <div role="main" class="ui-content" >
+                <ul data-role="listview" id="list">
+                </ul>
+            </div>
+        </div>
+
+        <!--内容页-->
+        <div data-role="page" id="content">
+            <header class="detail-header">
+                <a href="#base" class="back">
+                </a>
+                <div class="header-title article-header">
+                    <p>主持学堂</p>
+                </div>
+            </header>
+            <section role="main" class="ui-content articel-content">
+                <div class="title"></div>
+                <div class="type-time"></div>
+                <div class="articelContent"></div>
+            </section>
+            
+            <div data-role="popup" id="popupDialog" data-dismissible="false" style="max-width:400px;">
+                <div role="main" class="ui-content">
+                </div>
+            </div>
+
+        </div>
+        <div class="bg"></div>
+        <div class="c1Box"></div>
+        <div class="c2Box"></div>
+        <div class="c3Box"></div>
+        <script src="./Public/js/iosselect/new.js"></script>
+        <script src="./Public/js/iosselect/iscroll.js"></script>
+        <script src="./Public/js/iosselect/iosSelect.js"></script>
+        <script src="Public/ScrollPage.js"></script>
+        <script>
+            var type = [];
+            $.ajax({
+                type: 'GET',
+                url: "?m=web&c=school&a=getTypes",
+                data: {},
+                success: function(result){
+                    $.each(result, function(i, val) {
+                        type[i] = [];
+                        type[i][0] = {'id': '0', 'value': '全部'};
+                        $.each(val, function(j, box) {
+                            type[i].push({'id': box.id, 'value': box.channel_name});
+                        });
+
+                        var showBankDom = document.querySelector('#show'+ i);
+                        var bankIdDom = document.querySelector('#'+i+'Id');
+                        showBankDom.addEventListener('click', function () {
+                            var bankId = showBankDom.dataset['id'];
+                            var bankName = showBankDom.dataset['value'];
+
+                            var bankSelect = new IosSelect(1, [type[i]],
+                                {
+                                    container: '.'+i+'Box',
+                                    title: '类型选择',
+                                    itemHeight: 50,
+                                    itemShowCount: 5,
+                                    oneLevelId: bankId,
+                                    showAnimate:true,
+                                    callback: function (selectOneObj) {
+                                        bankIdDom.value = selectOneObj.id;
+                                        showBankDom.dataset['id'] = selectOneObj.id;
+                                        showBankDom.dataset['value'] = selectOneObj.value;
+                                }
+                            });  
+                        });
+                        
+                    }); 
+                },
+                dataType: 'json'
+            }); 
+
+
+            var channel = {};
+            function selectType(e) {
+                channel["c1"] = 0;
+                channel["c2"] = 0;
+                channel["c3"] = 0;
+                var cid = $('.at').attr('data-id');
+                channel[e.data.type] = cid;
+                $("#list").html('');
+                page = 0;
+                isEnd = false;
+                $('.filter-content').slideUp();
+                $('.bg').hide();
+                addMore();
+                ga('send', 'event', 'school', 'checkchannel', cid);
+            }
+
+            $('.c1Box').on('touchend','.sure',{type:"c1"}, selectType);
+            $('.c2Box').on('touchend','.sure',{type:"c2"}, selectType);
+            $('.c3Box').on('touchend','.sure',{type:"c3"}, selectType);
+
+            $('.search-btn').click(function() {
+                $("#list").html('');
+                page1 = 0;
+                isSearchEnd = false;
+                search();
+                return false;
+            })
+
+            var level = {$level};
+
+            function formatTime(timestamp){
+                var d = new Date(timestamp * 1000);    //根据时间戳生成的时间对象
+                var date = (d.getFullYear()) + "-" + 
+                    (d.getMonth() + 1) + "-" +
+                    (d.getDate()) ;
+                return date;
+            }
+
+            $('#content').on('pageshow',null, function(event, ui){
+                ga('send', 'event', 'school', 'check', '{$Think.session.id}');
+                $.ajax({
+                    type: 'POST',
+                    url: "?m=web&c=school&a=getArticleDetails",
+                    data: {'id':sessionStorage.aid,'openid':openid,'uid':uid,'action':'look'},
+                    success: function(result){
+                        $.mobile.loading("hide");
+                        if (result.code == 0 ) {
+                            $.mobile.changePage('#base');
+                            if(confirm(result.data)) {
+                                location.href= '?m=Center&c=profile&a=member&openid={$Think.session.openid}&mine';
+                            }
+                        }else {
+                            $('.articelContent').html(result.data.content);
+                            $('.title').html(result.data.title);
+                            var c1name = result.data.c1name==null?'':" | "+result.data.c1name;
+                            var c2name = result.data.c2name==null?'':" | "+result.data.c2name;
+                            var c3name = result.data.c3name==null?'':" | "+result.data.c3name;
+                            $('.type-time').html("发布时间:"+formatTime(result.data.timeline)+c1name+c2name+c3name+' | '+result.data.value+"");
+                        }
+                    },
+                    beforeSend: function(){
+                        $.mobile.loading("show", {
+                            text: "加载中..",
+                            textVisible: true
+                        });
+                    },
+                    dataType: 'json'
+                }); 
+                ga('send', 'event', 'school', 'checkGetArticleDetails', sessionStorage.aid);
+                ga('send', 'event', 'school', 'checkIsmember', '{$Think.session.id}');
+                
+            });
+            
+            var isFirstLoadBase = true;
+            $('#base').on('pageshow',null, function(event, ui){
+                if (isFirstLoadBase == true) {
+                    isFirstLoadBase = false;
+                    $.mobile.loading("show", {
+                        text: "加载中..",
+                        textVisible: true
+                    });
+                }
+            });
+            
+            /* add more function */
+            function addMore() {
+                $.ajax({
+                    type: 'POST',
+                    url: "?m=web&c=school&a=getArticles",
+                    data: {'page':page,'channelc1':channel["c1"],'channelc2':channel["c2"],'channelc3':channel["c3"]},
+                    success: function(result){
+                        console.log(result);
+                        $.mobile.loading("hide");
+                        //
+                        $("#list li").last().remove();
+                        //
+                        var items = '';
+                        result.forEach(function(e) {  
+                            var c1name = e.c1name==null?'':" | "+e.c1name+"";
+                            var c2name = e.c2name==null?'':" | "+e.c2name+"";
+                            var c3name = e.c3name==null?'':" | "+e.c3name+"";
+                            items += "<li class=\"article-box\">\
+                            <a href=\"#content\" onclick=\"sessionStorage.aid="+e.id+"; \">\
+                            <h2 class=\"article-title\">" + e.title + "</h2>\
+                            <p class=\"article-text\">"+e.description+"</p>\
+                            <p class=\"article-tips\" style=\"white-space:pre-wrap;\">发布时间:"+formatTime(e.timeline)+c1name+c2name+c3name+" | "+e.value+"</p>\
+                            </a>\
+                            </li>"; 
+                        });
+                        $("#list").append(items).listview("refresh");
+                        //
+                        if (result.length > 0) {
+                            page++;
+                            var loadingHTML = '<li>加载中...</li>'
+                            $("#list").append(loadingHTML).listview("refresh");
+                        }else{
+                            var loadingHTML = '<li>没有更多...</li>'
+                            $("#list").append(loadingHTML).listview("refresh");
+                            isEnd = true;
+                        }
+                        
+                    },
+                    beforeSend: function(){
+                        $.mobile.loading("show", {
+                            text: "加载中..",
+                            textVisible: true
+                        });
+                    },
+                    dataType: 'json'
+                }); 
+            }
+
+            function search() {
+                $.ajax({
+                    url: '?m=web&c=school&a=getArticles',
+                    type: 'GET',
+                    data: {'page':page1, 'keyword': $('.search').val(), 'action':'search'},
+                    success: function(result) {
+                        console.log(result);
+                        $.mobile.loading("hide");
+                        //
+                        $("#list li").last().remove();
+                        //
+                        var items = '';
+                        result.forEach(function(e) {  
+                            var c1name = e.c1name==null?'':" | "+e.c1name+"";
+                            var c2name = e.c2name==null?'':" | "+e.c2name+"";
+                            var c3name = e.c3name==null?'':" | "+e.c3name+"";
+                            items += "<li class=\"article-box\">\
+                            <a href=\"#content\" onclick=\"sessionStorage.aid="+e.id+"; \">\
+                            <h2 class=\"article-title\">" + e.title + "</h2>\
+                            <p class=\"article-text\">"+e.description+"</p>\
+                            <p class=\"article-tips\" style=\"white-space:pre-wrap;\">发布时间:"+formatTime(e.timeline)+c1name+c2name+c3name+" | "+e.value+"</p>\
+                            </a>\
+                            </li>"; 
+                        });
+                        $("#list").append(items).listview("refresh");
+                        //
+                        if (result.length > 0) {
+                            page1++;
+                            var loadingHTML = '<li>加载中...</li>'
+                            $("#list").append(loadingHTML).listview("refresh");
+                        }else{
+                            var loadingHTML = '<li>没有更多...</li>'
+                            $("#list").append(loadingHTML).listview("refresh");
+                            isSearchEnd = true;
+                        }
+                        
+                    },
+                    beforeSend: function(){
+                        $.mobile.loading("show", {
+                            text: "加载中..",
+                            textVisible: true
+                        });
+                    },
+                    dataType: 'json'
+                }); 
+            }
+
+            /* attach if scrollstop for first time */
+            $(document).on("scrollstop", checkScroll);
+            var openid = '{$Think.session.openid}';
+            var uid = '{$Think.session.id}';
+
+           
+
+        </script>
+        
+        <script src="./Public/ga.js"></script>
+    </body>
+</html>

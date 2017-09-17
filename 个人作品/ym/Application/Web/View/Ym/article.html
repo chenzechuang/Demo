@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>约麦</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        
+        <link rel="stylesheet" href="./Public/dist/dropload.css">
+        <link rel="stylesheet" href="./Public/dist/APlayer.min.css">          
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <link rel="stylesheet" href="./Public/js/PhotoSwipe/photoswipe.css">
+        <link rel="stylesheet" href="./Public/js/Scrollbar/jquery.mCustomScrollbar.css">
+        <link rel="stylesheet" href="./Public/css/index.css">  
+
+        <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+        <script src="./Public/dist/APlayer.min.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="./Public/js/hideMenuItems.js"></script>
+        <script src="./Public/js/YMPlayer.js"></script>
+        <script src="./Public/js/function.js"></script>         
+        <script>
+            var fx_url = window.location.href;
+            fx_url = fx_url.replace('openid', 'fuid');
+            hideMenu("wx8ad1b47530e4c6a1", "{$Think.session.timestamp}", "{$Think.session.nonceStr}", "{$signature}", "约麦", "用声音开启一段走心之旅", fx_url, "http://ym.yuemai168.com/Public/img/logo.jpg", "http://ym.yuemai168.com//Public/img/logo.jpg");
+        </script>        
+    </head>
+    <body class="bgf4">
+        
+        <header id="header">
+            <div class="back"></div>
+            <div class="person">
+                <img class="person_img img-circle" src="./Public/img/data/1.jpg" alt="">
+                <p class="person_name"><span>约麦麦主</span><b class="sex"></b></p>
+                <p class="person_intro">我就是这样的一个人，独自走</p>
+            </div>
+            <ul class="person-total">
+                <li><a href="#">动态<span class="dynamic_count">1123</span></a></li>
+                <li><a href="#">粉丝<span class="passive_count">321</span></a></li>
+                <li><a href="#">通话<span class="video_time">12时21分</span></a></li>
+            </ul>
+        </header>
+        
+        <nav class="nav">
+            <ul id="myTab">
+                <li class="dynamic active"><a href="#home" data-toggle="tab" class="start">动态</a></li>
+                <li class="data"><a href="#ios" data-toggle="tab" class="stop" >资料</a></li>
+            </ul>
+        </nav>
+    
+        <div class="f_windown">
+            <div class="bg"></div>
+            <div class="ui-scroller">
+                <div id="f_close"><img src="./Public/img/data/close.png" width="30"/></div>
+                <div class="f_close_line"></div>
+                <div class="windown-info">
+                    <h1>下载约麦APP，体验全部功能。</h1>
+                    <!-- <p>下载APP可体验更多功能</p> -->
+                    <a href="">iOS版下载</a>
+                    <p>Android敬请期待</p>
+                </div>
+            </div>
+        </div>  
+
+        <div class="index_article">
+
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in active " id="home">
+                    <div class="content">
+                        <div class="lists">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade " id="ios">
+                    <div class="data-item">
+                        <h1 class="item-title">麦主简介</h1>
+                        <p class="introduction"></p>
+                    </div>
+
+                    <div class="data-item">
+                        <h1 class="item-title">相册</h1>
+                        <ul class="album-menu">
+                        </ul>
+                    </div>
+
+                    <div class="data-item">
+                        <h1 class="item-title">兴趣爱好</h1>
+                        <ul class="btn-menu interest">
+                        </ul>
+                    </div>
+
+                    <div class="data-item">
+                        <h1 class="item-title">生活经历</h1>
+                        <ul class="btn-menu experience">
+                        </ul>
+                    </div>
+
+                    <div class="data-item">
+                        <h1 class="item-title">声音标签</h1>
+                        <ul class="btn-menu language">
+                        </ul>
+                    </div>
+
+                    <div class="data-item">
+                        <h1 class="item-title">关注方向</h1>
+                        <ul class="btn-menu follow">
+                        </ul>
+                    </div>
+                </div>    
+            </div>
+        </div>
+
+        <script src="./Public/dist/dropload.min.js"></script>
+        <script src="./Public/js/PhotoSwipe/klass.min.js"></script>
+        <script src="./Public/js/PhotoSwipe/code.photoswipe.jquery-3.0.5.min.js"></script>
+        <script src="./Public/js/Scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+        <script>
+        
+        $('.back').click(function() {
+            var voice = window.location.href.indexOf('voice');
+            var dynamic = window.location.href.indexOf('dynamic');
+            var list = window.location.href.indexOf('list');
+            if (voice != -1) {
+                window.location.href = './index.php?m=web&c=article&a=square&openid={$Think.get.openid}&backVoice'
+            } else if (dynamic != -1) {
+                window.location.href = './index.php?m=web&c=article&a=square&openid={$Think.get.openid}&backArticle';
+            } else if (list != -1) {
+                window.location.href='./index.php?m=web&c=ym&a=index&openid={$Think.get.openid}&back';
+            } else {
+                window.history.back();
+            }
+        });
+
+        var itemIndex = 0;
+        var tab1LoadEnd = false;
+        var tab2LoadEnd = false;
+        var start = 0;
+        var audio = '';
+
+        var dropload = $('.content').dropload({
+            scrollArea: window,
+            loadDownFn: function (me) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'index.php?m=Api&c=Article&a=userlist&openid={$Think.get.openid}',
+                    dataType: 'json',
+                    data: {
+                        userid: '{$Think.get.uid}',
+                        range: start
+                    },
+                    success: function (data) {
+                        var data = data.data;      
+                        console.log(data);
+                        if(data.dynamic_list.length < 1){
+                            dropload.lock('down');
+                            dropload.noData();
+                        }                                      
+                        var strVar = '';
+                        for (var i = 0; i < data.dynamic_list.length; i++) {
+                            var headimg = data.dynamic_list[i].photo_url;
+                            var name = data.dynamic_list[i].nick;
+
+                            var pics_html = '';
+                            if (data.dynamic_list[i].type == "1") {
+                                pics_html += "<div onclick=\"clickListion(" + data.dynamic_list[i].userid + "," + data.dynamic_list[i].create_time + ",this)\" data =\"" + data.dynamic_list[i].topic_id + "\" playno=\"0\" id=\"playerControl" + data.dynamic_list[i].topic_id + "\"  class=\"gq_play play_but\" >\n";
+                                pics_html += "	<img onclick=\"longAudio('" + data.dynamic_list[i].topic_id + "','" + data.dynamic_list[i].audio_lite + "','" + data.dynamic_list[i].pics[0]['pic'] + "')\" class=\"img-responsive\" src=\"./Public/img/dd_07.png\">\n";
+                                pics_html += "	<\/div>\n";
+
+                                pics_html += "<audio id=\"player" + data.dynamic_list[i].topic_id + "\"><\/audio>";
+                                pics_html += "	<\/div>\n";
+                                pics_html += " <div id='progress" + data.dynamic_list[i].topic_id + "'></div>";
+                                // audio_html += " <audio src='" + data.dynamic_list[i].pics[0]['pic'] + "' class=\"audio\" data=\"" + data.dynamic_list[i].topic_id + "\" id='audio" + data.dynamic_list[i].topic_id + "' ></audio>";
+                            } else {
+                                pics_html += "	<\/div>\n";
+                            }
+
+                            var date = new Date(data.dynamic_list[i].create_time * 1000);
+                            date = (date.getMonth() + 1) + "/" + date.getDate();
+                            strVar += "<div class=\"dynamic-item\">\n";
+                            strVar += " <div class=\"header\">\n";
+                            strVar += "     <img class=\"img-circle\" src=\""+ headimg +"\" alt=\"\">\n";
+                            strVar += "     <div class=\"header-msg\">\n";
+                            strVar += "         <p class=\"user-name\">"+ name +"<\/p>\n";
+                            if (data.dynamic_list[i].type == 1) {
+                                strVar += "         <p class=\"dynamic-info\"><span class=\"time\">"+ date +"<\/span> 发布 | <span class=\"listen\">"+ data.dynamic_list[i].listen_count +"<\/span> 收听<\/p>\n";
+                            } else {
+                                strVar += "         <p class=\"dynamic-info\"><span class=\"time\">"+ date +"<\/span> 发布 | <span class=\"listen\">"+ data.dynamic_list[i].listen_count +"<\/span> 阅读<\/p>\n";
+                            }
+                            strVar += "     <\/div>\n";
+                            strVar += "             \n";
+                            strVar += " <\/div>\n";
+                            strVar += " <p class=\"dynamic-content\">"+ data.dynamic_list[i].content +"<\/p>\n";
+                            if (data.dynamic_list[i].type == 1) {
+                                
+                                strVar += " <div class=\"video\" style=\"background:url('"+data.dynamic_list[i].cover+"') no-repeat center center / cover;\" >\n";
+                                strVar += "<a style=\"display:block; height:100%;\" href=\"index.php?m=web&c=article&a=articleContent&channel=" + data.dynamic_list[i].channel + "&create_time=" + data.dynamic_list[i].create_time + "&userid=" + data.dynamic_list[i].userid + "&openid={$Think.get.openid}\"></a>"
+                                strVar += pics_html;
+                                // strVar += "     <audio class=\"audio\" src=\""+ data.dynamic_list[i].pics[0].pic +"\"><\/audio><img class=\"cover\" src=\"./Public/img/data/btn_play@2x.png\">\n";
+                                
+                            } else {
+                                strVar += " <div class=\"photo\">\n";
+                                strVar += "<a style=\"display:block; height:100%;\" href=\"index.php?m=web&c=article&a=articleContent&channel=" + data.dynamic_list[i].channel + "&create_time=" + data.dynamic_list[i].create_time + "&userid=" + data.dynamic_list[i].userid + "&openid={$Think.get.openid}\">"
+                                strVar += "     <img class=\"poster\" src=\"./Public/img/data/img_cover.png\" style=\"background:url('"+data.dynamic_list[i].cover+"') no-repeat top center / cover\" alt=\"\"><\/img></a>\n";
+                                strVar += " <\/div>\n";
+                            }
+                            
+                            strVar += " <ul class=\"dynamic-follow\">\n";
+                            strVar += "     <li class=\"gift\" onclick=\"DLapp(event)\"><\/li>\n";
+                            strVar += "     <li class=\"like\" onclick=\"DLapp(event)\">"+ data.dynamic_list[i].praise_count +"<\/li>\n";
+                            strVar += "     <li class=\"comment\" onclick=\"DLapp(event)\">"+ data.dynamic_list[i].comment_count +"<\/li>\n";
+                            strVar += "     <li class=\"more\" onclick=\"DLapp(event)\"><\/li>\n";
+                            strVar += " <\/ul>\n";
+                            strVar += "<\/div>\n";
+
+
+                            // strVar += "<div class=\"ddbox\">\n";
+                            // strVar += "	<div class=\"ddbox_title\">\n";
+                            // strVar += "		<div class=\"col-xs-10 plr0\">\n";
+                            // strVar += "			<div class=\"dd_box_headimg\">\n";
+                            // strVar += "				<img class=\"img-responsive\" src=\"" + headimg + "\">\n";
+                            // strVar += "			<\/div>\n";
+                            // strVar += "			<div class=\"dd_box_headtit\">\n";
+                            // strVar += "				<div class=\"dd_box_headtit_t\">\n";
+                            // strVar += "					" + name + "\n";
+                            // strVar += "				<\/div>\n";
+                            // strVar += "				<div class=\"dd_box_headtit_b\">\n";
+                            // strVar += "					 <img height=\"15\" src=\"./Public/img/dd_03.jpg\">" + data.dynamic_list[i].listen_count + " 收听\n";
+                            // strVar += "				<\/div>\n";
+                            // strVar += "			<\/div>\n";
+                            // strVar += "		<\/div>\n";
+                            // strVar += "		<div class=\"col-xs-2 fcac plr0 text-right\">\n";
+                            // //  strVar += "			" + data.dynamic_list[i].log_time.substr(data.dynamic_list[i].log_time.length - 8, 5) + "\n";
+                            // strVar += "		<\/div>\n";
+                            // strVar += "		<div class=\"clearfix\">\n";
+                            // strVar += "		<\/div>\n";
+                            // strVar += "	<\/div>\n";
+                            // strVar += "	<div class=\"ddbox_img\">\n";
+                            // strVar += "		<a href =\"index.php?m=web&c=article&a=articleContent&channel=" + data.dynamic_list[i].channel + "&create_time=" + data.dynamic_list[i].create_time + "&userid=" + data.dynamic_list[i].userid + "&openid=\"{$Think.get.openid}\"><img class=\"img-responsive\" src=\"" + data.dynamic_list[i].cover + "\"><\/a>\n";
+                            // //                                    strVar += "		<div class=\"play_but\">\n";
+                            // //                                    strVar += "			<img class=\"img-responsive\" src=\"./Public/img/dd_07.png\">\n";
+                            // //                                    strVar += "		<\/div>\n";
+                            // strVar += "" + pics_html + "";
+                            // //  strVar += "	<\/div>\n";
+                            // strVar += "	<div class=\"ddbox_cont\">\n";
+                            // strVar += "		" + data.dynamic_list[i].content + "\n";
+                            // strVar += "	<\/div>\n";
+                            // strVar += "	<div class=\" bc1c1\">\n";
+                            // strVar += "	<\/div>\n";
+                            // strVar += "	<div class=\"ddbox_foot\">\n";
+                            // strVar += "		<div class=\"col-xs-4\">\n";
+                            // strVar += "			<img width=\"25%\" src=\"./Public/img/dd_11.png\"> 分享\n";
+                            // strVar += "		<\/div>\n";
+                            // strVar += "		<div class=\"col-xs-4\">\n";
+                            // strVar += "			<img width=\"25%\" src=\"./Public/img/dd.png\"> " + data.dynamic_list[i].comment_count + "\n";
+                            // strVar += "		<\/div>\n";
+                            // strVar += "		<div class=\"col-xs-4\">\n";
+                            // strVar += "			<img width=\"25%\" src=\"./Public/img/dd_d.png\"> " + data.dynamic_list[i].praise_count + "\n";
+                            // strVar += "		<\/div>\n";
+                            // strVar += "	<\/div>\n";
+                            // strVar += "	<div class=\"clearfix\">\n";
+                            // strVar += "	<\/div>";
+                            // strVar += "<\/div>";
+                        }
+                        start = start + 1;
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function () {
+                            $('.lists').eq(itemIndex).append(strVar);
+                            // 每次数据加载完，必须重置
+                            me.resetload();
+                        }, 1000);
+                    },
+                    error: function (xhr, type) {
+                        alert('Ajax error!');
+                        // 即使加载出错，也得重置
+                        //  me.resetload();
+                        dropload.lock('down');
+                    }
+
+                });
+
+
+            }
+
+        });
+
+
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: "index.php?m=Api&c=users&a=simple&openid={$Think.get.openid}",
+            data:{
+                userid:'{$Think.get.uid}'
+            },
+            error: function (request) {
+                alert('提交超时，请稍候再试！');
+            },
+            success: function (data) {
+                var data = eval('(' + data + ')');
+                data = data.data;
+                $('.person_img').attr('src', data.photo_url);
+                $('.person_name span').text(data.nick);
+                if (data.sex == 1) {
+                    $('.person_name .sex').css('background', 'url(\'./Public/img/data/man@2x.png\') no-repeat 0 center / 0.213333rem 0.346667rem')
+                }
+
+                $('.person_intro').text(data.signature);
+                $('.dynamic_count').text(data.article_row);
+                $('.passive_count').text(data.passive_count);
+                $('.video_time').text(formatSeconds(data.video_time));
+
+                $('.introduction').text(data.introduction);
+
+                if (data.pics && data.pics.length > 0) {
+                    var pic = "";
+                    for (var i = 0, len = data.pics.length; i < len; i++) {
+                        pic += "<li class=\"album-item\"><a href=\""+data.pics[i]+"\" data-imagelightbox=\"e\"><img src=\""+data.pics[i]+"\" alt=\"\"></a></li>";
+                    }
+                    $('.album-menu').prepend(pic);
+                    photoSwipe();
+                }
+
+                
+
+                tags("interest", data.interest_ids);
+                tags("experience", data.experience_ids);
+                tags("language", data.language_ids);
+                tags("follow", data.follow_ids);
+                
+                var xq = data.interest_ids.split("|");
+                var xqhtml = "";
+                if(xq.length > 1){
+                    for(var i=0; i<xq.length; i++  ){
+                        xqhtml +="<li>"+xq[i]+"</li>"
+                    }
+                }else{
+                    xqhtml +="<li>"+data.interest_ids+"</li>"
+                }
+                $(".xq_list").html(xqhtml)
+                
+                
+                var lghtml = "";
+                var lg = data.voice_ids.split("|");
+                if(lg.length > 1){
+                    for(var l=0; l<lg.length; l++  ){
+                       lghtml +="<li>"+lg[l]+"</li>"                  
+                    }
+                }else{
+                     lghtml +="<li>"+data.voice_ids+"</li>"  
+                }
+                $(".sy_list").html(lghtml)
+                      
+                var picList = "";
+                if(data.pics){
+                    if(data.pics.length > 1){
+                        for(var p=0; p < data.pics.length; p++  ){
+                            picList +="<li><a href='"+data.pics[p]+"'><img src='" +data.pics[p]+ "' /></a></li>";
+                        }
+                        $(".photoHtml").html(picList)
+                        $(".photoHtml").css('width',data.pics.length*130)
+                    }
+                }
+                 
+                if (data.follow == 0) {
+                    $(".follow_html").html('<div class=\"active_gz_c\"><img src =\"./Public/img/gz_03_b.png\"><\/div>')
+                } else if (data.follow == 1) {
+                    $(".follow_html").html('<div class=\"active_gz_c\"><img src =\"./Public/img/gz_06.png\"><\/div>')
+
+                }
+                
+                
+               
+                
+            }
+        })
+                     
+
+        function photoSwipe() {
+            (function(window, $, PhotoSwipe){
+                var options = {};
+                $(".album-menu a").photoSwipe(options);
+            }(window, window.jQuery, window.Code.PhotoSwipe));
+            
+            $.mCustomScrollbar.defaults.theme="light-2"; 
+            
+            $(".album-menu").mCustomScrollbar({
+                axis:"x",
+                advanced:{autoExpandHorizontalScroll:true}
+            });
+        }
+
+        function follow() {
+            $.ajax({
+                cache: true,
+                type: "GET",
+                url: "index.php?m=web&c=article&a=articleFollow&openid={$Think.get.openid}&mcsId={$Think.get.uid}",
+                error: function (request) {
+                    alert('提交超时，请稍候再试！');
+                },
+                success: function (data) {
+                    //      console.log(data);
+                    var data = eval('(' + data + ')');
+                    if (data.row == 0) {
+                        $(".follow_html").html('<div class=\"active_gz_c\"><img src =\"./Public/img/gz_03_b.png\"><\/div>')
+                    } else if (data.row == 1) {
+                        $(".follow_html").html('<div class=\"active_gz_c\"><img src =\"./Public/img/gz_06.png\"><\/div>')
+
+                    }
+                }
+            })
+        }
+
+
+        </script>            
+
+    </body>
+</html>

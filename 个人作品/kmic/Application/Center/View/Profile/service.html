@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>客服</title>
+        <link rel="stylesheet" href="./Public/Profile/css/frozen.css">
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <script src="./Public/wxmenu.js"></script>
+        <style>
+             body{font-family:"Microsoft YaHei",微软雅黑; font-size: 14px;}
+             h4{font-size: 14px !important;}
+        </style>
+    </head>
+    <body ontouchstart>
+        <input type="hidden" name="openid" value="{$Think.get.openid}" />
+<header class="ui-header ui-header-positive ui-border-b" style="background-color: #ff629a; ">
+            <i class="ui-icon-return" onclick="history.back()"></i><h1>客服</h1>
+        
+        </header>
+        <section class="ui-container" >
+        
+            <ul class="ui-list ui-list-pure ui-border-tb">
+                <li class="ui-border-t">
+                    <p><span>1.微信号 </span><span class="date"> 16/01/28</span></p>
+                    <h4>微信号：kaimai100</h4>
+                </li>
+                <li class="ui-border-t">
+                    <p><span>3.邮箱 </span><span class="date"> 16/04/23</span></p>
+                    <h4>邮箱：kaimic@163.com  欢迎留言及洽谈合作</h4>
+                </li>
+            </ul>
+        </section>
+        
+        <script>
+            $('.pay').click(function(){
+                location.href= '?m=Center&c=Profile&a=member&action=pay';
+            });
+            $('.index').click(function(){
+                location.href= '?m=Center&c=Profile';
+            });
+        $('.qrcode').click(function(){
+            
+            $.ajax({
+                type: 'GET',
+                url: "?m=Center&c=Index&a=getQRcode",
+                data: {'openid':$("input[name='openid']").val()},
+                success: function(result){
+                                    alert(result);
+                },
+                dataType: 'html'
+            }); 
+        });
+        
+        
+        </script>
+    </body>
+</html>

@@ -1,0 +1,14 @@
+Application/Runtime/
+Caches/
+Uploads/
+QRcode/
+images/
+mysql/
+nbproject/private
+php.php
+test.html
+apps/
+nbproject/
+log.txt
+logs/
+Application/Common/Conf/config.php

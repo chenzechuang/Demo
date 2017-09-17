@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>主持经历</title>
+        <link rel="stylesheet" href="./Public/css/reset.css">
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css"> 
+        <link rel="stylesheet" href="./Public/js/datepicker/bootstrap-datetimepicker.min.css">
+
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">  
+        <link rel="stylesheet" href="./Public/css/index.css">
+        
+        <script src="./Public/js/flexible.min.js"></script>
+          
+        <link rel="stylesheet" type="text/css" href="./Public/calendar/calendar.css" />
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+        
+            wx.ready(function(){
+                    wx.onMenuShareTimeline({
+                        title: '开麦通告页面', // 分享标题
+                        link: 'http://www.kmic168.com/index.php?m=web', // 分享链接,将当前登录用户转为puid,以便于发展下线
+                        desc: '全国主持人通告，每日实时更新',
+                        imgUrl: 'http://www.kmic168.com/Public/share1.jpg', // 分享图标
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        },
+                        trigger: function (res) {
+     
+                        },
+                        fail: function (res) {
+                        }
+                    });
+                    
+                    wx.onMenuShareAppMessage({
+                        title: '开麦通告页面', // 分享标题
+                        desc: '全国主持人通告，每日实时更新', // 分享描述
+                        link: 'http://www.kmic168.com/index.php?m=web', // 分享链接
+                        imgUrl: 'http://www.kmic168.com/Public/share1.jpg', // 分享图标
+                        type: 'link', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                });
+        </script>
+    </head>
+
+    <body onload="loadMessage('{$uid}');"><input type="hidden" name="openid" value="{$Think.get.openid}" />
+        <header class="detail-header">
+            <div class="back" onclick="window.location.href = '?m=Center&c=Profile&a=index&openid={$Think.get.openid}';">
+            </div>
+            <div class="header-title">
+                <p>主持经历</p>
+            </div>
+            
+        </header>
+
+        <div class="f_windown" style="display:none;">
+            <div class="bg"></div>
+            <div class="ui-scroller">
+                <div id="f_close"><img src="./Public/Kmic/close.png" width="30"/></div>
+                <div class="f_close_line"></div>
+                <div class="windown-info">
+                    <p>删除经历</p>
+                    <p>你确定要删除当前活动经历？</p>
+                    <a href="">确定</a>
+                </div>
+            </div>
+        </div> 
+
+        <section class="artist-detail">    
+            <div class="info-activity user-activity">
+            
+            </div>
+
+            <div class="add-experience">
+                <a href="#"><i class="fa fa-plus"></i>增加经历</a>
+            </div>
+        </section>
+        
+        <div class="delete-menu">
+            
+            <a class="delete-confirm" href="javascript:;">删除照片</a>
+            <a class="delete-cancel" href="javascript:;">取消</a>
+        </div>
+
+        <div class="add-activity">
+            <header class="detail-header">
+                <div class="back">
+                </div>
+                <div class="header-title">
+                    <p>新增经历</p>
+                </div>
+                <div class="header-confirm msg_subtim">
+                    <p>确定</p>
+                </div>
+                
+            </header>
+            <section class="user-info">
+                <div class="bg"></div>
+                <form id="dosubmit" action="">
+                    <div class="col-xs-12 info-group artist-list">
+        
+                        <div class="item member-item">
+                            <div class="col-xs-3 member-item-title">
+                               名称
+                            </div>
+                            <div class="col-xs-9">
+                               <input type="text" name="title" placeholder="请输入活动名称">
+                            </div>
+                        </div>
+
+                        <div class="item member-item">
+                            <div class="col-xs-3 member-item-title">
+                               时间
+                            </div>
+                            <div class="col-xs-9">
+                                <input class="form_datetime" type="text" name="time" value="" placeholder="请选择活动时间" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 info-group artist-list">
+                        <div class="addimg-title">
+                           添加活动照片
+                        </div>
+                        <div class="file">
+                            <ul class="pics clearfix">
+                                <li class="add">
+                                    <i class="plus"></i>
+                                    <input id="file" type="file" accept="image/*" /> 
+                                </li>             
+                            </ul>  
+                        </div>
+                        <input id="picID" name="picId" type="hidden" value="" >
+                    </div>
+
+                    <div class="col-xs-12 info-group artist-list">
+                        <div class="add-activity-item member-item">
+                            <div class="col-xs-3 member-item-title">
+                               活动视频
+                            </div>
+                            <div class="col-xs-9">
+                               <input type="text" name="video" placeholder="请填写视频的链接">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+
+        <div class="set-activity">
+            <header class="detail-header">
+                <div class="back">
+                </div>
+                <div class="header-title">
+                    <p>修改经历</p>
+                </div>
+                <div class="header-confirm set_subtim">
+                    <p>保存</p>
+                </div>
+            </header>
+
+            <section class="user-info">
+                <div class="bg">  </div>
+                <form id="setsubmit" action="">
+                    <div class="col-xs-12 info-group artist-list">
+       
+                        <div class="item member-item">
+                            <div class="col-xs-3 member-item-title">
+                                名称
+                            </div>
+                            <div class="col-xs-9 set-item">
+                                <input type="text" name="title" placeholder="请输入活动名称">
+                            </div>
+                        </div>
+       
+                        <div class="item member-item">
+                            <div class="col-xs-3 member-item-title">
+                                时间
+                            </div>
+                            <div class="col-xs-9 set-item">
+                                <input class="form_datetime" type="text" name="time" value="" placeholder="请选择活动时间">
+                            </div>
+                        </div>
+                    </div>
+       
+                    <div class="col-xs-12 info-group artist-list">
+                        <div class="addimg-title">
+                           添加活动照片
+                        </div>
+                       <div class="file">
+                           <ul class="pics set-pics clearfix">
+                               <li class="add">
+                                   <i class="plus"></i>
+                                   <input id="setfile" type="file" accept="image/*" /> 
+                               </li>             
+                           </ul>  
+                       </div>
+                       <input id="picID1" name="picId" type="hidden" value="" >
+                   </div>
+       
+                   <div class="col-xs-12 info-group artist-list">
+                       <div class="add-activity-item member-item">
+                           <div class="col-xs-3 member-item-title">
+                              活动视频
+                           </div>
+                           <div class="col-xs-9">
+                              <input type="text" name="video" placeholder="请填写视频的链接">
+                           </div>
+                       </div>
+                   </div>
+               </form>
+       
+           </section>
+        </div>
+      
+        <div class="bg"></div>
+        <script src="./Public/js/scroll.min.js"></script>
+        <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+        <script src="./Public/js/datepicker/bootstrap-datetimepicker.min.js"></script>
+        <script src="./Public/js/datepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/calendar/js/calendar.js"></script>
+        <script src="./Public/pcSelect/jquery.cxselect.js"></script> 
+        <script src="./Public/js/index.js"></script> 
+        <script src="./Public/localResizeIMG/dist/lrz.bundle.js"></script>
+        <script>
+
+            var picNum = 0;
+            var videoNum = 0;
+
+            //增加经历图片上传
+            $('#file').change(function () {
+                $('.show').fadeIn();
+                lrz(this.files[0],{width: 700})
+               .then(function (rst) {
+                    var xhr = new XMLHttpRequest();
+                    var data = {
+                        pic_type:6,
+                        openid:'{$Think.get.openid}',
+                        base64: rst.base64,
+                        size: rst.base64.length // 校验用，防止未完整接收
+                    };
+                    xhr.open('POST', '?m=web&a=profiles&upload');
+                    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                    xhr.onreadystatechange = function () {
+                        //console.log(xhr.status);
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+
+                            console.log(xhr.response);
+                            var result = JSON.parse(xhr.response);
+                            if (result.error == 0) {
+                                var picId= $("#picID").val()+","+result.picId;
+                                $("#picID").val(picId);
+                                $(".pics").prepend('<li id="'+picNum+'"><div class="delete" onclick="deletePic(\''+result.url+'\','+picNum+','+result.picId+')"></div><img class="img-responsive" src="'+result.url+'"></li>');
+                                picNum++;
+                                $('.show').fadeOut();
+                            }
+                        }
+                        if (picNum >= 9) {
+                            $('.add').css('display','none');
+                        }
+                    };
+                    xhr.send(JSON.stringify(data)); // 发送base64
+                //});
+                })
+                .catch(function (err) {
+                   // 处理失败会执行
+                   $('.show').fadeOut();
+                   console.log(rst);
+                })
+                .always(function () {
+                   // 不管是成功失败，都会执行
+                   
+                });
+            });
+
+                         
+            
+            //增加经历提交
+            $(".msg_subtim").click(function(){     
+                console.log($('#dosubmit').serialize());       
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url:"?m=Center&c=Profile&a=setActivity&action=msg",
+                    data:$('#dosubmit').serialize(),// 序列号formid
+                    async: false,
+                    dataType: 'json',
+                    error: function(request) {
+                        alert('提交超时，请稍候再试！');
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data.error == 0) {
+                            alert('发布成功！');
+                            window.location.href="?m=Center&c=Profile&a=setActivity&openid={$Think.get.openid}&artistId={$uid}";
+                        }else if (data.error == 1) {
+                            alert(data.msg);
+                        }
+                    }
+                });
+                
+            });
+
+            var pic_html = $(".set-pics").html();
+
+            $('.user-activity').on('click', '.change', function(event) {
+                event.preventDefault();
+
+                $('.set-activity').show();
+                $('.artist-detail').hide();
+
+                var picId = "";
+                var picNum = 0;
+                var pic_index = $(this).parents('.activity').attr('id');
+                var title = $(this).siblings('.name').html();
+                var time = $(this).siblings('.time').html().split('/').join('-');
+                var img_Box = $(this).parent().next();
+                var img = img_Box.find('.picItem');
+                var video_href = img_Box.find('.user-video').attr('href');
+                
+                
+                $('.set-activity').find('input[name="title"]').attr('value', title);
+                $('.set-activity').find('input[name="time"]').attr('value', time);
+                $('.set-activity').find('input[name="video"]').attr('value', video_href);
+                $(".set-pics").html(pic_html);
+
+                for (var i = img.length - 1; i >= 0; i--) {
+                    picNum++;
+                    var img_src = img[i].getAttribute('href');
+                    var img_picId = img[i].id;
+                    picId += (','+img[i].id);
+                    $(".set-pics").prepend('<li id="'+picNum+'"><div class="delete" onclick="deletePic(\''+img_src+'\','+picNum+','+img_picId+')"></div><img src="'+img_src+'"></li>');  
+                }
+                $("#picID1").val(picId);
+
+                $('#setfile').change(function () {
+                    $('.show').fadeIn();
+                    lrz(this.files[0],{width: 700})
+                   .then(function (rst) {
+                        var xhr = new XMLHttpRequest();
+                        var data = {
+                            pic_type:6,
+                            openid:'{$Think.get.openid}',
+                            base64: rst.base64,
+                            size: rst.base64.length // 校验用，防止未完整接收
+                        };
+                        xhr.open('POST', '?m=web&a=profiles&upload');
+                        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                        xhr.onreadystatechange = function () {
+                            //console.log(xhr.status);
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+
+                                console.log(xhr.response);
+                                var result = JSON.parse(xhr.response);
+                                if (result.error == 0) {
+                                    var picId= $("#picID1").val()+","+result.picId;
+                                    $("#picID1").val(picId);
+                                    $(".set-pics").prepend('<li id="'+picNum+'"><div class="delete" onclick="deletePic(\''+result.url+'\','+picNum+','+result.picId+')"></div><img src="'+result.url+'"></li>');
+                                    picNum++;
+                                    $('.show').fadeOut();
+                                }
+                            }
+                            if (picNum >= 9) {
+                                $('.add').css('display','none');
+                            }
+                        };
+                        xhr.send(JSON.stringify(data)); // 发送base64
+
+                    })
+                    .catch(function (err) {
+                       // 处理失败会执行
+                       $('.show').fadeOut();
+                       console.log(rst);
+                    })
+                    .always(function () {
+                       // 不管是成功失败，都会执行
+                       
+                    });
+                });  
+                
+                $(".set_subtim").click(function(){
+                    console.log("id="+pic_index+ "&" +$('#setsubmit').serialize());
+                    $.ajax({
+                        cache: true,
+                        type: "POST",
+                        url:"?m=Center&c=Profile&a=changeActivity&action=msg",
+                        data:"id="+pic_index+ "&" +$('#setsubmit').serialize(),// 序列号formid
+                        async: false,
+                        dataType: 'json',
+                        error: function(request) {
+                            alert('提交超时，请稍候再试！');
+                        },
+                        success: function(data) {
+                            console.log(data);
+
+                            if (data.error == 0) {
+                                alert('修改成功！');
+                                  window.location.href="?m=Center&c=Profile&a=setActivity&openid={$Think.get.openid}&artistId={$uid}";
+                            } else if (data.error == 1) {
+                                alert(data.msg);
+                            }
+                        }
+                    });
+                    return false;
+                });
+                
+            });
+
+        </script>
+
+        <script>
+            $(".form_datetime").datetimepicker({
+                language: "zh-CN",
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: true,
+                minView:'month',
+                maxView:'decade',
+                pickerPosition:'bottom-left'
+            });
+        </script>
+    </body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>活动经历</title>        
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <script src="./Public/timeFormat.js"></script>
+        
+        <link rel="stylesheet" href="./Public/Kmic/css/index.css">
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">   
+        <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>    
+        <script src="./Public/calendar/js/calendar.js"></script>
+        <script src="./Public/pcSelect/jquery.cxselect.js"></script>   
+        <link rel="stylesheet" type="text/css" href="./Public/calendar/calendar.css" />
+    </head>
+    <body>
+        
+        <div class="col-xs-12 ptm20">
+            <form id="dosubmit" action="">
+                 <div class="user_info mb20">
+                    <div class="row">
+                        <div class="col-xs-3 col999">活动名称</div>
+                        <div class="col-xs-9 pl0"><input type="text"  name="title" value=""></div>
+                        <div class="clearfix"></div>                 
+                    </div>
+                    <div class="boder1px"></div>
+                    <div class="row">
+                        <div class="col-xs-3 col999">活动时间</div>
+                        <div class="col-xs-9 pl0">
+                               <input type="text" id="dt"  name="time"  placeholder="活动开始日期">
+                               <div id="dd"></div>
+                        </div>
+                        <div class="clearfix"></div>                 
+                    </div>
+                      <div class="boder1px"></div>
+                 </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="web_title"><span class="bl2px"></span> 活动图片</div>
+                    </div>
+                </div>
+                
+                <div class="ui-border-b file" >
+                     <ul class="pics">
+                            <li class="add col-xs-3">
+                                <input id="file" type="file" accept="image/*" />
+                                
+                            </li>             
+                        </ul>   
+                </div>
+                <input id="picID" name="picId" type="hidden" value="" >
+                
+                <div class="clearfix mb20"></div> 
+                
+                <div class="col-xs-12">
+                <div class="row">
+                    <div class="web_title"><span class="bl2px"></span> 视频链接</div>
+                    <div class="video"><img width="35" src="./Public/Kmic/vidio.jpg" /> <input type="text"  name="video" value=""></div>
+                    <div class="clearfix mb20"></div>   
+                    <div  class="col999 mb10"><div class="zhuyi">!</div>请上传带http://前缀，建议选择优酷视频或腾讯视频。</div>
+                </div>
+                </div>
+            </form>
+          
+        </div>
+        
+        <div class="clearfix"></div>
+        <div class="col-xs-12">
+           <div class="button_wbut text-center msg_subtim">提交</div>
+        </div>
+        <script src="./Public/localResizeIMG/dist/lrz.bundle.js"></script>
+        <script>
+            
+            $('.show').fadeOut();
+            var picNum = 0;
+            var videoNum = 0;
+            
+            
+            document.querySelector('#file').addEventListener('change', function () {
+                $('.show').fadeIn();
+                lrz(this.files[0],{width: 700})
+                    .then(function (rst) {
+                       // 处理成功会执行
+//                       console.log(rst);
+                        var xhr = new XMLHttpRequest();
+                        var data = {
+                            pic_type:6,
+                            openid:'{$Think.get.openid}',
+                            base64: rst.base64,
+                            size: rst.base64.length // 校验用，防止未完整接收
+                        };
+                        xhr.open('POST', '?m=web&a=profiles&upload');
+                        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                        xhr.onreadystatechange = function () {
+//                            console.log(xhr.status);
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                
+                                var result = JSON.parse(xhr.response);
+                                if (result.error == 0) {
+                                    var picId= $("#picID").val()+","+result.picId;
+                                    $("#picID").val(picId);
+                                    $(".pics").prepend('<li id="'+picNum+'"><div class="delete" onclick="deletePic(\''+result.url+'\','+picNum+','+result.picId+')"><img src="./Public/Kmic/picDelete.png" /></div><img class="img-responsive" src="'+result.url+'" width="103"/></li>');
+                                    picNum++;
+                                    $('.show').fadeOut();
+                                }
+                            }
+                            if (picNum >= 9) {
+                                $('.add').css('display','none');
+                            }else if (picNum >= 6) {
+                                $('.file').css('height','420px');
+                            }else if (picNum >= 3) {
+                                $('.file').css('height','300px');
+                            }
+                        };
+                        xhr.send(JSON.stringify(data)); // 发送base64
+//                        });
+                   })
+                   .catch(function (err) {
+                       // 处理失败会执行
+                       $('.show').fadeOut();
+                       console.log(rst);
+                   })
+                   .always(function () {
+                       // 不管是成功失败，都会执行
+                       
+                   });
+           });
+           
+  
+    
+            function deletePic(pic,num,picID){
+                if(confirm("确定要删除数据吗？"))
+                {
+                    
+                }else{
+                    return;
+                }
+                $('#'+num).remove();
+                $('.add').css('display','block');
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url:"?m=web&a=profiles",
+                    data:{'delete':pic},// 序列号formid
+                    dataType: 'json',
+                    error: function(request) {
+
+
+                    },
+                    success: function(data) {
+                        var D_picID = $("#picID").val();
+                        picID = ","+picID;
+                        D_picID = D_picID.replace(picID,"");           
+                        $("#picID").val(D_picID) 
+                        console.log(data);
+                    }
+                });
+            } 
+            
+            $(".msg_subtim").click(function(){            
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url:"?m=Center&c=Profile&a=setActivity&action=msg",
+                    data:$('#dosubmit').serialize(),// 序列号formid
+                    async: false,
+                    dataType: 'json',
+                    error: function(request) {
+                        alert('提交超时，请稍候再试！');
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data.error == 0) {
+                            alert('发布成功！');
+                          //  window.location.href="?m=web&a=profiles&openid={$Think.get.openid}";
+                        }else if (data.error == 1) {
+                            alert(data.msg);
+                        }
+                    }
+                });
+                
+            });
+            
+            
+        </script>
+    </body>
+</html>
+
+ -->

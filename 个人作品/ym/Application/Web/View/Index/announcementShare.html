@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>开麦-{$list.title}</title>
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        <script src="./Public/timeFormat.js"></script>
+        <link rel="stylesheet" type="text/css" href="./Public/DateTime/dist/DateTimePicker.css" />
+        <script src="./Public/jquery.min.js"></script>
+        <script type="text/javascript" src="./Public/DateTime/dist/DateTimePicker.js"></script>
+        <script src="./Public/pcSelect/jquery.cxselect.js"></script>
+        <link rel="stylesheet" href="./Public/global.css">
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <style>
+            label{color: #ff90b7;}
+            .pics li{list-style: none; float: left; width: 88px;height: 88px;border:#e9e9e9 1px solid; margin: 5px; padding: 0px; overflow: hidden;
+            text-height: 103px;}
+            .pics .add{background-image: url('./Public/Kmic/picAdd.jpg'); background-repeat: no-repeat; background-position: center; background-size: 50px 50px;}
+            .file input {
+                /*position: absolute;*/
+                font-size: 100px;
+/*                right: 0;
+                top: 0;*/
+                opacity: 0;
+                width: 103px; height: 103px;
+            }
+            .file:hover {
+                background: #AADFFD;
+                border-color: #78C3F3;
+                color: #004974;
+                text-decoration: none;
+            }
+        </style>
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone','previewImage','checkJsApi'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            
+            
+            function previewImage(current,all){
+                var additionalStrs= new Array(); //定义一数组 
+                    additionalStrs=all.split(",");
+                    
+                $.each(additionalStrs, function(i,val){
+                    if (val.substr(2) != '') {
+                        additionalStrs[i] = 'http://'+window.location.host+'/'+val.substr(2);
+                    }
+                    
+                });
+//                console.log(additionalStrs);
+                var json = JSON.stringify(additionalStrs);
+                
+//                console.log(current.substr(2),json);
+                
+                
+
+                wx.previewImage({
+                    current: 'http://'+window.location.host+'/'+current.substr(2),
+                    urls: additionalStrs
+                  });
+
+            }
+            
+            
+            function share(title,link,imgUrl){
+                wx.ready(function(){
+                    wx.onMenuShareTimeline({
+                        title: title, // 分享标题
+                        link: link, // 分享链接,将当前登录用户转为puid,以便于发展下线
+                        imgUrl: imgUrl, // 分享图标
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        },
+                        trigger: function (res) {
+//                            alert("分享到朋友圈按钮点击");        
+                        },
+                        fail: function (res) {
+//                            alert(JSON.stringify(res));
+                        }
+                    });
+                    
+                    wx.onMenuShareAppMessage({
+                        title: title, // 分享标题
+                        desc: title, // 分享描述
+                        link: link, // 分享链接
+                        imgUrl: imgUrl, // 分享图标
+                        type: 'link', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                    
+                    wx.onMenuShareQQ({
+                        title: title, // 分享标题
+                        desc: title, // 分享描述
+                        link: link, // 分享链接
+                        imgUrl: imgUrl, // 分享图标
+                        success: function () { 
+                           // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                           // 用户取消分享后执行的回调函数
+                        }
+                    });
+                    
+                    wx.onMenuShareWeibo({
+                        title: title, // 分享标题
+                        desc: title, // 分享描述
+                        link: link, // 分享链接
+                        imgUrl: imgUrl, // 分享图标
+                        success: function () { 
+                           // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                    wx.onMenuShareQZone({
+                        title: title, // 分享标题
+                        desc: title, // 分享描述
+                        link: link, // 分享链接
+                        imgUrl: imgUrl, // 分享图标
+                        success: function () { 
+                           // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                });
+                wx.error(function(res){
+//                    console.log(res);
+//                    alert(JSON.stringify(res));
+                });
+            }
+            share('{$list.title}','http://'+window.location.host+'/?m=web&a=announcementShare&aid={$list.id}','http://'+window.location.host+'{$thumbnail}');
+        </script>
+    </head>
+    <body ontouchstart=""><header class="ui-header ui-border-b" style="background-color: white;">
+            <h1>{$list.title}</h1>
+        </header>
+        <!--<i class="ui-icon-return" onclick="window.location.href='./?m=web&openid={$Think.get.openid}'"></i>-->
+        <div id="dtBox"></div>
+        <section class="ui-container">
+            <div class="ui-form ui-border-t"><a href="Public/Kmic/qrcode.jpg"><img src="Public/Kmic/banner.jpg" width="100%" /></a>
+                <form role="form" method="post" name="dosubmit" id="dosubmit">
+                    
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>活动类型</label>
+                        <input type="text" value="{$list.activity_type}" readonly>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b" style="height:90px;">
+                        <label>活动日期</label>
+                        <input type="text" value="<if condition="$list.activity_time eq '0000-00-00 00:00:00'">时间未定<else />{$list.activity_time}</if>" readonly>
+                        <input type="text" value="{$list.activity_time_input}" readonly>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b element_id" style="height:130px;">
+                        <label>活动地址</label>
+                        <input type="text" value="{$list.province}" readonly>
+                        <input type="text" value="{$list.city}" readonly>
+                        <input type="text" value="{$list.area}" readonly>
+                    </div>
+                    
+                    <div class="ui-form-item ui-form-item-textarea ui-border-b" style="height:100px;">
+                        <label>
+                            详细地址
+                        </label>
+                        <textarea placeholder="街道等详细地址" name="" style="height:80px;" readonly>{$list.address}</textarea>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>主持人性别</label>
+                        
+                        <input type="text" value="<if condition="$list.sex eq -1">不限
+                                <elseif condition="$list.sex eq 0"/>男
+                                <else /> 女
+                                </if>" readonly>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>主持人数量</label>
+                        <input type="text" value="<if condition="$list.number eq -1">3个以上
+                                <else /> {$list.number}个
+                                </if>" readonly>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b" >
+                        <label>
+                            价格/天<br/>
+                        </label>
+                        <input type="text" value="<if condition="$list.price eq -1">自报<elseif condition="$list.price_h gt 0"/>
+                        {$list.price} 至 {$list.price_h}<else />{$list.price}
+                        </if>" readonly>
+                    </div>
+                    
+                    
+                    <div class="ui-form-item ui-form-item-textarea ui-border-b" style="height:120px;">
+                        <label>
+                            详细内容
+                        </label>
+                        <textarea readonly style="height:100px;">{$list.original_desc}</textarea>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            电话
+                        </label>
+                        <input type="text" value="{$list.phone}" >
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            QQ
+                        </label>
+                        <input type="text" value="{$list.qq}" >
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            微信号
+                        </label>
+                        <input type="text" value="{$list.echat}" >
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            Email
+                        </label>
+                        <input type="text" value="{$list.email}" >
+                    </div>
+                    
+                    
+                    
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <div style="color: #ff90b7;">添加宣传图片</div>
+                        <ul class="pics">
+                            <foreach name="list.img_url" item="vo">
+                                <li><a href="javascript:previewImage('{$vo}','{$img_url_arr}');"><img src="{$vo}" width="103"/></a></li>
+                            </foreach>
+                        </ul>
+                        <div id="clear"></div>
+                    </div>
+                </form>
+            </div>
+            
+        </section>
+        <div class="ui-loading-block show">
+            <div class="ui-loading-cnt">
+                <i class="ui-loading-bright"></i>
+                <p>正在加载中...</p>
+            </div>
+        </div>
+        <script src="./Public/localResizeIMG/dist/lrz.bundle.js"></script>
+        <script>
+            $('.show').fadeOut();
+            var picArr = new Array();
+           
+            
+            $('.element_id').cxSelect({ 
+                url: './Public/pcSelect/cityData.min.js',               // 如果服务器不支持 .json 类型文件，请将文件改为 .js 文件 
+                selects: ['province', 'city', 'area'],  // 数组格式，请注意顺序 
+                nodata: 'none' 
+            }); 
+            
+            
+            
+        </script>
+    </body>
+</html>

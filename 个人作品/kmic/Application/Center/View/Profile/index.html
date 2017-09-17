@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>我的信息</title>
+
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+
+    	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css"> 
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">  
+        <link rel="stylesheet" href="./Public/css/index.css">
+
+    	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>   
+        <script src="./Public/wxmenu.js"></script>
+        <script src="./Public/js/index.js"></script> 
+        
+    </head>
+    <body class="bgeee" ontouchstart><input type="hidden" name="openid" value="{$Think.get.openid}" />
+        <header class="detail-header mine-header">
+
+            <div class="header-title">
+                <p>我</p>
+            </div>
+            
+        </header>
+
+        <div class="f_windown">
+            <div class="bg"></div>
+            <div class="ui-scroller">
+                <div id="f_close"><img src="./Public/Kmic/close.png" width="30"/></div>
+                <div class="f_close_line"></div>
+                <div class="windown-info">
+                    <p>排名已刷新</p>
+                    <p>排名越前，越容易被商家发现，会员可享每天一次刷排名机会，记得每天来刷哦</p>
+                    <a href="">确定</a>
+                </div>
+            </div>
+        </div> 
+        
+        <section class="user-info info-menu">
+            <!-- 头部 -->
+            <div class="col-xs-12 detail-item info-title">
+                <img class="img-circle head-img" src="{$headimgurl}">
+                <div class="detail-title-content">
+                    <span class="artist-name">{$name}</span>
+                    <span class="artist-id">{$city} | 麦麦号：{$user_id}</span>
+                </div>
+            </div>
+            
+            <!--  -->
+            <div class="col-xs-12 info-group info-main">
+                <div class="info-item">
+                    <span class="col-xs-2 info-icon"><img src="./Public/img/artist-detail.png" alt=""></span>
+                    <div class="item col-xs-10">
+                        <a class="user-data-show">主持资料<i class="pull-right fa fa-chevron-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <span class="col-xs-2 info-icon"><img src="./Public/img/rank.png" alt=""></span>
+                    <div class="item col-xs-10" onclick="updataOnlineTime('{$uid}');">
+                        刷排名
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <span class="col-xs-2 info-icon"><img src="./Public/img/share.png" alt=""></span>
+                    <div class="item col-xs-10" onclick="artistDetail('{$Think.get.openid}', '{$uid}', 'mine')";>分享主页
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="user-data-menu">
+                <div id="bg"></div>
+
+                <header class="detail-header">
+                    <div class="back user-data-hide"></div>
+                    <div class="header-title">
+                        <p>主持资料</p>
+                    </div>
+                    <div class="header-preview">
+                        <a href="?m=Center&c=Profile&a=userView&openid={$Think.get.openid}&uid={$uid}" >预览</a>
+                    </div>
+                </header>
+                <section class="user-info">
+                    <div class="col-xs-12 info-group artist-list">
+                        <div class="info-item">
+                            <div class="item">
+                               <a href="?m=Center&c=Profile&a=setMessage&openid={$Think.get.openid}">个人信息<i class="pull-right fa fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="item">
+                               <a href="?m=Center&c=Profile&a=setImg&openid={$Think.get.openid}&artistId={$uid}">形象照片<i class="pull-right fa fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- <div class="info-item">
+                            <div class="item">
+                               <a href="?m=web&a=recordVoice&openid={$Think.get.openid}&artistId={$uid}">展示声音<i class="pull-right fa fa-chevron-right"></i></a>
+                            </div>
+                        </div> -->
+
+                    </div>
+
+                    <div class="col-xs-12 info-group artist-list">
+                        <div class="info-item">
+                            <div class="item">
+                               <a href="?m=Center&c=Profile&a=setActivity&openid={$Think.get.openid}&artistId={$uid}">主持经历<i class="pull-right fa fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="preview-btn">
+                        <a class="preview" href="?m=Center&c=Profile&a=userView&uid={$uid}"><i class="fa fa-eye"></i>预览</a>
+                    </div> -->
+                    
+                </section>
+            </div>
+
+            <!--  -->
+            <div class="col-xs-12 info-group info-main">
+                
+                <div class="info-item">
+                    <span class="col-xs-2 info-icon"><img src="./Public/img/member.png" alt=""></span>
+                    <div class="item col-xs-10">
+                        <a href="?m=Center&c=profile&a=member&openid={$Think.get.openid}">开麦会员<i class="pull-right fa fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- <div class="info-item">
+                    <span class="col-xs-2 info-icon"><img src="./Public/img/order.png" alt=""></span>
+                    <div class="item col-xs-10">
+                        <a href="?m=Center&c=profile&a=member&openid={$Think.get.openid}">我的订单<i class="pull-right fa fa-chevron-right"></i><span class="pull-right message-count">12</span></a>
+                    </div>
+                </div> -->
+
+                <!-- <div class="info-item">
+                    <span class="col-xs-2 info-icon"><img src="./Public/img/progress.png" alt=""></span>
+                    <div class="item col-xs-10">
+                        <a href="?m=Center&c=profile&a=userset&openid={$Think.get.openid}">报名进展<i class="pull-right fa fa-chevron-right"></i></a>
+                    </div>
+                </div> -->
+
+                <div class="info-item">
+                    <span class="col-xs-2 info-icon"><img src="./Public/img/rank.png" alt=""></span>
+                    <div class="item col-xs-10">
+                        <a href="?m=web&c=index&a=mineExchange&openid={$Think.get.openid}">闲置物品<i class="pull-right fa fa-chevron-right"></i><!-- <span class="pull-right message-count">12</span> --></a>
+                    </div>
+                </div>
+            </div>  
+            
+            <!--  -->
+            <div class="col-xs-12 info-group info-main">
+                <div class="info-item">
+                    <span class="col-xs-2 info-icon"><img src="./Public/img/announce-select.png" alt=""></span>
+                    <div class="item col-xs-10">
+                        <a href="?m=web&c=index&a=mine&openid={$Think.get.openid}">发布的通告<i class="pull-right fa fa-chevron-right"></i></a>
+                    </div>
+                </div>
+            </div>  
+
+            <!--  -->
+            <div class="col-xs-12 info-group info-main">
+                <div class="info-item">
+                    <span class="col-xs-2 info-icon"><img src="./Public/img/message.png" alt=""></span>
+                    <div class="item col-xs-10">
+                        <a href="?m=Center&c=profile&a=message&openid={$Think.get.openid}">消息<i class="pull-right fa fa-chevron-right"></i></a>
+                    </div>
+                </div>
+            </div>  
+
+            <!--  -->
+            <div class="col-xs-12 info-group info-main">
+                <div class="info-item">
+                    <span class="col-xs-2 info-icon"><img src="./Public/img/set.png" alt=""></span>
+                    <div class="item col-xs-10">
+                        <a href="?m=Center&c=profile&a=userSet&openid={$Think.get.openid}">设置<i class="pull-right fa fa-chevron-right"></i></a>
+                    </div>
+                </div>
+            </div>    
+             
+        </section>
+
+        <!-- footer -->
+        <footer id="footer">
+            <ul>
+                <li><a href="?m=web&c=index&openid={$Think.get.openid}"><i></i>通告</a></li>
+                <li><a href="?m=web&c=index&a=artist&openid={$Think.get.openid}"><i></i>主持人</a></li>
+                <li><a href="?m=web&c=index&a=goods&openid={$Think.get.openid}"><i></i>闲置</a></li>
+                <li class="current"><a href="?m=Center&c=Profile&a=index&openid={$Think.get.openid}"><i ></i>我</a></li>
+            </ul>
+        </footer>
+
+        <!-- <div class="col-xs-12 bgw mb10">
+            <div class="wx_user ptm20">
+                <div class="wx_user_head col-xs-4 mb5"><img class="img-circle b1999" width="80" height="80" src="{$headimgurl}"></div>
+                <div class="col-xs-12">
+                    <div class="wx_user_name mb5">{$name}</div>
+                    <div class="wx_user_mh mb5 col999">麦麦号： {$user_id}</div>
+                </div> 
+                <div class="col-xs-12"><a class="pull-right button_fj" href="?m=Center&c=profile&a=userset&openid={$Think.get.openid}">设置</a></div>     
+                <div class="clearfix"></div>
+            </div> 
+        </div>     
+        
+        <div class="clearfix"></div>
+        
+        <div class="col-xs-12 mb10 bgw">
+            <div class="user_list">
+                <ul>
+                    <li><a href="?m=Center&c=profile&a=edit&openid={$Think.get.openid}"><img src="./Public/Kmic/user_07.jpg"> 基本信息</a></li>
+                    <li><a href="?m=Center&c=Profile&a=setMessage&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27_06.jpg"> 我的资料</a></li>
+                    <li><a href="?m=Center&c=Profile&a=setCount&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27_08.jpg"> 个人介绍</a></li>                 
+                </ul>
+            </div>
+        </div> 
+        
+        <div class="clearfix"></div>      
+         
+        <div class="col-xs-12 mb10 bgw">
+            <div class="user_list">
+                <ul>
+                    <li><a href="?m=web&a=recordVoice&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27_10.jpg"> 我的声音</a></li>
+                    <li><a href="?m=Center&c=Profile&a=setImg&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27_12.jpg"> 我的相册</a></li>
+                    <li><a href="?m=Center&c=Profile&a=setActivity&openid={$Think.get.openid}"><img src="./Public/Kmic/user_18.jpg"> 活动经历</a></li>                 
+                </ul>
+            </div>
+        </div>
+        
+        <div class="clearfix"></div>      
+         
+        <div class="col-xs-12 mb10 bgw">
+            <div class="user_list">
+                <ul>
+                    <li><a href="?m=Center&c=Profile&a=userView&uid={$uid}"><img src="./Public/Kmic/user_27_16.jpg">预览全部</a></li>               
+                </ul>
+            </div>
+        </div> -->
+        <!--?m=Center&c=Profile&a=qrcode-->
+        <!--<script>
+        
+        /*$('.upgrade').click(function(){
+            location.href= "?m=Center&c=Profile&a=member";
+        });
+        
+//        $('.check').click(function(){
+//            location.href= '?m=Center&c=Profile&a=qrcode';
+//        });
+        $('.ui-header .ui-btn').click(function(){
+            
+        });*/
+        
+        /*<eq name="Think.get.show" value="qrcode">
+        qrcode();
+            </eq>
+        
+        $('.qrcode').click(function(){
+            qrcode();
+        });
+        
+        function qrcode(){
+            var el;
+            $.ajax({
+                type: 'GET',
+                url: "?m=Center&c=Index&a=getQRcode",
+                data: {'openid':$("input[name='openid']").val()},
+                success: function(result){
+//                    location.href= '?m=Center&c=Profile&a=qrcode';
+                    el.loading("hide");
+                    $(".ui-dialog").dialog("show");
+                    $(".ui-dialog").on("dialog:action",function(e){
+//                        console.log(e.index)
+//                            alert(e.index);
+//                        location.href= '?m=Center&c=Profile&a=qrcode';
+                        if (e.index ==1) {
+                            ga('send', 'event', 'profile', 'qrcode', $("input[name='openid']").val());
+                            location.href= '?m=Center&c=Profile&a=qrcode';
+                        }else if(e.index ==0){
+                            $(".ui-dialog").dialog("hide");
+                        }
+                    });
+                },
+                beforeSend: function(){
+                    el=$.loading({
+                        content:'加载中...',
+                    })
+                },
+                dataType: 'html'
+            }); 
+        }
+        
+        
+        
+        function checkOrder(order){
+            $.ajax({
+                type: 'POST',
+                url: "?m=center&c=profile&a=checkOrder",
+                data: {'order':order},
+                success: function(result){
+                    if (result.state==0) {
+                        if(confirm("支付未完成,继续支付吗？"))
+                        {
+                            location.href= 'http://www.kmic168.com/index.php/wxJsapi/?openid={$Think.get.openid}&type=';
+                        }
+                      
+                    }else if (result.state==4) {
+                    }else{
+                        alert('支付成功，您已经是会员了！谢谢您的支持！');
+                        location.href= '?m=Center&c=Profile&a=member&openid={$Think.get.openid}';
+                    }
+                },
+                dataType: 'json'
+            });  
+        }
+        
+        /*
+        <gt name="pendingOrder" value="1">
+            checkOrder('{$pendingOrder}');
+        </gt> */
+        </script>  -->
+        <!-- <script src="./Public/ga.js"></script> -->
+        
+        
+        <!-- <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+            <script>
+              // Initialize Firebase
+              var config = {
+                apiKey: "AIzaSyBN0Fgb-04vjbdGDiOtyAQs-SL8p3msXqo",
+                authDomain: "kmic-ca200.firebaseapp.com",
+                databaseURL: "https://kmic-ca200.firebaseio.com",
+                storageBucket: "kmic-ca200.appspot.com",
+              };
+              
+
+            var openid = '{$Think.get.openid}';
+        </script> -->
+        <!--  <script src="./Public/UnionInfo.js"></script>  -->
+    </body>
+</html>

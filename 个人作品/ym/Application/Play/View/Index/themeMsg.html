@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="">
+	<meta name="name" content="content">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>约麦-用声交换故事</title>
+
+	<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+	<link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">
+	<link rel="stylesheet" href="./Public/css/play_reset.css">
+	<link rel="stylesheet" href="./Public/css/play_index.css">
+    
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script>
+            var toke = "{:S('token')->access_token}";
+            var openid  = "{$Think.get.openid}";
+	    wx.config({
+	        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	        appId: 'wx8ad1b47530e4c6a1', // 必填，公众号的唯一标识
+	        timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+	        nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+	        signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage','hideMenuItems','startRecord','stopRecord','onVoiceRecordEnd','playVoice','pauseVoice','stopVoice','onVoicePlayEnd','uploadVoice','downloadVoice'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+/*
+            wx.ready(function () {
+                wx.onMenuShareTimeline({
+                    title: "{$data[theme][content]}", // 分享标题
+                    link: "?m=Play&c=Index&a=themeMsg&msgid={$data[id]}&themeid={$data[theme][id]}", // 分享链接,将当前登录用户转为puid,以便于发展下线
+                    desc: '你想知道吗？',
+                    imgUrl: "{$data[info][headimgurl]}", // 分享图标
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    },
+                    trigger: function (res) {
+//                            alert("分享到朋友圈按钮点击");        
+                    },
+                    fail: function (res) {
+//                            alert(JSON.stringify(res));
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: "{$data[theme][content]}", // 分享标题
+                    desc: '你想知道吗？', // 分享描述
+                    link: "?m=Play&c=Index&a=themeMsg&msgid={$data[id]}&themeid={$data[theme][id]}", // 分享链接
+                    imgUrl: "{$data[info][headimgurl]}", // 分享图标
+                    type: 'link', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                wx.hideMenuItems({
+                    menuList: ["menuItem:copyUrl", "menuItem:openWithQQBrowser", "menuItem:openWithSafari", "menuItem:share:email"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+                });                
+            });
+*/
+            wx.ready(function () {
+                wx.onVoicePlayEnd ({
+                    complete: function (res) {
+                        $('.preview-record a').removeClass('selected');
+                    }
+                });
+            });
+	</script>
+</head>
+<body>
+    <div class="yuemai">
+        <div class="yuemai-logo">
+            <img src="./Public/img/icon@2x.png" alt="">
+            <p>约麦—用声交换故事</p>
+        </div>
+        <a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzIxNzQ1MzIyOQ==&scene=124#wechat_redirect">关注</a>
+    </div>
+
+    <div id="wrapper">
+		<div class="mine-voice item">
+			<div class="voice-title">
+                <div class="pub1Head"></div>
+                <!-- <p class="pub1name">sss</p> -->
+                <!-- <div class="unlock-time item">
+                    <div class="time">
+                        <p>离解锁还剩</p>
+                        <p><span id="t_d">00</span>天</p>
+                        <p><span id="t_h">00</span>小时</p>
+                        <p><span id="t_m">00</span>分钟</p>
+                        <p><span id="t_s">00</span>秒</p>
+                    </div>
+                </div>           -->      
+			</div>
+			<div class="voice-content">
+                <p><span>“</span> <span>”</span></p>
+			</div>
+		</div>
+		
+		<div class="tips item">
+			<p class="unlock">解锁口令:<span class="unlockPw"></span></p>
+			<p>想听Ta说了什么？语音回复解锁口令就可以听到Ta说了什么哦</p>
+		</div>
+
+		<div class="others-voice">
+          
+		</div>
+	</div>
+
+    <!-- 模态框（Modal） -->
+    <div class="textTab hide" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                              
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                                提示
+                        </h4>
+                </div>
+                <div class="modal-body text-center textTabContent">
+                        
+                </div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+	<div class="footer-btn">
+		<a class="play" href="?m=Play&c=Index&a=pub&openid={$Think.get.openid}"></a>
+		<a class="unload" href="javascript:;"></a>
+	</div>
+        <input type="hidden" class="themeID" value="{$Think.get.themeid}">
+        <input type="hidden" class="pub" value="0">
+        <input type="hidden" class="son" value="{$Think.get.msgid}">
+        
+        
+	<div class="footer-btn hide footer-btn-vadio">               
+                
+        <div class="recording">
+			<img src="./Public/img/voice/voice_0@2x.png" alt="">
+			<p>录音中</p>
+		</div>
+		
+		<div class="record-chioce">
+			<div class="send-record">
+				<a class="cancel" href="javascript:;">取消</a>
+				<a class="confirm"  onclick="WxUpload(toke,openid,'{$data[headimgurl]}');" >{$data[info][headimgurl]}发送</a>
+			</div>
+			<div class="preview-record">
+				<a href="javascript:;"><span class="record-count"></span></a>
+			</div>
+		</div>
+        
+		<a class="record" ontouchstart = "return false;">按住说话</a>
+	</div>
+        
+
+	<script src="./Public/js/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="./Public/dist/dropload.min.js"></script>
+	<script src="./Public/js/play.js"></script>
+	<script>
+
+         //   var create_time = 0;
+            var Jurisdiction = 0;
+            var theme_html = "";
+
+            msgLoad()
+	    function msgLoad(){
+                var start = 0;
+	        // dropload
+	        var dropload = $('#wrapper').dropload({
+	            scrollArea : window,
+	            loadDownFn : function(me){
+	                $.ajax({
+	                    type: 'GET',
+	                    url: '?m=Play&c=Index&a=themeMsg&msgid={$Think.get.msgid}&themeid={$Think.get.themeid}&openid={$Think.get.openid}&create_time={$Think.get.createtime}&action=list&page='+start,
+	                    dataType: 'json',
+	                    success: function(data){
+                            console.log(data);
+                           	var result = '';
+                                data = data.data;
+                                if (data.theme) {
+                                    theme_html = '<p><span>“</span>'+ data.theme.content +'<span>”</span></p>';
+                                } 
+                                
+                                if (data.lists.length < 1) {
+                                    dropload.lock('down');
+                                    dropload.noData();
+                                    $(".dropload-load").css('display','none');
+                                }
+	                            if(data.lists.length > 0){
+                                    var audio='';
+                                    var biaoCss;
+	                                for(var i = 0; i < data.lists.length; i++){
+                                        audio = '<audio class="stype'+Jurisdiction+'" id="aduio_'+data.lists[i].id+'"> <source src="'+ data.lists[i].audio +'" type="audio/mp3"></audio>';
+
+	                            	    if (data.count > 0) {
+                                            Jurisdiction = 1; 
+                                            $(".voice-content a").removeClass('lock');
+                                            $('.others-voice a').removeClass('lock');
+                                             // audio = '<audio class="stype'+Jurisdiction+'" id="aduio_'+data.lists[i].id+'"> <source src="'+ data.lists[i].audio +'" type="audio/mp3"></audio>';
+                                        } else {
+                                            if (openid != data.lists[0].confirm_id) {
+                                                Jurisdiction = 0;
+                                                $(".voice-content a").addClass('lock');
+                                                $('.others-voice a').addClass('lock');
+                                            }
+                                        }
+                                        
+                                        if(data.lists[i].pub == "1" ){
+                                            
+                                            $(".pub1Head").html('<img class="img-circle" src="'+ data.lists[i].headimgurl +'" alt="">');
+                                           
+                                            // $(".pub1name").html(data.lists[i].name);
+                                            if (openid == data.lists[i].confirm_id) {
+                                                $(".voice-content").html(theme_html +'<a onclick="Shareplay(event,'+data.lists[i].id+')" href="javascript:;">'+data.lists[i].audio_time+'\"</a>'+audio);
+                                                Jurisdiction = 1;
+                                            } else {
+                                                $(".voice-content").html(theme_html +'<a class="lock" onclick="Shareplay(event,'+data.lists[i].id+')" href="javascript:;">'+data.lists[i].audio_time+'\"</a>'+audio);
+                                                Jurisdiction = 0;
+                                            }
+                                            
+                                        }
+                                        
+                                        if(data.lists[i].pub == 0) {
+                                            if (openid != data.lists[0].confirm_id) {
+                                                Jurisdiction = 0;
+                                                result += '<div  class="others-voice-item"><a class="lock" onclick="Shareplay(event,'+data.lists[i].id+')" href="javascript:;">'+data.lists[i].audio_time+'\"</a> <img class="img-circle" src="'+data.lists[i].headimgurl+'" alt="">'+audio+'</div>';
+                                            } else {
+                                                Jurisdiction = 1; 
+                                                result += '<div  class="others-voice-item"><a onclick="Shareplay(event,'+data.lists[i].id+')" href="javascript:;">'+data.lists[i].audio_time+'\"</a> <img class="img-circle" src="'+data.lists[i].headimgurl+'" alt="">'+audio+'</div>';
+                                            }
+
+                                        }
+//	                                if((i + 1) >= data.lists.length){
+//	                                    // 数据加载完
+//	                                    // 锁定
+//	                                    me.lock();
+//	                                    // 无数据
+//	                                    me.noData();
+//	                                    break;
+//	                                }
+	                            }
+                                    start = start+10;
+	                            // 为了测试，延迟1秒加载
+	                            setTimeout(function(){
+	                                $('.others-voice').append(result);
+
+	                                // 每次数据加载完，必须重置
+	                                me.resetload();
+                                    if(data.count > 0){
+                                        Jurisdiction = 1; 
+                                        $('.others-voice-item a').removeClass('lock');
+                                    }
+	                            },1000);
+	                        }
+	                    },
+	                    error: function(xhr, type){
+	                        console.log(xhr);
+	                        // 即使加载出错，也得重置
+	                        me.resetload();
+	                    }
+	                });
+	            }
+	        });
+	    };
+                var clickF = '';
+                
+
+                function Shareplay(event, audio) {
+                    if(Jurisdiction == 0){
+                        alert('读出解锁口令，就可以解锁');
+                        return false;
+                    }
+                    var audioid = audio;
+                    var audio = document.getElementById("aduio_"+audio+"");
+
+                    if (clickF != '' && clickF != audio) {
+                        $(clickF).siblings('a').removeClass('selected');
+                        clickF.pause();
+                        clickF = audio;
+                    }
+
+                    if (audio.paused){
+                        clickF = audio;
+                        $(event.target).addClass('selected');
+                        audio.play();                          
+                    } else if (audio.play) {
+                        $(event.target).removeClass('selected');
+                        audio.pause();
+                    }
+
+                    audio.addEventListener('ended', function () {  
+                        $(this).siblings('a').removeClass('selected');
+                        audio.load();
+                    }, false);
+                    /*
+                    if(audioid == clickF){
+                        audio.pause()
+        
+                    }else{
+                        if(clickF !=""){
+                            alert('1');
+                             var Up_audio = document.getElementById("aduio_"+clickF+"");
+                             Up_audio.pause();
+                        }
+                        audio.play()
+                    }
+                    clickF = audioid;*/
+                }
+                
+                
+                
+
+                $(".unload").click(function(){
+                    $(".footer-btn").removeClass('hide');
+                }) 
+
+
+                /*function GetRTime(){
+                    var getTime = "{$Think.get.createtime}"
+                    create_time = new Date(getTime*1000);
+                    var Y = create_time.getFullYear();   
+                    var M = create_time.getMonth()+1;   
+                    var D = create_time.getDate()+1;   
+                    create_time = Y+"/"+M+"/"+D+" 22:00:00"; 
+
+                    var EndTime= new Date(create_time);
+                    var NowTime = new Date();
+                    var t =EndTime.getTime() - NowTime.getTime();
+                    var d=0;
+                    var h=0;
+                    var m=0;
+                    var s=0;
+                    if(t>=0){
+                      d=Math.floor(t/1000/60/60/24);
+                      h=Math.floor(t/1000/60/60%24);
+                      m=Math.floor(t/1000/60%60);
+                      s=Math.floor(t/1000%60);
+                    }
+
+
+                        document.getElementById("t_d").innerHTML = d;
+                        document.getElementById("t_h").innerHTML = h;
+                        document.getElementById("t_m").innerHTML = m;
+                        document.getElementById("t_s").innerHTML = s;
+                }
+                setInterval(GetRTime,0);*/
+
+                
+	</script>
+</body>
+</html>

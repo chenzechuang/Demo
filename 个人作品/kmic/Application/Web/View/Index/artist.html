@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>主持人列表</title>
+
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <link rel="stylesheet" href="./Public/bootstrap/bootstrap.css">
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+        <link rel="stylesheet" href="./Public/global.css">
+        <link rel="stylesheet" href="./Public/cityPicker/cityPicker.css">
+        <link rel="stylesheet" href="./Public/css/index.css">
+        
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/json2.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="./Public/jquery.min.js"></script>
+        <script src="./Public/jquery.session.js"></script>
+        
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone','previewImage','checkJsApi'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            
+            
+
+                wx.ready(function(){
+                    wx.onMenuShareTimeline({
+                    title: '找主持，上开麦', // 分享标题
+                    desc: '汇聚全国优质主持', // 分享描述
+                    link: 'http://www.kmic168.com/?m=web&a=artist', // 分享链接
+                    imgUrl: 'http://www.kmic168.com/Public/img/logo.jpg', // 分享图标
+                    type: 'link', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () { 
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                
+                wx.onMenuShareAppMessage({
+                    title: '找主持，上开麦', // 分享标题
+                    desc: '汇聚全国优质主持', // 分享描述
+                    link: 'http://www.kmic168.com/?m=web&a=artist', // 分享链接
+                    imgUrl: 'http://www.kmic168.com/Public/img/logo.jpg', // 分享图标
+                    type: 'link', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () { 
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+            });
+        </script>
+        
+    </head>
+    <body><input type="hidden" name="openid" value="{$Think.get.openid}" />    
+        <!-- header -->
+        <header class="detail-header">
+            <div class="location">
+               <input type="text" name="city" class="city" value="全国" readonly>
+            </div>
+            <div class="header-title">
+                <p>主持人列表</p>
+            </div>
+            <div class="filter">
+                <div class="filter-content">
+                    <header class="detail-header">
+                        <div class="back">
+                        </div>
+                        <div class="header-title">
+                            <p>筛选</p>
+                        </div>
+                        <div class="filter-close">
+                            
+                        </div>
+                    </header>
+                    <section class="filter-menu">
+                        <ul class="filter-list">
+                            <li class="sex filter-item artist-sex">
+                                <p>{$Think.lang.L_SEX}</p>
+                                <ul>
+                                    <li>{$Think.lang.L_SEX_M}主持</li>
+                                    <li>{$Think.lang.L_SEX_F}主持</li>
+                                </ul>
+                            </li>
+                            <li class="price filter-item">
+                                <p>{$Think.lang.L_PRICE}</p>
+                                <ul>
+                                    <li>1K以下</li>
+                                    <li>1K~3K</li>
+                                    <li>3K以上</li>
+                                    <li>面议</li>
+                                </ul>
+                            </li>
+                            <li class="filter-btn filter-item clearfix">
+                                <a class="reset" href="javascript:;">重置</a>
+                                <a class="confirm" href="javascript:;">确定</a>
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </header>
+
+        <!-- section -->
+        <section class="artist-menu">
+
+            <ul class="ui-list list clearfix">
+
+                <!-- <div class="w50 gl" style="display:none;">
+                    <div class="zc_list" onclick="artistDetail('27614')">
+                        <img class="w100" src="http://resource.kmic168.com/Fvj6YiN1xvCLpSAtneQKnJ0k54Vt"> 
+                        <div class="zc_list_iso">
+                            <div class="nk_name">æ›¾æµ·è€å¸ˆ</div>
+                            <div class="cl"></div>
+                        </div>   
+                    </div>
+                </div> -->
+
+            </ul>
+
+         
+            <div class="loading">
+                <div class="ui-loading-block showV">
+                    <div class="ui-loading-cnt">
+                        <i class="ui-loading-bright"></i>
+                        <p>正在加载中...</p>
+                    </div>
+                </div> 
+            </div>
+        </section>
+        
+        <!-- footer -->
+        <footer id="footer">
+            <ul>
+                <li><a href="?m=web&c=index&openid={$Think.get.openid}"><i></i>通告</a></li>
+                <li class="current"><a href="?m=web&c=index&a=artist&openid={$Think.get.openid}"><i></i>主持人</a></li>
+                <li><a href="?m=web&c=index&a=goods&openid={$Think.get.openid}"><i></i>闲置</a></li>
+                <li><a href="?m=Center&c=Profile&a=index&openid={$Think.get.openid}"><i></i>我</a></li>
+            </ul>
+        </footer>
+
+        <script src="./Public/ga.js"></script>
+        <script src="./Public/cityPicker/cityPicker.js"></script>
+        <script src="./Public/js/index.js"></script>  
+
+        <script>
+            $('.show').fadeOut();
+            $(".city").CityPicker();
+            
+
+            $(window).scroll(function() {
+                if ($(document).scrollTop() != 0){
+                    sessionStorage.setItem("offsetTop", $(window).scrollTop());//保存滚动位置
+                } 
+                loaddata();
+            });
+
+
+            var el,
+                totalheight = 0,     //定义一个总的高度变量
+                isLoading = 0,
+                city = "",
+                province = "",
+                where = new Array(),
+                page = 0,
+                isEnd = 0,
+                level = '{$Think.session.level}',
+                openid = '{$Think.session.openid}',
+                back = window.location.href.indexOf('back'),
+                uncache = window.location.href.indexOf('uncache');
+
+
+            if (back != -1 || uncache != -1) {
+                ifBack();
+            } else {
+                sessionStorage.setItem("city", "全国");
+                var _city = sessionStorage.getItem("city");
+                cityPage(_city);
+            }
+
+
+            $(document).on('click', '.city-picker li', function(event) {
+                citySelect(event, this);
+            });
+
+            $(document).on('click', '#hot-city dd', function(event) {
+                citySelect(event, this);
+            });
+            
+
+            function getPage(){
+                sessionStorage.setItem("page", parseInt(page)+1);
+                console.log("save:"+sessionStorage.getItem("page"));
+                var string = '';
+                for (value in where){
+                    if (where[value] != null) {
+                        string += value+'='+where[value]+',';
+                        console.log(string);
+                    }
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    url: "?m=Web&a=artistList",
+                    data: {'page':page,'where':string},
+                    complete:function(result){
+
+                        $('.showV').fadeOut();
+                    },
+                    success: function(result){
+
+                        $.each(result, function(i,val){
+                            // console.log(val);
+                            
+                            var time = getDateDiff(val.time);
+                            var sex = val.sex==1?'{$Think.lang.L_SEX_M}':'{$Think.lang.L_SEX_F}';
+                            
+                            var price = parseInt(val.price) < 1?'面谈':'￥'+parseInt(val.price);
+                            
+                            
+                            
+                            var additional=[];
+                            for(var key in val.additional){
+                                if (val.additional[key]['type']==1) {
+                                    additional.push(val.additional[key]['value']);
+                                }
+                               
+                            }
+
+                            var strVar_html ='';
+                            
+                            if ( level == '10') {
+                                strVar_html ='<div class="lx_button" onclick="deleteUserData(event,'+val.uid+')">ID: '+val.uid+'<button>删除</button></div>';
+                            }
+                            
+                            
+                            var name = '';
+                            if (val.name == null) {
+                                name = '-';
+                            }else if (val.name == '') {
+                                name = '-';
+                            }else{
+                                name = val.name;
+                            }
+ 
+                            
+                            var strVar = "";
+                                strVar += "<div class=\"w49 gl\" id=\"l"+val.id+"\">"
+                                
+                                strVar += "<div class =\"zc_list\" onclick=\"artistDetail(\'"+openid+"\',\'"+val.uid+"\')\">\n"; 
+                                strVar += strVar_html;
+                                strVar += " <img class=\"w100\" src=\"./Public/img/img_cover.png\" style=\"background: url(\'"+ val.headimgurl +"\') no-repeat center/cover;\">";
+                        
+
+                                strVar += " <div class=\"zc_list_iso\">\n";
+                                strVar += " <div class=\"nk_name\">"+name+"<\/div>\n";
+        
+                                strVar += " <\/div>   \n";
+                                strVar += " <\/div>\n";
+                                strVar += "<\/div>"
+                                $('.list').append(strVar);
+                                var w = $('.zc_list img').width();
+                                $('.zc_list').height(w);
+                        });
+                        
+                        sessionStorage.setItem("list", $('.list').html());
+                        $(".list").find("#loading").remove(); 
+
+                        if (result.length == 0){
+                            $(".list").append('<li class="ui-border-t" id="loading">没有更多</li>');
+                            isEnd = 1;
+                        }
+
+                        isLoading = 0;
+                        $('.showV').fadeOut();
+                    },
+                    beforeSend: function(){
+
+                        $('.showV').fadeIn();
+                    },
+                    dataType: 'json'
+                }); 
+            }
+   
+
+
+        </script>
+        
+    </body>
+</html>

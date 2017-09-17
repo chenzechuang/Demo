@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>约麦</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="stylesheet" href="./Public/css/index.css">  
+        <link rel="stylesheet" href="./Public/dist/dropload.css">      
+        <link rel="stylesheet" href="./Public/css/swiper.min.css">
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="./Public/js/hideMenuItems.js"></script>
+        <script>
+            var fx_url = window.location.href;
+            fx_url = fx_url.replace('openid', 'fuid');
+            hideMenu("wx8ad1b47530e4c6a1","{$Think.session.timestamp}","{$Think.session.nonceStr}","{$signature}","约麦","用声音开启一段走心之旅.",fx_url,"http://ym.yuemai168.com/Public/img/logo.jpg","http://ym.yuemai168.com//Public/img/logo.jpg");
+        </script>
+    </head>
+    <body>
+        <div class="article_swip">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img class="img-responsive" src="./Public/img/banner1.jpg"></div>
+                    <div class="swiper-slide"><img class="img-responsive" src="./Public/img/banner2.jpg"></div>
+                    <div class="swiper-slide"><img class="img-responsive" src="./Public/img/banner3.jpg"></div>            
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+        
+        <div class=" listen_html">
+            <div class="listen">
+                <!--
+                <div class="index_box">
+                    <a href="">
+                    <div class="l_list">                
+                        <div class="l_list_img col-xs-12"><img class="img-responsive" src="./Public/img/l_03.png"></div>
+                        <div class="col-xs-12 l_list_title">
+                            <span>听路途</span><span>|</span><span>1005个故事</span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="l_list_bom"><img class="img-responsive" src="./Public/img/lb_07.jpg"></div>
+                    </a>
+                </div>
+               -->
+            </div>
+           
+        </div>
+        <div class="clearfix"></div>
+        <div class="h45"></div>
+        <div class="foot">
+            <div class="col-xs-4"><a href="index.php?m=web&c=article&openid={$Think.get.openid}"><img src="./Public/img/l_07_b.png"></a></div>
+            <div class="col-xs-4"><a href="index.php?m=web&&c=ym&a=praise&openid={$Think.get.openid}"><img src="./Public/img/l_09.png"></a></div>
+            <div class="col-xs-4"><a href="index.php?m=web&c=user&openid={$Think.get.openid}"><img src="./Public/img/l_11.png"></a></div>   
+            <div class="clearfix"></div>
+        </div>
+    <!-- Swiper JS -->
+    <script src="./Public/js/swiper.min.js"></script>
+    <!-- Initialize Swiper -->
+    <script>
+        
+    $.ajax({
+        cache: true,
+        type: "POST",
+        url:"index.php?m=web&c=article",
+      //  data:$('#dosubmit').serialize(),// 序列号formid
+        async: false,
+        dataType: 'json',
+        error: function(request) {
+            alert('提交超时，请稍候再试！');
+        },
+        success: function(data) {
+            console.log(data.data);
+            var strVar = "";
+            if (data.error == 0) {
+             for(var i=0;i<data.data.length;i++){
+             //  alert(data.data[0].id); 
+             
+                strVar += "<div class=\"index_box\">\n";
+                strVar += "	<a href=\"index.php?m=web&c=article&a=article&channel="+data.data[i].id+"&openid={$Think.get.openid}\">\n";
+                strVar += "	<div class=\"l_list\">\n";
+                strVar += "		<div class=\"l_list_img col-xs-12\">\n";
+                strVar += "			<img  src=\""+data.data[i].img_url+"\">\n";
+                strVar += "		<\/div>\n";
+                strVar += "		<div class=\"col-xs-12 l_list_title\">\n";
+                strVar += "			<div class=\"col-xs-5 text-r plr0\">"+data.data[i].title+"<\/div><div class=\"col-xs-2 text-c plr0 red\"><\/div><div class=\"col-xs-5 text-l plr0\">"+data.data[i].article_row+" 个故事<\/div>\n";
+                strVar += "		<\/div>\n";
+                strVar += "		<div class=\"clearfix\">\n";
+                strVar += "		<\/div>\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<div class=\"l_list_bom\">\n";
+                strVar += "		<img class=\"img-responsive\" src=\"./Public/img/lb_07.jpg\">\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<\/a>\n";
+                strVar += "<\/div>\n";       
+                
+          
+             }
+            }
+            $(".listen_html").html(strVar);
+        }
+        
+    });      
+    
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        paginationClickable: '.swiper-pagination',
+        spaceBetween: 30,
+        autoplay : 5000,
+    });
+    </script>
+    </body>
+</html>

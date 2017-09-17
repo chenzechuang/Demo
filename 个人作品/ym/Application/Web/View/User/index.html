@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>约麦</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <link rel="stylesheet" href="./Public/css/index.css">  
+
+	    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>   
+        
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="./Public/js/hideMenuItems.js"></script>
+        <script src="./Public/js/function.js"></script>
+        <script>
+            var fx_url = window.location.href;
+            fx_url = fx_url.replace('openid', 'fuid');
+            hideMenu("wx8ad1b47530e4c6a1","{$Think.session.timestamp}","{$Think.session.nonceStr}","{$signature}","约麦","用声音开启一段走心之旅",fx_url,"http://ym.yuemai168.com/Public/img/logo.jpg","http://ym.yuemai168.com//Public/img/logo.jpg");
+        </script>        
+    </head>
+    <body class="bgf4">
+        <div class="article">   
+            <div class="active_headimg"><div class="active_headimg_iocn"></div><div class="active_headimg_pic"><img class="img-responsive" src="{$user.headimgurl}"></div></div>
+            <div class="active_title">{$user.name}</div>
+
+            <img class="img-responsive" src="./Public/img/u_02.jpg">
+        </div>
+        
+        <div class="f_windown">
+            <div class="bg"></div>
+            <div class="ui-scroller">
+                <div id="f_close"><img src="./Public/img/data/close.png" width="30"/></div>
+                <div class="f_close_line"></div>
+                <div class="windown-info">
+                    <p>操作失败</p>
+                    <p>下载APP可体验更多功能</p>
+                    <a href="">点击下载</a>
+                </div>
+            </div>
+        </div> 
+
+        <div class="user_list bgw">
+            <ul>
+                <li><a href="index.php?m=web&c=user&a=reply&type=follow&openid={$Think.get.openid}"><img src="./Public/img/u_03.jpg">关注</a></li>
+                <li><a href="index.php?m=web&c=user&a=reply&type=fans&openid={$Think.get.openid}"><img src="./Public/img/u_07.jpg">粉丝</a></li>
+            </ul>
+            <div class="clearfix"></div>
+            
+        </div>
+
+        <!-- footer -->
+        <footer id="footer">
+            <ul class="clearfix">
+                <li><a href="index.php?m=web&c=article&a=square&openid={$Think.get.openid}"><i></i>广场</a></li>
+                <li><a href="index.php?m=web&c=ym&a=praise&openid={$Think.get.openid}"><i></i>麦主</a></li>
+                <li onclick="DLapp(event);"><a href="javascript:;"><i></i>发布</a></li>
+                <li class="current"><a href="index.php?m=web&c=user&openid={$Think.get.openid}"><i></i>我的</a></li>
+            </ul>
+        </footer>
+
+    </body>
+</html>

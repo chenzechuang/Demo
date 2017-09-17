@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>基本资料</title>
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">   
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">
+        <link rel="stylesheet" href="./Public/js/iosselect/iosSelect.css">
+        <link rel="stylesheet" href="./Public/cityPicker/cityPicker.css">
+        <link rel="stylesheet" href="./Public/css/index.css">
+        
+        <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <header class="detail-header">
+            <div class="back" onclick="window.location.href = '?m=Center&c=Profile&a=index&openid={$Think.get.openid}';">
+            </div>
+            <div class="header-title">
+                <p>个人信息</p>
+            </div>
+            <div class="header-confirm msg_subtim">
+                <p>确定</p>
+            </div>
+        </header>
+        <section class="user-info">
+            <div class="bg"></div>
+            <form id="dosubmit" action="">
+                <div class="col-xs-12 user-message">
+                    <div class="item headimg">
+                        <div class="col-xs-3 message-title">
+                           头像
+                        </div>
+                        <div class="file clearfix" >
+                            <ul class="pics">
+                                <li class="add">
+                                    <input id="file" type="file" accept="image/*" />
+                                </li>             
+                            </ul>                                 
+                        </div>
+                        <div class="col-xs-9 text-right AJAX_heard">
+                            <img class="img-circle" src="{$user.headimgurl}">
+                            <i class="fa fa-chevron-right"></i>
+                          
+                        </div>
+                    </div>
+ 
+                    <div class="item message-item">
+                        <div class="col-xs-3 message-title">
+                           昵称
+                        </div>
+                        <div class="col-xs-9">
+                           <input type="text" name="name" value="{$user.name}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 user-message">
+                    <div class="item message-item">
+                        <div class="col-xs-3 message-title">
+                           性别
+                        </div>
+                        <div class="col-xs-9">
+                           <div class="col-xs-3 message-name">
+                                <label for="male">
+                                    <input id="male" type="radio" name='sex' <eq name='user.sex' value='1'>checked</eq> value="1">
+                                    <span></span>男
+                                </label>
+                           </div>
+                           <div class="col-xs-3 message-name">
+                                <label for="female">
+                                    <input id="female" type="radio" name='sex' <eq name='user.sex' value='2'>checked</eq> value="2">
+                                    <span></span>女
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item message-item">
+                        <div class="col-xs-3 message-title">
+                           身高
+                        </div>
+                        <div class="col-xs-9">
+                           <div class="pc-box">                     
+                               <input type="hidden" name="stature" id="statureId" value="0">
+                               <p id="showStature" style="color:#666"></p>  
+                           </div>
+                        </div>
+                    </div>
+
+                    <div class="item message-item">
+                        <div class="col-xs-3 message-title">
+                           期望酬劳
+                        </div>
+                        <div class="col-xs-9">
+                           <input type="text"  class="price" name="price" value="0" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')">
+                        </div>
+                    </div>
+
+                    <div class="item message-item">
+                        <div class="col-xs-3 message-title">
+                           所在城市
+                        </div>
+                        <div class="col-xs-9">
+                           <input type="text" name="city" class="city" value="{$detail.city}" readonly>
+                           <input type="hidden" name="province" class="province" value="">
+                        </div>
+                    </div>
+                </div>
+                
+
+
+                <div class="col-xs-12 user-message">
+                    <div class="item message-item">
+                        <div class="col-xs-3 message-title">
+                           从业年限
+                        </div>
+                        <div class="col-xs-9">
+                           <div class="pc-box">                     
+                               <input type="hidden" name="experience" id="experienceId" value="{$detail.experience}">
+                               <p id="showExperience" style="color:#666"></p>
+                           </div>
+                        </div>
+                    </div>
+
+                    <div class="item message-item">
+                        <div class="col-xs-3 message-title">
+                           工作单位
+                        </div>
+                        <div class="col-xs-9">
+                           <input type="text"  class="organization" name="organization" value="{$detail.organization}">
+                        </div>
+                    </div>
+
+                    <div class="item message-item">
+                        <div class="col-xs-3 message-title">
+                           毕业学院
+                        </div>
+                        <div class="col-xs-9">
+                           <input type="text"  class="school" name="school" value="{$detail.school}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 user-message">
+                    <div class="item message-item cols-item">
+                        <div class="col-xs-3 message-title">
+                           曾获荣誉
+                        </div>
+                        <div class="col-xs-9 message-textarea honour" contenteditable>
+                           
+                        </div>
+                        <input type="hidden" name="honour">
+                    </div>
+
+                    <div class="item message-item cols-item">
+                        <div class="col-xs-3 message-title">
+                           个人介绍
+                        </div>
+                        <div class="col-xs-9 message-textarea user_content" contenteditable>
+                           
+                        </div>
+                        <input type="hidden" name="info">
+                    </div>
+                </div>
+                <input type="hidden" name="headimgurl" class="AJAX_heard_val" value="{$user.headimgurl}">
+                <input type="hidden" name="action" value="save">
+                <input type="hidden" name="openid" value="{$Think.get.openid}" />
+            </form>
+        </section>
+
+        <div class="statureBox"></div>
+        <div class="experienceBox"></div>
+        <script src="./Public/js/iosselect/new.js"></script>
+        <script src="./Public/js/iosselect/iscroll.js"></script>
+        <script src="./Public/js/iosselect/iosSelect.js"></script>
+        <script src="./Public/localResizeIMG/dist/lrz.bundle.js"></script>
+        <script src="./Public/cityPicker/cityPicker.js"></script>
+        <script>
+            var showStatureDom = document.querySelector('#showStature');
+            var statureIdDom = document.querySelector('#statureId');
+            showStatureDom.addEventListener('click', function () {
+                var statureId = showStatureDom.dataset['id'];
+                var statureName = showStatureDom.dataset['value'];
+
+                var statureSelect = new IosSelect(1, 
+                    [stature],
+                    {
+                        container: '.statureBox',
+                        title: '身高选择',
+                        itemHeight: 50,
+                        itemShowCount: 3,
+                        oneLevelId: statureId,
+                        showAnimate:true,
+                        callback: function (selectOneObj) {
+                            statureIdDom.value = selectOneObj.id;
+                            showStatureDom.innerHTML = selectOneObj.value;
+                            showStatureDom.dataset['id'] = selectOneObj.id;
+                            showStatureDom.dataset['value'] = selectOneObj.value;
+                        }
+                });
+            });
+
+            var showExperienceDom = document.querySelector('#showExperience');
+            var experienceIdDom = document.querySelector('#experienceId');
+            showExperienceDom.addEventListener('click', function () {
+                var experienceId = showExperienceDom.dataset['id'];
+                var experienceName = showExperienceDom.dataset['value'];
+
+                var experienceSelect = new IosSelect(1, 
+                    [experience],
+                    {
+                        container: '.experienceBox',
+                        title: '身高选择',
+                        itemHeight: 50,
+                        itemShowCount: 3,
+                        oneLevelId: experienceId,
+                        showAnimate:true,
+                        callback: function (selectOneObj) {
+                            experienceIdDom.value = selectOneObj.id;
+                            showExperienceDom.innerHTML = selectOneObj.value;
+                            showExperienceDom.dataset['id'] = selectOneObj.id;
+                            showExperienceDom.dataset['value'] = selectOneObj.value;
+                        }
+                });
+            });
+
+
+            $(".city").CityPicker();
+            $(document).on('click', '.city-picker li', function(event) {
+                event.preventDefault();
+                var city = $('.city').val();
+
+            });
+
+            $(document).on('click', '#hot-city dd', function(event) {
+                event.preventDefault();
+                var city = $(this).html();
+                $(".picker-box").hide();
+                $(".pro-picker").show();
+                $('.city').val(city);
+            });
+            var picNum = 0;
+            var videoNum = 0;
+            document.querySelector('#file').addEventListener('change', function () {
+                $('.alert_box').css("display","block");
+                $('#bg').css("display","block");
+                lrz(this.files[0],{width: 700})
+                   .then(function (rst) {
+                       // 处理成功会执行
+                        var xhr = new XMLHttpRequest();
+                        var data = {
+                            base64: rst.base64,
+                            size: rst.base64.length // 校验用，防止未完整接收
+                        };
+                        xhr.open('POST', '?m=web&a=profiles&upload');
+                        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                        xhr.onreadystatechange = function () {
+                            $('.alert_box').css("display","none");
+                            $('#bg').css("display","none"); 
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                var result = JSON.parse(xhr.response);
+                                if (result.error == 0) {
+                                    $(".AJAX_heard").html('<img class="img-circle" src= "'+result.url+'"><i class="fa fa-chevron-right"></i>');
+                                    $(".AJAX_heard_val").val(result.url);
+                                }
+                            }
+           
+                        };
+                        xhr.send(JSON.stringify(data)); // 发送base64
+                   })
+                   .catch(function (err) {
+                       // 处理失败会执行
+                      alert('error!');
+                       console.log(rst);
+                   })
+                   .always(function () {
+                       // 不管是成功失败，都会执行
+                       
+                   });
+           });
+        </script>
+        <script>
+            var openid = '{$Think.get.openid}';
+
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url:"?m=Center&c=Profile&a=setMessage&action=msg&openid={$Think.get.openid}",
+                data:$('#dosubmit').serialize(),// 序列号formid
+                async: false,
+                dataType: 'json',
+                error: function(request) {
+                    alert('提交超时，请稍候再试！');
+                },
+                success: function(data) {
+                    console.log(data);
+                    if (data.error == 0) {
+                        $("#showStature").html(data.stature);
+                        $("#statureId").val(data.stature);
+                        $(".organization").val(data.organization);
+                        $(".school").val(data.school);
+                        $("#showExperience").html(data.experience);
+                        $(".honour").html(data.honour);
+                        $(".user_content").html(data.info);
+                        if (data.price && data.price != 0) {
+                            $(".price").val(data.price);    
+                        }
+                        
+                        $(".city").val(data.city);
+                        $(".province").val(data.province); 
+                        
+
+                        /*var obj = eval('(' + data.language + ')');
+                        //var arr = Object.keys(obj);                  
+                        for (var i=0;i<Object.keys(obj).length;i++){
+                              $(".setmassage li").eq(Object.keys(obj)[i]).addClass('selected colw');                        
+                         }    */
+                    }
+                }
+            });
+                
+            $(".msg_subtim").click(function(){
+                $('.honour').next('input').val($('.honour').html());
+                $('.user_content').next('input').val($('.user_content').html());
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url:"?m=Center&c=Profile&a=addMessage&openid="+openid+"&action=msg",
+                    data:$('#dosubmit').serialize(),// 序列号formid
+                    async: false,
+                    dataType: 'json',
+                    error: function(request) {
+                        alert('提交超时，请稍候再试！');
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data.error == 0) {
+                            alert('修改成功');
+                        window.location.href="?m=Center&c=Profile&a=index&openid={$Think.get.openid}";
+                        }else if (data.error == 1) {
+                            alert('信息未修改，请修改信息后提交');
+                        }
+                    }
+                });
+                
+            });
+
+        </script>
+    </body>
+</html>
+

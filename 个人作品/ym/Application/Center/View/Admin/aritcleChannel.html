@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>管理后台</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+        <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+        <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+        <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+        <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>        
+        <link href="Public/admin/css/dashboard.css" rel="stylesheet">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+    </head>
+    <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">管理后台</a>
+        </div>
+        <include file="./Public/admin/navbar.html" keywords="1" />
+
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+         <div class="col-sm-3 col-md-2">
+        <include file="./Public/admin/menu.html" keywords="1" />
+         </div>
+        <!--正式内容开始-->
+        <div class="col-sm-9 col-md-10  main">
+            <h1 class="page-header">说-列表</h1>
+            <P><a class="btn btn-danger" href="{:U(aritcleChannelAdd)}">添加</a></p>                
+            <table id="table" ></table> 
+        </div>
+        <!--正式内容结束-->
+      </div>
+    </div>
+    <script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/bootstrap-table.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script type="text/javascript">
+
+        $('#table').bootstrapTable({
+            url:'./index.php?m=Center&c=Admin&a=aritcleChannelListData',
+                 dataType: "json",
+               
+                silentSort:true,
+                pagination:true,
+                pageSize:20,
+                search:true,
+                showExport:true,
+                filterControl:true,
+                pageList: [10, 25, 50, 100],
+                showRefresh: true,                  //是否显示刷新按钮
+                clickToSelect: true,                //是否启用点击选中行
+                uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+                minimumCountColumns: 2,             //最少允许的列数
+                showColumns: true,//列选择按钮
+                /*
+                 *                 pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                strictSearch: true,
+                showColumns: true,                  //是否显示所有的列
+                showRefresh: true,                  //是否显示刷新按钮
+                minimumCountColumns: 2,             //最少允许的列数
+                clickToSelect: true,                //是否启用点击选中行
+                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+                showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
+                cardView: false,                    //是否显示详细视图
+                detailView: false,                   //是否显示父子表
+                 */
+            columns: [{
+                field: 'id',
+                title: 'id',
+                align : 'center',
+                valign : 'middle'
+            }, {
+                field: 'title',
+                title: '标题',
+                align : 'center',
+                valign : 'middle'
+                
+            }, {
+                field: 'img_url',
+                title: '缩略图',
+                align : 'center',
+                valign : 'middle',    
+                formatter:function(value,row,index){  
+                   var a = '<img height="40" src="'+row.img_url+'">';                   
+                        return a;  
+                    } 
+            },{
+                field: 'article_row',
+                title: '文章数',
+                align : 'center',
+                valign : 'middle'
+            },{
+                field: 'sort',
+                title: '排序',
+                align : 'center',
+                valign : 'middle'
+            },{
+                field: 'log_time',
+                title: '创建时间',
+                align : 'center',
+                valign : 'middle'
+            },{
+                field: 'option',
+                title: '编辑',
+                align : 'center',
+                valign : 'middle',
+                formatter:function(value,row,index){  
+             
+                   var e = '<a href="./index.php?m=Center&c=Admin&a=aritclech&edit='+row.id+'" >'+'编辑</a> ';  
+                   var d = '<a href="./index.php?m=Center&c=Admin&a=delete&table=aritcle_channel&did='+row.id+'">删除</a> '; 
+                        return e+d;  
+                    } 
+            }  
+            ]
+        });
+        
+
+
+    </script>
+    </body>
+</html>

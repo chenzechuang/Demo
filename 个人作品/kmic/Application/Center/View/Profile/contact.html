@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>聊天</title>
+
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        <link rel="stylesheet" href="./Public/bootstrap/bootstrap.css">
+        <!-- <link href="./Public/css/fsgallery.css" rel="stylesheet"> -->
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">  
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+        <link rel="stylesheet" href="./Public/css/index.css">
+
+        
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script type="text/javascript">
+
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+
+        </script>
+    </head>
+
+    <body><input type="hidden" name="openid" value="{$Think.get.openid}" />
+
+        <!-- header -->
+        <header class="detail-header">
+            <div class="back" onclick="window.location.href = './?m=Center&c=profile&a=message&openid={$Think.session.openid}'">
+            </div>
+
+            <div class="header-title">
+                <p></p>
+            </div>           
+        </header>
+
+        <!-- section -->
+        <section class="contact-menu">
+
+            <ul class="contact-box">
+                
+            </ul>
+            
+            <div class="ui-loading-block show">
+                <div class="ui-loading-cnt">
+                    <i class="ui-loading-bright"></i>
+                    <p>正在加载中...</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="send">
+            <input id="text" type="text" placeholder="说点什么吧...">
+            <span id="btn" onclick="send('{$fromuid}');"></span>
+        </div>
+        
+        
+        <script src="./Public/ga.js"></script>
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/jquery.min.js"></script>
+        <script src="./Public/js/index.js"></script>
+        <script>
+            var fromuid = '{$fromuid}';
+            var uid = '{$uid}';
+            var u_headimgurl = "{$headimgurl}";
+            $('.show').fadeOut();
+
+            $.ajax({
+                type: 'GET',
+                url: "?m=Center&c=profile&a=contactList&openid={$Think.session.openid}",
+                data: {'fromuid': fromuid},
+                complete:function(result){
+                   
+                },
+                success: function(result){
+                    console.log(result);
+                    if (fromuid == '112') {
+                        $('.header-title p').html("开麦小助手");
+                        $('.send').remove();
+                        $.each(result.system, function(i, val) {
+                            var headimgurl = "./Public/img/logo.jpg";
+
+                            var time = transTimeline(val.timeline);
+
+                            
+                            var strVar = "";
+                                strVar += "<li class=\"li-left\">\n";
+                                strVar += "<p class=\"msg-time\">"+ time +"</p>\n";
+                                strVar += "<div class=\"msg-box\">\n";
+                                strVar += " <img class=\"img-circle\" src=\""+ headimgurl +"\">\n";
+                                strVar += " <div class=\"msg-text\">"+ val.msg +"<\/div>\n";
+                                strVar += "<\/div><\/li>\n";
+                            
+                            $(".contact-box").prepend(strVar);
+                        }); 
+                        $("body").scrollTop($(".contact-box").height());
+                    } else {
+                        if (result.fromUser) {
+                            $('.header-title p').html(result.fromUser.name);
+
+                            var headimgurl = "";
+                            if (result.fromUser.headimgurl_user != null) {
+                                headimgurl = result.fromUser.headimgurl_user;
+                            } else if (result.fromUser.headimgurl != null) {
+                                headimgurl = result.fromUser.headimgurl;
+                            }
+
+                            $.each(result.fromUser.msg, function(i, val) {
+                                if (val.fromuid == fromuid) {
+                                    var time = transTimeline(val.timeline);
+
+                                    var strVar = "";
+                                        strVar += "<li class=\"li-left\">\n";
+                                        strVar += "<p class=\"msg-time\">"+ time +"</p>\n";
+                                        strVar += "<div class=\"msg-box\">\n";
+                                        strVar += " <img class=\"img-circle\" src=\""+ headimgurl +"\">\n";
+                                        strVar += " <div class=\"msg-text\">"+ val.msg +"<\/div>\n";
+                                        strVar += "<\/div><\/li>\n";
+                                } else {
+                                    var time = transTimeline(val.timeline);
+                                    var strVar = "";
+                                        strVar += "<li class=\"li-right\">\n";
+                                        strVar += "<p class=\"msg-time\">"+ time +"</p>\n";
+                                        strVar += "<div class=\"msg-box\">\n";
+                                        strVar += " <div class=\"msg-text\">"+ val.msg +"<\/div>\n";
+                                        strVar += " <img class=\"img-circle\" src=\""+ u_headimgurl +"\">\n";
+                                        strVar += "<\/div><\/li>\n";
+                                }
+                                
+                                $(".contact-box").prepend(strVar);
+                                $("body").scrollTop($(".contact-box").height());
+                            });
+                        }
+                    }
+
+                },
+                beforeSend: function(){
+                   
+                },
+                dataType: 'json'
+            });
+
+            function send(id) {
+
+                if ($('#text').val() == '') {
+                    alert('不能发送空消息');
+                } else {
+                    $.ajax({
+                        type: 'POST',
+                        url: "?m=web&a=messages",
+                        data: {'fromuid':uid,'touid':id,'msg':$('#text').val(),'action':'send'},
+                        success: function(val){
+                            if (val.error==0) {
+                                var timestamp = Date.parse(new Date());
+                                var time = transTimeline(timestamp);
+                                var strVar = "";
+                                    strVar += "<li class=\"li-right\">\n";
+                                    strVar += "<p class=\"msg-time\">"+ time +"</p>\n";
+                                    strVar += "<div class=\"msg-box\">\n";
+                                    strVar += " <div class=\"msg-text\">"+ $('#text').val() +"<\/div>\n";
+                                    strVar += " <img class=\"img-circle\" src=\""+ u_headimgurl +"\">\n";
+                                    strVar += "<\/div><\/li>\n";
+                                $(".contact-box").append(strVar);
+                                $("body").scrollTop($(".contact-box").height());
+                            } else{
+                                alert(val.msg);
+                            }
+                            $('#text').val("");
+                            $('.show').fadeOut();
+                        },
+                        beforeSend: function(){
+                            $('.show').fadeIn();
+                        },
+                        dataType: 'json'
+                    });    
+            
+                }
+            }
+
+        </script>
+
+    </body>
+</html>

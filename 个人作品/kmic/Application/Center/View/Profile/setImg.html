@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>编辑相册</title>
+        
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">   
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css"> 
+        <link rel="stylesheet" href="./Public/css/index.css">
+        
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>  
+        <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    </head>
+    <body onload="loadMessage('{$uid}');">
+  
+
+        
+        <header class="detail-header">
+            <div class="back" onclick="location.href= '?m=Center&c=Profile&openid={$Think.get.openid}';">
+            </div>
+            <div class="header-title">
+                <p>形象照片</p>
+            </div>
+            
+        </header>
+
+        <section class="user-info">
+           <div class="bg">  </div>
+           <form id="drawsubmit" action="">
+
+               <div class="col-xs-12 info-group">
+                   <div class="img-container clearfix">
+                       <div class="col-xs-12 file">
+                           <ul class="pics draw-pics clearfix">
+                               <li class="add">
+                                   <i class="plus"></i>
+                                   <input id="drawfile" type="file" accept="image/*" /> 
+                               </li>             
+                           </ul>  
+                       </div>
+                       <input id="picID2" name="picId" type="hidden" value="" >
+                   </div>
+               </div>
+            </form>
+
+
+        </section>
+         <div class="bg"></div>
+        <div class="delete-menu">
+           
+            <a class="delete-confirm" href="javascript:;">删除照片</a>
+            <a class="delete-cancel" href="javascript:;">取消</a>
+        </div>
+        <!-- <div  class="col-xs-12 col999 mb10"><div class="zhuyi">!</div>上传过程持续一段时间，请耐心等待。</div>
+        <div class="clearfix"></div>
+        <div class="col-xs-12">
+            <div class="button_wbut text-center msg_subtim" onclick="alert('编辑成功！')">提交</div>
+        </div> -->
+        
+        <script src="./Public/localResizeIMG/dist/lrz.bundle.js"></script>
+        <script src="./Public/js/index.js"></script>
+        <script>
+            
+            picNum = 0;
+            var videoNum = 0;
+            $('#drawfile').change(function () {
+                $('.show').fadeIn();
+                lrz(this.files[0],{width: 700})
+               .then(function (rst) {
+                    var xhr = new XMLHttpRequest();
+                    var data = {
+                        pic_type:1,
+                        openid:'{$Think.get.openid}',
+                        base64: rst.base64,
+                        size: rst.base64.length // 校验用，防止未完整接收
+                    };
+                    xhr.open('POST', '?m=web&a=profiles&upload');
+                    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                    xhr.onreadystatechange = function () {
+                        //console.log(xhr.status);
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+
+                            console.log(xhr.response);
+                            var result = JSON.parse(xhr.response);
+                            if (result.error == 0) {
+                                var picId= $("#picID2").val()+","+result.picId;
+                                $("#picID2").val(picId);
+                                $(".draw-pics").prepend('<li id="'+picNum+'"><div class="delete" onclick="deletePic(\''+result.url+'\','+picNum+','+result.picId+')"></div><img class="artist-img" src="'+result.url+'"></li>');
+                                picNum++;
+                                $('.show').fadeOut();
+                            }
+                        }
+                        if (picNum >= 9) {
+                            $('.add').css('display','none');
+                        }
+                    };
+                    xhr.send(JSON.stringify(data)); // 发送base64
+
+                })
+                .catch(function (err) {
+                   // 处理失败会执行
+                   $('.show').fadeOut();
+                   console.log(rst);
+                })
+                .always(function () {
+                   // 不管是成功失败，都会执行
+                   
+                });
+            });  
+            /*document.querySelector('#file').addEventListener('change', function () {
+                $('.alert_box').css("display","block");
+                $('#bg').css("display","block");
+                lrz(this.files[0],{width: 700})
+                   .then(function (rst) {
+                       // 处理成功会执行
+                        console.log(rst);
+                        var xhr = new XMLHttpRequest();
+                        var data = {
+                            openid:'{$Think.get.openid}',
+                            base64: rst.base64,
+                            size: rst.base64.length // 校验用，防止未完整接收
+                        };
+                        xhr.open('POST', '?m=web&a=profiles&upload');
+                        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                        xhr.onreadystatechange = function () {
+                            //console.log(xhr.readyState);
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                $('.alert_box').css("display","none");
+                                $('#bg').css("display","none"); 
+                                var result = JSON.parse(xhr.response);
+                                if (result.error == 0) {
+                                    $(".pics").prepend('<li id="'+picNum+'"><div class="delete" onclick="deletePic(\''+result.url+'\','+picNum+')"><img src="./Public/Kmic/picDelete.png" /></div><img src="'+result.url+'" width="103"/></li>');
+                                    picNum++;
+                                    $('.show').fadeOut();
+                                }
+                            }
+                            if (picNum >= 9) {
+                                $('.add').css('display','none');
+                            }else if (picNum >= 6) {
+                                $('.file').css('height','420px');
+                            }else if (picNum >= 3) {
+                                $('.file').css('height','300px');
+                            }
+                        };
+                        xhr.send(JSON.stringify(data)); // 发送base64
+                   })
+                   .catch(function (err) {
+                       // 处理失败会执行
+                       $('.show').fadeOut();
+                       console.log(rst);
+                   })
+                   .always(function () {
+                       // 不管是成功失败，都会执行
+                       
+                   });
+            });*/
+              
+        </script>
+    </body>
+</html>
+

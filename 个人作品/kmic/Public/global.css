@@ -1,0 +1,18 @@
+A:link {
+ color: #fe6398;
+ TEXT-DECORATION: none
+}
+A:visited {
+ color: #fe6398;
+ TEXT-DECORATION: none
+}
+A:hover {
+ color: #fe6398;
+ text-decoration: underline;
+}
+A:active {
+ color: #fe6398; 
+ text-decoration: underline;
+}
+
+.ui-header a{color: #fe6398;}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <title>Fake auto play html audio in iOS Safari the right way</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <audio id="fen1" autoplay preload loop controls></audio>
+    <audio id="fen2" autoplay preload loop controls></audio>
+    <div id="duration">0</div>
+    <div id="buffered">0</div>
+    <script>
+   
+    function autoPlayAudio() {
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: 'wx8ad1b47530e4c6a1', // 必填，公众号的唯一标识
+            timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+            nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+            signature: '{$signature}', // 必填，签名，见附录1
+            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage','hideMenuItems'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        var player1 =document.getElementById('fen1');
+        var player2 =document.getElementById('fen2');
+        wx.ready(function() {
+        	player1.src = 'http://opgljb0gg.bkt.clouddn.com/1499742591.99.m4a?<?php echo time() ?>';
+            player1.play();
+            //player1.currentTime = 4;
+            player2.src = 'http://opgljb0gg.bkt.clouddn.com/1499744961.33.m4a?<?php echo time() ?>';
+            player2.play();
+            
+        });
+        
+        player1.addEventListener('playing', function() {
+        	//player1.currentTime = 4;
+    	});
+    	var isRunPlayer1 = false;
+    	player2.addEventListener('playing', function() {
+    		if(isRunPlayer1 == false){
+    			player2.pause();
+    		}
+        	
+    	});
+    	window.setInterval(auDuration,50);
+    	
+    	
+    	function auDuration(){
+    		if(player2.buffered.end(0) == player2.duration && isRunPlayer1 == false){
+    			isRunPlayer1 = true;
+    			player1.pause();
+    			player2.currentTime = player1.currentTime;
+    			player2.play();
+    		}
+    	
+    	
+    		$("#buffered").html(player2.buffered.start(0) +"-=-=- "+player2.buffered.end(0)+"-=-=- "+player2.duration);
+    		if(isRunPlayer1 == false){
+    			$("#duration").html(player1.currentTime);
+    		}else{
+    			$("#duration").html(player2.currentTime);
+    		}
+    	}
+    }
+    
+    autoPlayAudio();
+    
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>约麦</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="stylesheet" href="./Public/css/index.css">  
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+        <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="./Public/js/hideMenuItems.js"></script>
+        <script>
+            var fx_url = window.location.href;
+            fx_url = fx_url.replace('openid', 'fuid');
+            hideMenu("wx8ad1b47530e4c6a1","{$Think.session.timestamp}","{$Think.session.nonceStr}","{$signature}","约麦","用声音开启一段走心之旅",fx_url,"http://ym.yuemai168.com/Public/img/logo.jpg","http://ym.yuemai168.com//Public/img/logo.jpg");
+        </script>
+
+    </head>
+    <body class="bgw">
+          <div class="content">
+            <div class="lists">  
+                
+
+            </div>
+           </div>
+
+        <script src="./Public/dist/dropload.min.js"></script>
+        <script>
+            $(function () {
+                var getType='{$Think.get.type}';
+                var itemIndex = 0;
+                var start = 0;
+                var url = '';
+
+                if(getType == "follow"){
+                    url = 'index.php?m=api&c=users&a=attentionlist';
+                }else if(getType == "fans"){
+                    url = 'index.php?m=api&c=users&a=beattentionlist'
+                }
+    
+                var dropload = $('.content').dropload({
+                    scrollArea: window,
+                    loadDownFn: function (me) {
+                        $.ajax({
+                            type: 'POST',
+                            url: url,
+                            dataType: 'json',
+                            data:{
+                                userid:'{$Think.get.openid}',
+                                range:start
+                            },
+                            success: function (data) {
+                                if(getType == "follow"){
+                                    var data = data.data.attention_list;
+                                }else{
+                                    var data = data.data.beattention_list;                          
+                                }
+                                
+                                if (data.length < 1) {
+                                    dropload.lock('down');
+                                    dropload.noData();
+                                }
+                       
+                                var result = '';
+                                for (var i = 0; i <data.length; i++) {
+                                 
+                                    var headimg = data[i].photo_url;
+                                    var name = data[i].nick;
+
+                                    var time_c = new Date(parseInt(data[i].create_time) * 1000).toLocaleString().substr(5,5)
+                                    var followUrl = '#';
+                                    
+                                    if(getType == "follow"){
+                                         followUrl = "./index.php?m=web&openid={$Think.get.openid}&c=ym&a=article&uid="+data[i].userid+""
+                                    }
+                                    
+                                        result += "<div class=\"replay_list\">\n";
+                                        result += "	<div class=\"col-xs-12\">\n";
+                                        result += "		<a href=\""+followUrl+"\"><div class=\"col-xs-2 plr0\">\n";
+                                        result += "			<img class=\"img-responsive imgr\" src=\""+headimg+"\">\n";
+                                        result += "		<\/div>\n";
+                                        result += "		<div class=\"col-xs-9\">\n";
+                                        result += "			<div class=\"replay_list_tit\">\n";
+                                        result += "				"+name+"\n";
+                                        result += "			<\/div>\n";
+                                        result += "			<div class=\"replay_list_iso\">\n";
+                                        result += "				"+data[i].introduction+"\n";
+                                        result += "			<\/div>\n";
+                                        result += "		<\/div>\n";
+                                        result += "		<div class=\"col-xs-1 plr0 time\">\n";
+                                        result += "			"+time_c +"\n";
+                                        result += "		<\/div>\n <\/a>";
+                                        result += "	<\/div>\n";
+                                        result += "	<div class=\"clearfix\">\n";
+                                        result += "	<\/div>\n";
+                                        result += "<\/div>\n";
+                                        result += "<div class=\"bc1c1\">\n";
+                                        result += "<\/div>\n";
+                                }
+                                start = start + 1;
+                                // 为了测试，延迟1秒加载
+                                setTimeout(function () {
+                                    $('.lists').eq(itemIndex).append(result);
+                                    // 每次数据加载完，必须重置
+                                    me.resetload();
+                                }, 1000);
+                            },
+                            error: function (xhr, type) {
+                                alert('Ajax error!');
+                                // 即使加载出错，也得重置
+                                //  me.resetload();
+                                dropload.lock('down');
+                            }
+
+                        });
+
+
+                    }
+                });
+            });
+        </script>        
+    </body>
+</html>

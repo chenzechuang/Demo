@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="">
+	<meta name="name" content="content">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>用声音开启一段走心之旅</title>
+
+	<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+	<link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">
+	<link rel="stylesheet" href="./Public/css/play_reset.css">
+	<link rel="stylesheet" href="./Public/css/play_index.css">
+
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script>
+            var toke = "{:S('token')->access_token}";
+            var openid  = "{$Think.get.openid}";
+	    wx.config({
+	        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	        appId: 'wx8ad1b47530e4c6a1', // 必填，公众号的唯一标识
+	        timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+	        nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+	        signature: '{$signature}',// 必填，签名，见附录1
+	        jsApiList: ['startRecord','stopRecord','onVoiceRecordEnd','playVoice','pauseVoice','stopVoice','onVoicePlayEnd','uploadVoice','downloadVoice'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	    });
+
+
+	</script>
+</head>
+<body>
+
+	<div id="wrapper">
+		<div class="words item">
+			<div class="words-menu">
+				最想说的一句话？  
+			</div>
+			<div class="change-word clearfix">
+				<p><i class="fa fa-refresh"></i>换一个</p>
+			</div>
+		</div>
+		<div class="tips item">
+			<p>1、所有语音</p>
+			<p>2、不想等解锁？不想等解锁？不想等解锁？不想等解锁？不想等解锁？</p>
+		</div>
+	</div>
+    <input type="hidden" class="themeID" value="">
+	<div class="footer-btn">
+		<div class="recording">
+			<i class="fa fa-wifi"></i>
+			<p>录音中</p>
+		</div>
+		
+         
+                <div class="conmit_from">
+                    <div class="cancel pull-left" >取消</div>
+                        <div class="confirm  pull-right" onclick="WxUpload(toke,openid);">发送</div>
+                        <div class="clearfix"></div>
+                </div>
+           
+		 <div class="record-chioce" >  
+			<div class="preview-record">
+				<a href="javascript:;"><i class="fa fa-volume-up"></i><span class="record-count">56"</span></a>
+			</div>
+		</div>
+		<a class="record" ontouchstart = "return false;"><i class="fa fa-microphone"></i>按住 说话</a>
+	</div>
+        <!-- 模态框（Modal） -->
+        <div class="textTab fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                              
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabel">
+                                                提示
+                                        </h4>
+                                </div>
+                                <div class="modal-body text-center textTabContent">
+                                        
+                                </div>
+ 
+                        </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+        </div>
+        <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="./Public/js/jquery.min.js"></script>
+	<script src="./Public/js/play.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>会员升级</title>
+        <link rel="stylesheet" href="./Public/Profile/css/frozen.css">
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+    </head>
+    <body ontouchstart><input type="hidden" name="openid" value="{$Think.get.openid}" />
+<header class="ui-header ui-header-positive ui-border-b" style="background-color: #ff629a; ">
+            <i class="ui-icon-return" onclick="location.href= '?m=Center&c=Profile&openid={$Think.get.openid}';"></i><h1>会员升级</h1>
+            <!--<button class="ui-btn index" style="color: #fb2e39;">回首页</button>-->
+        </header>
+        <section class="ui-container" >
+            
+            
+            <style>
+                body{font-family:"Microsoft YaHei",微软雅黑; font-size: 14px; color: #333}
+                td,th{padding: 4px 0px}
+                .l{background-color: #dedede; width: 50%; ;}
+                .r{background-color:  #d1d1d1; width: 50% ;}
+                .list_button{ background-color: #ff629a; font-size: 15px; color: #FFF; border-radius: 3px; text-align: center; padding: 8px 0px; width: 100%; margin-bottom: 12px; }
+                .ui-border-t{ line-height: 28px;}
+            </style>
+            <table class="ui-table ui-border-tb">
+                <thead>
+                    <tr><th class="l"><b>普通会员</b></th><th class="r"><b>VIP</b></th></tr>
+                </thead>
+                <tbody>
+                <tr><td colspan="2">查看通告联系方式</td></tr>
+                <tr><td class="l">1个/天</td><td class="r">不限</td></tr>
+                <tr><td colspan="2">自动推荐给相关一手通告</td></tr>
+                <tr><td class="l">无</td><td class="r">有</td></tr>
+                <tr><td colspan="2">一手通告报价</td></tr>
+                <tr><td class="l">无</td><td class="r">有</td></tr>
+                <tr><td colspan="2">主持学堂</td></tr>
+                <tr><td class="l">1篇/天</td><td class="r">不限</td></tr>
+                <tr><td colspan="2">手稿管理APP(开发中)</td></tr>
+                <tr><td class="l">无</td><td class="r">有</td></tr>
+                <tr><td colspan="2">日程管理APP(开发中)</td></tr>
+                <tr><td class="l">无</td><td class="r">有</td></tr>
+                <tr><td colspan="2">现金提现(开发中)</td></tr>
+                <tr><td class="l">无</td><td class="r">有</td></tr>
+                <tr><td colspan="2">其它丰富功能开发中,敬请期待</td></tr>
+                <tr><td class="l">无</td><td class="r">有</td></tr>
+<!--                <tr><td>通告置顶</td><td>无</td><td colspan="3" >每天1个</td></tr>
+                <tr><td>通告查看</td><td>5条/天</td><td colspan="3" >不限</td></tr>
+                <tr><td>主持自动置顶</td><td>无</td><td colspan="3" >每3小时1次</td></tr>
+                <tr><td>提现</td><td>无</td><td colspan="3" >24小时到账</td></tr>-->
+                </tbody>
+            </table>
+            <ul class="ui-list ui-list-pure ui-border-tb">
+                <li class="ui-border-t">
+                    <p><span><div class="ui-reddot">您已是会员，到期时间为 {$user.expire|date='Y-m-d',###}</div></span></p>
+                </li>
+                <li class="ui-border-t">
+                    <p><span><div class="ui-reddot">如使用过程中有任何问题，请与管理员联系。</div></span></p>
+                </li>
+                <li class="ui-border-t">
+                    <p><span><div class="ui-reddot">如果发现付款了还没成为VIP的话，请不要着急。只要把付款页面(订单号)截图给管理员(技术客服微信 witheasy)。我们会尽快为您解决。</div></span></p>
+                </li>
+            </ul>
+
+            <div class="ui-btn-wrap">
+                <button class="list_button pay" id="3">
+                    一年VIP 108元(省12元)
+                </button><br/>
+                <button class="list_button pay" id="2">
+                    半年VIP 55元(省5元)
+                </button><br/>
+                <button class="list_button pay" id="1">
+                    一个季度VIP 28元(省2元)
+                </button><br/>
+                <button class="list_button pay" id="0">
+                    一个月VIP 10元
+                </button><br/>
+            </div> 
+     
+            <div class="ui-btn-wrap"><h3>历史订单</h3></div>
+            <ul class="ui-list ui-list-pure ui-border-tb">
+                <foreach name="orders" item="vo">
+                    
+                    <li class="ui-border-t">订单号:{$vo.orderid} <font color="red">价格:{$vo.price}</font><br/>创建时间:{$vo.addtime|date='Y-m-d h:i:s',###}<br/>
+                        状态:<eq name="vo.paid" value="0">未支付<br/><br/>
+                        <button class="list_button" onclick="checkOrder('{$vo.orderid}')">继续完成 / 检查支付状态</button>
+                    <else/>已支付 | 支付时间:{$vo.paidtime|date='m月d日 h:i',###}</eq>
+                    </li>
+                </foreach>
+                
+            </ul>
+        </section>
+         
+        <script>
+            var el;
+            var openid = '{$Think.session.openid}';
+            $('.pay').click(function(){
+                var this_id = $(this).attr("id");
+                el=$.loading({
+                    content:'加载中...',
+                })
+                ga('send', 'event', 'profile', 'memberPay', '{$Think.get.openid}');
+                location.href= 'http://www.kmic168.com/index.php/wxJsapi/?openid={$Think.get.openid}&type='+this_id;
+//                location.href= 'http://www.kmic168.com/index.php/wxJsapi/';
+            });
+            $('.check').click(function(){
+                el=$.loading({
+                    content:'加载中...',
+                })
+                location.href= '?m=Center&c=Profile&a=member&action=sus';
+            });
+            $('.index').click(function(){
+                el=$.loading({
+                    content:'加载中...',
+                })
+                location.href= '?m=Center&c=Profile';
+            });
+        
+        function checkOrder(order){
+            $.ajax({
+                type: 'POST',
+                url: "?m=center&c=profile&a=checkOrder",
+                data: {'order':order},
+                success: function(result){
+                    if (result.state==0) {
+                        if(confirm("支付未完成,继续支付吗？"))
+                        {
+                            location.href= 'http://www.kmic168.com/index.php/wxJsapi/?openid={$Think.get.openid}&type=';
+                        }
+                      
+                    }else if (result.state==4) {
+                    }else{
+                        alert('支付成功，您已经是会员了！谢谢您的支持！');
+                        location.href= '?m=Center&c=Profile&a=member&openid={$Think.get.openid}';
+                    }
+                },
+                dataType: 'json'
+            });  
+        }
+        
+        <gt name="pendingOrder" value="1">
+            checkOrder('{$pendingOrder}');
+        </gt>
+        
+ga('send', 'event', 'profile', 'member', '{$Think.get.openid}');
+        </script>
+        <script src="./Public/UnionInfo.js"></script>
+        <script src="./Public/ga.js"></script>
+    </body>
+</html>

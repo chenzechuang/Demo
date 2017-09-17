@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>管理后台</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+        <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+        <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+        <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+        <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <link href="Public/admin/css/dashboard.css" rel="stylesheet">
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">管理后台</a>
+        </div>
+        <include file="./Public/admin/navbar.html" keywords="1" />
+          
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <include file="./Public/admin/menu.html" keywords="2" />
+        <!--正式内容开始-->
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          
+          <h2 class="sub-header">添加会员</h2>
+          <form name="dosubmit" id="dosubmit" role="form" method="post">
+              <input type="hidden" name="action" value="add" />
+            <div class="form-group">
+              <label for="exampleInputEmail1">用户名/手机</label>
+              <input type="text" class="form-control" name="mob" placeholder="用户登录名/11位手机号">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">密码</label>
+              <input type="password" class="form-control" name="password" placeholder="密码">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">确认密码</label>
+              <input type="password" class="form-control" name="passwordC" placeholder="重复密码">
+            </div>
+              
+            <!--<div class="form-group">
+              <label for="exampleInputPassword1">专业分类</label>
+              <select class="form-control">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+            </div>-->
+              
+            
+          </form>
+          <button type="submit" class="btn btn-default submit">添加</button>
+        </div>
+        <!--正式内容结束-->
+      </div>
+    </div>
+        
+        
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">提示</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer" style="display: none;">
+        <button type="button" class="btn btn-default" data-dismiss="modal">知道了</button>
+      </div>
+    </div>
+  </div>
+</div>
+        
+    </body>
+    <script>
+        
+        $(".submit").click(function(){
+            if ($("input[name='mob']").val()=='') {
+                alert('请输入正确的用户名/手机号');
+                return;
+            }
+            if ($("input[name='password']").val()=='') {
+                alert('请输入密码');
+                return;
+            }
+            if ($("input[name='password']").val()!=$("input[name='passwordC']").val()) {
+                alert('二次密码不一至');
+                return;
+            }
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url:"?m=Center&c=Admin&a=member",
+                data:$('#dosubmit').serialize(),// 序列号formid
+                async: false,
+                dataType: 'json',
+                error: function(request) {
+                    $('.modal-body').html('提交超时，请稍候再试！');
+                    $('.modal-footer').css('display','block');
+//                    $('#myModal').modal('hide');
+                },
+                success: function(data) {
+                    console.log(data);
+                    if (data.error == 0) {
+                        $('.modal-body').html('添加成功！');
+//                        window.location.href="?m=web&a=profiles&openid={$Think.get.openid}";
+                    }else{
+                        $('.modal-body').html(data.msg);
+                    }
+                },
+                beforeSend: function(){
+                    $('#myModal').modal('show');
+                    $('.modal-body').html('加载中！');
+                    $('.modal-footer').css('display','none');
+                },
+               complete: function(){
+//                   $('#myModal').modal('hide');
+                    $('.modal-footer').css('display','block');
+                }
+            });
+        });
+        
+    </script>
+</html>

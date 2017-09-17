@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="keywords" content="主持人,高颜值,高言值,走心,音频,在线互动,交流,1对1,一对一,邀约,直播,视频,声音,好声音,心灵之旅,麦主,社交,社区,轻社交,轻社区,美女,帅哥">
+	<meta name="name" content="content">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>约麦</title>
+
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css"> 
+	<link rel="stylesheet" href="./Public/js/PhotoSwipe/photoswipe.css">
+	<link rel="stylesheet" href="./Public/js/Scrollbar/jquery.mCustomScrollbar.css">
+	<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+	<link rel="stylesheet" href="./Public/css/data.css">
+
+
+</head>
+<body>
+	<header id="header">
+		<div class="person">
+			<img class="person_img img-circle" src="./Public/img/data/1.jpg" alt="">
+			<p class="person_name"><span>约麦麦主</span><b class="sex"></b></p>
+			<p class="person_intro">我就是这样的一个人，独自走</p>
+		</div>
+		<ul class="person-total">
+			<li><a href="#">动态<span class="dynamic_count">1123</span></a></li>
+			<li><a href="#">粉丝<span class="passive_count">321</span></a></li>
+			<li><a href="#">通话<span class="video_time">12时21分</span></a></li>
+		</ul>
+	</header>
+
+	<nav class="nav">
+		<ul>
+			<li class="data selected">资料</li>
+			<li class="dynamic">动态</li>
+		</ul>
+	</nav>
+
+	<section class="data-menu">
+		<div class="data-item">
+			<h1 class="item-title">麦主简介</h1>
+			<p class="introduction"></p>
+		</div>
+
+		<div class="data-item">
+			<h1 class="item-title">相册</h1>
+			<ul class="album-menu">
+			</ul>
+		</div>
+
+		<div class="data-item">
+			<h1 class="item-title">兴趣爱好</h1>
+			<ul class="btn-menu interest">
+			</ul>
+		</div>
+
+		<div class="data-item">
+			<h1 class="item-title">生活经历</h1>
+			<ul class="btn-menu experience">
+			</ul>
+		</div>
+
+		<div class="data-item">
+			<h1 class="item-title">声音标签</h1>
+			<ul class="btn-menu language">
+			</ul>
+		</div>
+
+		<div class="data-item">
+			<h1 class="item-title">关注方向</h1>
+			<ul class="btn-menu follow">
+			</ul>
+		</div>
+		
+	</section>
+	<div class="call">
+		跟TA打个招呼
+	</div>
+
+
+	<script src="./Public/js/jquery.min.js"></script>
+	<script src="./Public/js/PhotoSwipe/klass.min.js"></script>
+   	<script src="./Public/js/PhotoSwipe/code.photoswipe.jquery-3.0.5.min.js"></script>
+	<script src="./Public/js/Scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script src="./Public/js/data.js"></script>
+	<script>
+
+		var topValue = 0,// 上次滚动条到顶部的距离
+		    interval = null;// 定时器
+
+		document.onscroll = function(){
+		    if(interval == null) // 未发起时，启动定时器，1秒1执行
+		        interval = setInterval("showDiv()", 2000);
+		    
+		    topValue = document.documentElement.scrollTop;
+		    $('.call').hide("fast");
+		}
+
+		function showDiv() {
+		    // 判断此刻到顶部的距离是否和1秒前的距离相等
+		    if(document.documentElement.scrollTop == topValue) {
+		    	$('.call').show("fast");
+
+		       
+		        clearInterval(interval);
+		        interval = null;
+		    }
+		}
+
+	 	// var uid = '{$Think.get.uid}';
+	 	var uid = '172';
+  		$.ajax({
+  			url: '?m=Api&c=users&a=simple',
+  			type: 'POST',
+  			data: {userid: uid},
+  			success: function(result) {
+  				var data = result.data;
+  				console.log(data);
+  				$('.person_img').attr('src', data.photo_url);
+  				$('.person_name span').text(data.nick);
+  				if (data.sex == 1) {
+  					$('.person_name .sex').css('background', 'url(\'./Public/img/data/man@2x.png\') no-repeat 0 center / 0.213333rem 0.346667rem')
+  				}
+
+  				$('.person_intro').text(data.signature);
+  				
+  				$('.passive_count').text(data.passive_count);
+  				$('.video_time').text(formatSeconds(data.video_time));
+
+  				$('.introduction').text(data.introduction);
+
+  				if (data.pics && data.pics.length > 0) {
+  					var pic = "";
+  					for (var i = 0, len = data.pics.length; i < len; i++) {
+  						pic += "<li class=\"album-item\"><a href=\""+data.pics[i]+"\" data-imagelightbox=\"e\"><img src=\""+data.pics[i]+"\" alt=\"\"></a></li>";
+  					}
+  					$('.album-menu').prepend(pic);
+  					photoSwipe();
+  				}
+
+  				
+
+  				tags("interest", data.interest_ids);
+  				tags("experience", data.experience_ids);
+  				tags("language", data.language_ids);
+  				tags("follow", data.follow_ids);
+
+  				$.ajax({
+  					url: '?m=Api&c=users&a=attentioncount',
+  					type: 'POST',
+  					data: {userid: uid},
+  					success: function(result) {
+  						$('.dynamic_count').text(result.data.dynamic_count);
+  					},
+  					dataType: 'json'
+  				});
+  			
+  				sessionStorage.setItem("data", $('.data-menu').html());
+  			},
+  			dataType: 'json'
+  		});
+
+  		function photoSwipe() {
+  			(function(window, $, PhotoSwipe){
+  			    var options = {};
+  			    $(".album-menu a").photoSwipe(options);
+  			}(window, window.jQuery, window.Code.PhotoSwipe));
+  			
+  			$.mCustomScrollbar.defaults.theme="light-2"; 
+  			
+  			$(".album-menu").mCustomScrollbar({
+  			    axis:"x",
+  			    advanced:{autoExpandHorizontalScroll:true}
+  			});
+  		}
+
+  		var firstLoad = true;
+  		var prevideo = "";
+  		var flag = 0;
+  		var start = 0;
+
+  		$('.data').click(function(event) {
+  			$('.data-menu').html("");
+  			var data = sessionStorage.getItem("data");
+  			$('.data-menu').append(data);
+  			if ($('.album-item').length > 0) {
+  				photoSwipe();
+  			}
+  			
+  		});
+
+  		$('.dynamic').click(function(event) {
+  			if (firstLoad) {
+  				$.ajax({
+	  				url: '?m=Api&c=article&a=userlist',
+	  				type: 'POST',
+	  				data: {userid: uid,
+	  					rang: start},
+	  				dataType: 'json',
+	  				success: function(result) {
+	  					console.log(result);
+	  					var data = result.data.dynamic_list;
+	  					var strVar = "";
+	  					
+	  					$.each(data, function(i, val) {
+	  						console.log(val);
+	  						var date = new Date(val.create_time * 1000);
+	  						date = date.getMonth() + "/" + date.getDate();
+						    strVar += "<div class=\"dynamic-item\">\n";
+						    strVar += "	<div class=\"header\">\n";
+						    strVar += "		<img class=\"img-circle\" src=\""+ val.photo_url +"\" alt=\"\">\n";
+						    strVar += "		<div class=\"header-msg\">\n";
+						    strVar += "			<p class=\"user-name\">"+ val.nick +"<\/p>\n";
+						    strVar += "			<p class=\"dynamic-info\"><span class=\"time\">"+ date +"<\/span> 发布 | <span class=\"listen\">"+ val.listen_count +"<\/span> 收听<\/p>\n";
+						    strVar += "		<\/div>\n";
+						    strVar += "				\n";
+						    strVar += "	<\/div>\n";
+						    strVar += "	<p class=\"dynamic-content\">"+ val.content +"<\/p>\n";
+						    if (val.pics.length > 0 && val.pics[0].pic.indexOf("mp3") != -1) {
+						    	strVar += "	<div class=\"video\" style=\"background:url('"+val.cover+"') no-repeat center center / cover;\" >\n";
+						    	strVar += "		<audio class=\"audio\" src=\""+ val.pics[0].pic +"\"><\/audio><img class=\"cover\" src=\"./Public/img/data/btn_play@2x.png\">\n";
+						    	strVar += "	<\/div>\n";
+						    } else {
+						    	strVar += "	<div class=\"photo\">\n";
+						    	strVar += "		<img class=\"poster\" src=\"./Public/img/data/img_cover.png\" style=\"background:url('"+val.cover+"') no-repeat center center / cover\" alt=\"\"><\/img>\n";
+						    	strVar += "	<\/div>\n";
+						    }
+						    
+						    strVar += "	<ul class=\"dynamic-follow\">\n";
+						    strVar += "		<li class=\"gift\"><\/li>\n";
+						    strVar += "		<li class=\"like\">"+ val.praise_count +"<\/li>\n";
+						    strVar += "		<li class=\"comment\">"+ val.comment_count +"<\/li>\n";
+						    strVar += "		<li class=\"more\"><\/li>\n";
+						    strVar += "	<\/ul>\n";
+						    strVar += "<\/div>\n";
+	   					});
+
+		   				$('.data-menu').html(strVar);
+		   				sessionStorage.setItem("dynamic", strVar);
+		   				firstLoad = false;
+	   				}
+  				});
+  			} else {
+  				$('.data-menu').html("");
+  				var dynamic = sessionStorage.getItem("dynamic");
+  				$('.data-menu').append(dynamic);
+  			}
+  			
+  		})
+  		
+  		$(document).on('click', '.cover', function() {
+			if (prevideo != "" && $(this).prev()[0] != prevideo) {
+				prevideo.pause();
+				$(prevideo).next().attr('src', './Public/img/data/btn_play@2x.png');
+				prevideo = $(this).prev()[0];
+				flag = 0;
+			}
+
+			if (flag == 0) {
+				$(this).attr('src', './Public/img/data/btn_pause@2x.png');
+				$(this).prev()[0].play();
+				prevideo = $(this).prev()[0];
+				flag = 1;
+			} else {
+				$(this).attr('src', './Public/img/data/btn_play@2x.png');
+				$(this).prev()[0].pause();
+				flag = 0;
+			}
+			return false;
+		
+		});
+  		function tags(element, tags) {
+  			var tag = tags.split('|');
+			var str = "";
+			for (var i = 0, len = tag.length; i < len; i++) {
+				str += "<li class=\"data-btn\">"+ tag[i] +"</li>"
+			}
+			$('.'+element).append(str);
+  		}
+
+  		function formatSeconds(value) {
+  		    var second = parseInt(value);// 秒
+  		    var minute = 0;// 分
+  		    var hours = 0;// 小时
+  		    if(second > 60) {
+  		        minute = parseInt(second/60);
+  		        second = parseInt(second%60);
+	            if (minute > 60) {
+	            	hours = parseInt(minute/60);
+	            	minute = parseInt(minute%60);
+	            }
+  		    }
+	        var result = "";
+	        result += parseInt(hours)+"时";
+	        result += parseInt(minute)+"分";
+  		    return result;
+  		}
+	</script>
+</body>
+</html>	

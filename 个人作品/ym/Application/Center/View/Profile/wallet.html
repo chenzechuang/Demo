@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>我的钱包</title>
+        <link rel="stylesheet" href="./Public/Profile/css/frozen.css">
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <script src="./Public/wxmenu.js"></script>
+                <style>
+             body{font-family:"Microsoft YaHei",微软雅黑; font-size: 14px; line-height: 25px;}
+           
+        </style>
+    </head>
+    <body ontouchstart><input type="hidden" name="openid" value="{$Think.get.openid}" />
+<header class="ui-header ui-header-positive ui-border-b" style="background-color: #ff629a; ">
+            <i class="ui-icon-return" onclick="location.href= '?m=Center&c=Profile&openid={$Think.get.openid}';"></i><h1>我的钱包</h1>
+        </header>
+        <section class="ui-container" >
+            <div class="ui-newstips-wrap" style="background-color: white; margin: 5px; padding: 5px;-moz-border-radius: 15px;      /* Gecko browsers */
+    -webkit-border-radius: 15px;   /* Webkit browsers */
+    border-radius:15px;            /* W3C syntax */">
+                <div>
+                    <div style="font-size: 18px; color: #fb2e39;">钱包余额:{$userCenter.deposit}元</div>
+                    <div style="font-size: 14px; color: gray; text-align: left;">赚钱方法:只要有人通过您的二维码关注并成为VIP，您将会得到5元。如果您介绍进来的VIP再次介绍VIP进来，您会再次得到2元。</div>
+                    <div style="font-size: 14px; color: gray; text-align: left;">提现功能开发中</div>
+                </div>
+            </div>
+            <ul class="ui-list ui-list-pure ui-border-tb">
+                <foreach name="pay_log" item="vo">
+                    <li class="ui-border-t">
+                        <p><span>收入 </span><span class="date"> {$vo['timeline']|date="Y-m-d",###}</span></p>
+                        <h4>{$vo.userinfo.nickname}为我赚了{$vo.amout}元</h4>
+                    </li>
+                </foreach>
+            </ul>
+            
+            
+        </section>
+        
+        <script>
+            var openid = '{$Think.get.openid}';
+            var el;
+            $('.pay').click(function(){
+                el=$.loading({
+                    content:'加载中...',
+                })
+                location.href= '?m=Center&c=Profile&a=member&action=pay&payid='+$(this).attr('id');
+            });
+        $('.submig').click(function(){
+            $.ajax({
+                type: 'POST',
+                url: "?m=center&c=profile&a=edit&openid="+openid,
+                data: $('#dosubmit').serialize(),
+                success: function(result){
+//                    alert(result);
+                    el.loading("hide");
+                    alert('修改成功');
+                },
+                beforeSend: function(){
+                    el=$.loading({
+                        content:'加载中...',
+                    })
+                },
+                dataType: 'html'
+            }); 
+        });
+        
+//        (function (){
+//            var tab = new fz.Scroll('.ui-tab', {
+//                role: 'tab',
+//                autoplay: true,
+//                interval: 3000
+//            });
+//            /* 滑动开始前 */
+//            tab.on('beforeScrollStart', function(fromIndex, toIndex) {
+//                console.log(fromIndex,toIndex);// from 为当前页，to 为下一页
+//            })
+//        })();
+        </script>
+    </body>
+</html>

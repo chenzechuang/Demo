@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>提现</title>
+        <link rel="stylesheet" href="./Public/Profile/css/frozen.css">
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <script src="./Public/Profile/js/dialog.js"></script>
+        <script src="./Public/wxmenu.js"></script>
+    </head>
+    <body ontouchstart><input type="hidden" name="openid" value="{$Think.get.openid}" />
+<header class="ui-header ui-header-positive ui-border-b" style="background-color: #fb2e39; ">
+            <i class="ui-icon-return" onclick="history.back()"></i><h1>提现</h1>
+            <button class="ui-btn index" style="color: #fb2e39;">回首页</button>
+        </header>
+        <section class="ui-container" >
+            
+            
+            <div class="ui-form ui-border-t">
+                <form action="#">
+                    <div class="ui-form-item ui-form-item-show ui-form-item-link ui-border-b">
+                        <label for="#">账号</label>
+                        <input type="text" value="{:S('wx_info'.$_SESSION[openid])[nickname]}" readonly>
+                    </div>
+                    <div class="ui-form-item ui-form-item-show ui-form-item-link ui-border-b">
+                        <label for="#">用户ID</label>
+                        <input type="text" value="{:S('udid'.$_SESSION[openid])}" readonly>
+                    </div>
+                    <div class="ui-form-item ui-form-item-show ui-border-b">
+                        <label for="#">钱包余额</label>
+                        <input type="text" value="{$user.deposit}元" readonly>
+                    </div>
+                    <div class="ui-form-item ui-form-item-show ui-border-b">
+                        <label for="#">我要提现/元</label>
+                        <input type="text" placeholder="输入提现金额" name="money" onKeypress="return (/[\d.]/.test(String.fromCharCode(event.keyCode)))">
+                    </div>
+                </form>
+                <div class="ui-btn-wrap"><input type="submit" value="确定" class="ui-btn-lg ui-btn-danger submit" /></div>
+            </div>
+            
+            
+            
+            <ul class="ui-list ui-list-text ui-list-link ui-border-tb">
+                <foreach name="deposit" item="vo">
+                    <li class="ui-border-t">
+        <h4 class="ui-nowrap">提现{$vo.money}元</h4>
+                    <if condition="$vo.status eq 1">
+                        <p class="ui-txt-highlight">已到账</p>|
+                        <else/>
+                        <p class="ui-txt-muted">未到账</p>|
+                    </if>
+        
+        <div class="ui-txt-info">{$vo['timeline']|date="y-m-d H:i",###}</div>
+        
+    </li>
+       
+                </foreach>
+                <li class="ui-border-t">
+        只显示最后20条数据
+    </li>   
+            </ul>
+        </section>
+        
+        <script>
+            var elAlert;
+            var isMember = '{$user.level}';
+            var currentD = Number('{$user.deposit}');
+            var el;
+            $('.index').click(function(){
+                location.href= '?m=Center&c=Profile';
+            });
+            $('.submit').click(function(){
+                if (isMember != '1') {
+                    elAlert=$.tips({
+                        content:'您还不是高级会员',
+                        stayTime:2000,
+                        type:"success"
+                    })
+                    return;
+                }
+                var money = Number($("input[name='money']").val());
+                
+                if (money < 20 || money > 200 || isNaN(money) ) {
+                    elAlert=$.tips({
+                        content:'每次提现额度大于/含20元少于200元/含',
+                        stayTime:4000,
+                        type:"success"
+                    })
+                    return;
+                }
+                if (money > currentD) {
+                    elAlert=$.tips({
+                        content:'余额只有'+currentD+'元',
+                        stayTime:4000,
+                        type:"success"
+                    })
+                    return;
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: "?m=Center&c=Index&a=deposit",
+                    data: {'money':money},
+                    success: function(result){
+//                        console.log(result); 
+                        el.loading("hide");
+                        
+                        if (result.result == true) {
+                            alert('款项将在2小时内，以红包的形式发放，请注意查收。');
+                            location.href= '?m=Center&c=Profile&a=deposit';
+                        }
+                    },
+                    beforeSend: function(){
+                        el=$.loading({
+                            content:'加载中...',
+                        })
+                    },
+                    dataType: 'json'
+                }); 
+            });
+        
+//        (function (){
+//            var tab = new fz.Scroll('.ui-tab', {
+//                role: 'tab',
+//                autoplay: true,
+//                interval: 3000
+//            });
+//            /* 滑动开始前 */
+//            tab.on('beforeScrollStart', function(fromIndex, toIndex) {
+//                console.log(fromIndex,toIndex);// from 为当前页，to 为下一页
+//            })
+//        })();
+        </script>
+    </body>
+</html>

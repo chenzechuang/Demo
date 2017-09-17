@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>开麦-地区</title>
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <script src="./Public/jquery.min.js"></script>
+        <script src="./Public/wxmenu.js"></script>
+        <link rel="stylesheet" href="./Public/global.css">
+        <script src="./Public/jquery.session.js"></script>
+        <style>
+            .cityList{background-color: #ffffff; padding: 10px; }
+            .province{background-color:#eeeeee}
+            .ui-border-t{}
+            .ui-list li h4{font-size: 15px;}
+              body{font-family:"Microsoft YaHei",微软雅黑; font-size: 15px;}
+        </style>
+    </head>
+    <body ontouchstart="">
+<!--        <header class="ui-header ui-border-b" style="background-color: white;">
+            <h1>{$wxData.nickname}的主页</h1>
+        </header>-->
+        <div id="dtBox"></div>
+        <section class="ui-container">
+            <table border="0" width="100%">
+                <tbody>
+                    <tr>
+                        <td valign="top" width="30%">
+                            <ul class="ui-list ui-list-link ui-border-tb province">
+                                <li class="ui-border-t " id="hot">
+                                    <div class="ui-list-info">
+                                        <h4 class="ui-nowrap" onclick="select('hot')">热门</h4>
+                                    </div>
+                                </li>
+                                <foreach name="province" item="voProvince">
+                                    <li class="ui-border-t " id="{$voProvince.provinceid}">
+                                        <div class="ui-list-info">
+                                            <h4 class="ui-nowrap" onclick="select('{$voProvince.provinceid}','{$voProvince.province}')">{$voProvince.province}</h4>
+                                        </div>
+                                    </li>
+                                </foreach>
+
+                            </ul>
+                        </td>
+                        <td valign="top" width="70%">
+                            <ul class="ui-list ui-list-link ui-border-tb city">
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            
+            
+            
+        </section>
+        <div class="ui-loading-block show">
+            <div class="ui-loading-cnt">
+                <i class="ui-loading-bright"></i>
+                <p>正在加载中...</p>
+            </div>
+        </div>
+        <script>
+            $('.show').fadeOut();
+            var htmlHot = '<li class="ui-border-t cityList" onclick="filter(\'p\',\'北京市\')">北京市</li>\n\
+                            <li class="ui-border-t cityList" onclick="filter(\'p\',\'上海市\')">上海市</li>\n\
+                            <li class="ui-border-t cityList" onclick="filter(\'p\',\'广东省\')">广东省</li>\n\
+                            <li class="ui-border-t cityList" onclick="filter(\'p\',\'浙江省\')">浙江省</li>\n\
+                            <li class="ui-border-t cityList" onclick="filter(\'p\',\'天津市\')">天津市</li>\n\
+                            <li class="ui-border-t cityList" onclick="filter(\'p\',\'四川省\')">四川省</li>\n\
+                            <li class="ui-border-t cityList" onclick="filter(\'p\',\'江苏省\')">江苏省</li>';
+            $(".city").html(htmlHot);
+            function select(pid,name){
+                if (pid == 'hot') {
+                    $(".city").html(htmlHot);
+                    return;
+                }
+                $.ajax({
+                    type: 'GET',
+                    url: "?m=web&a=area&action=city&fatherid="+pid,
+                    data: $('#dosubmit').serialize(),
+                    success: function(result){
+//                        console.log(result);
+                        var html = '<li class="ui-border-t cityList" onclick="filter(\'p\',\''+name+'\')">全省</li>';
+                        $.each(result, function(i,val){
+                            html += '<li class="ui-border-t cityList" id="ol'+pid+'" onclick="filter(\'c\',\''+val.city+'\')">'+val.city+'</li>';
+                        });
+                        $(".city").html(html);
+                        $('body,html').animate({ scrollTop: 0 }, 100);
+                    },
+                    beforeSend: function(){
+                    },
+                    dataType: 'json'
+                }); 
+            }
+            
+            function filter(type,value){
+//                alert(type+value);
+                $.session.set('selectArea',type+'||'+value);
+                location.href= $.session.get('returnUrl');
+            }
+        </script>
+    </body>
+</html>

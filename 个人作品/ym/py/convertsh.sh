@@ -1,0 +1,1 @@
+python py/convertaudio.py $1 $2 $3 >> py/convertaudio.txt 2>&1

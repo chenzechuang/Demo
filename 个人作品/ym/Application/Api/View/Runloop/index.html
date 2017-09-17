@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>自动运行</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./Public/Profile/css/frozen.css">
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <script src="./Public/wxmenu.js"></script>
+        <script type="text/javascript">  
+            var i = 1;  
+            function remainTime(){  
+//                if(i==0){  
+////                    location.href='http://wechatcenter.witheasy.com/';
+//                    
+//                }  
+                $.ajax({url:"?m=Center&c=runloop&go",async:false});
+//                document.getElementById('time').innerHTML=i++;
+//                document.getElementById("runtime").innerHTML = 1;
+//                document.getElementById("time").innerHTML="dd";
+                $('#runtime').html(i++);
+//                console.log(i++);
+                setTimeout("remainTime()",10000);  
+            }  
+            remainTime();  
+        </script>   
+    </head>
+    <body>
+        <div id="runtime">0</div>
+    </body>
+</html>

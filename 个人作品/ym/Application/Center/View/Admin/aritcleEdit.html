@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>管理后台</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+        <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+        <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+        <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+        <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <link href="Public/admin/css/dashboard.css" rel="stylesheet">
+    </head>
+    <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">管理后台</a>
+        </div>
+        <include file="./Public/admin/navbar.html" keywords="1" />
+
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+         <div class="col-sm-3 col-md-2">
+        <include file="./Public/admin/menu.html" keywords="1" />
+         </div>
+        <!--正式内容开始-->
+        <div class="col-sm-9 col-md-10  main">
+            <h1 class="page-header">说-添加</h1>
+
+            <form class="form-horizontal" role="form" action="" enctype="multipart/form-data" method="post">
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">标题</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" value="{$data.title}"  name="title" type="text" >
+                            </div>
+                    </div>
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">所属</label>
+                            <div class="col-sm-11">
+                                <select name="channel" class="form-control">
+                                    <volist name="Clannel" id="vo">
+                                        <option <if condition="$data['channel'] eq $vo['id']">selected <else/></if> value="{$vo.id}">{$vo.title}</option>
+                                    </volist>
+                                </select>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">用户ID</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput"  name="uid" value="{$data.uid}" type="text" >
+                            </div>
+                    </div>   
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">缩略图</label>
+                            <div class="col-sm-11">
+                                    <div class="form-group">                                 
+                                        <input type="file" name="pic" value="{$data.img_url}" id="inputfile">
+                                    </div>
+                            </div>
+                    </div>                
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">音频</label>
+                            <div class="col-sm-11">
+                                    <div class="form-group">          
+                                        
+                                        <input type="text" name="audio" class="form-control" value="{$data.audio}" id="focusedInput">
+                                    </div>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">简介</label>
+                            <div class="col-sm-11">
+                                 <textarea   name="introduction" class="form-control" rows="2">{$data.introduction}</textarea>
+                            </div>
+                    </div> 
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">内容</label>
+                            <div class="col-sm-11">
+                                 <textarea   name="content" class="form-control" rows="4">{$data.content}</textarea>
+                               
+                            </div>
+                    </div>                 
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">排序</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" name="sort" value="{$data.sort}" type="text" >
+                            </div>
+                    </div>   
+                
+                
+             
+                    
+                <div class="col-sm-3 col-sm-offset-1">
+                    <button type="submit" value="Submit">Submit</button>
+                </div>
+            </form>
+
+
+        </div>
+        <!--正式内容结束-->
+      </div>
+    </div>
+
+    </body>
+</html>

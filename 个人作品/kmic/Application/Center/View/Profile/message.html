@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>?Ϣ</title>
+
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css"> 
+        <!-- <link href="./Public/css/fsgallery.css" rel="stylesheet"> -->
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">  
+        <link rel="stylesheet" href="./Public/css/index.css">
+
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script type="text/javascript">
+
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+        
+        </script>
+    </head>
+
+    <body><input type="hidden" name="openid" value="{$Think.get.openid}" />
+
+        <!-- header -->
+        <header class="detail-header">
+            <div class="back" onclick="window.location.href = './?m=Center&c=Profile&a=index&openid={$Think.session.openid}'">
+            </div>
+
+            <div class="header-title">
+                <p>消息</p>
+            </div>            
+        </header>
+
+        <!-- section -->
+        <section class="message-menu">
+            <div class="message-box system-message" onclick="contact('{$uid}', '112')">
+                <img class="img-circle head-img" src="./Public/img/logo.jpg"><i></i>
+                <div class="message-cotent">
+                    <span class="fromname">开麦小助手</span>
+                    <div class="lastest-msg"></div>
+                </div>
+                <div class="lastest-time"></div>
+            </div>
+
+        </section>
+        
+        
+        <script src="./Public/ga.js"></script>
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/jquery.min.js"></script>
+        <script src="./Public/js/index.js"></script>
+        <script>
+            function contact(uid, fromuid) {
+                window.location.href = './?m=Center&c=profile&a=contact&openid={$Think.session.openid}&fromuid=' + fromuid;
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: "?m=Center&c=profile&a=messageList&openid={$Think.session.openid}",
+                data: {},
+                complete:function(result){
+                   
+                },
+                success: function(result){
+                    console.log(result);
+                    var fromuid = [];
+                    if (result.system) {
+                        $('.system-message .lastest-msg').html(result.system.msg);
+                        var time = transTimeline(result.system.timeline);
+                        $('.system-message .lastest-time').html(time);
+                    }
+                    var tl = [];
+                    if (result.fromUser) {
+                        $.each(result.fromUser, function(i, val) {
+                            fromuid.push(val.fromuid);
+                            var user_arr = [];
+                            
+                            var headimgurl = "";
+                            if (val.headimgurl_user != null) {
+                                headimgurl = val.headimgurl_user;
+                            } else if (val.headimgurl != null) {
+                                headimgurl = val.headimgurl;
+                            }
+
+                            if (val.totimeline > val.timeline) {
+                                tl[i] = val.totimeline;
+                                var u_time = transTimeline(val.totimeline);
+                                var msg = val.tomsg;
+                            } else {
+                                tl[i] = val.timeline;
+                                var u_time = transTimeline(val.timeline);
+                                var msg = val.msg;
+                            }
+                            
+
+                            var strVar = "";
+                                strVar += "<div class=\"message-box person-message\" onclick=\"contact("+val.touid+", "+val.fromuid+")\">\n";
+                                strVar += " <img class=\"img-circle head-img\" src=\""+ headimgurl +"\"><i><\/i>\n";
+                                strVar += "        <div class=\"message-cotent\">\n";
+                                strVar += "         <span class=\"fromname\">"+ val.name +"<\/span>\n";
+                                if (msg.indexOf("<p>") != -1) {
+                                    msg = msg.split("<p>")[1].split("</p>")[0];
+                                    strVar += "         <div class=\"lastest-msg\">"+ msg +"<\/div>\n"; 
+                                } else {
+                                    strVar += "         <div class=\"lastest-msg\">"+ msg +"<\/div>\n";
+                                }
+                                
+                                strVar += "        <\/div>\n";
+                                strVar += "        <span class=\"lastest-time "+tl[i]+"\">"+ u_time +"<\/span>\n";
+                                strVar += "<\/div>\n";
+                            $(".message-menu").append(strVar);
+                        });
+
+                    }
+
+                    if (result.toUser) {
+                        $.each(result.toUser, function(i, val) {
+
+                            if ((fromuid.indexOf(val.fromuid) == -1)) {
+
+                            
+                                var user_arr = [];
+                                var headimgurl = "";
+                                if (val.headimgurl_user != null) {
+                                    headimgurl = val.headimgurl_user;
+                                } else if (val.headimgurl != null) {
+                                    headimgurl = val.headimgurl;
+                                }
+
+
+                                var u_time = transTimeline(val.timeline);
+                                var msg = val.msg;
+
+
+                                var strVar = "";
+                                    strVar += "<div class=\"message-box person-message\" onclick=\"contact("+val.touid+", "+val.fromuid+")\">\n";
+                                    strVar += " <img class=\"img-circle head-img\" src=\""+ headimgurl +"\"><i><\/i>\n";
+                                    strVar += "        <div class=\"message-cotent\">\n";
+                                    strVar += "         <span class=\"fromname\">"+ val.name +"<\/span>\n";
+                                    if (msg.indexOf("<p>") != -1) {
+                                        msg = msg.split("<p>")[1].split("</p>")[0];
+                                        strVar += "         <div class=\"lastest-msg\">"+ msg +"<\/div>\n"; 
+                                    } else {
+                                        strVar += "         <div class=\"lastest-msg\">"+ msg +"<\/div>\n";
+                                    }
+                                    
+                                    strVar += "        <\/div>\n";
+                                    strVar += "        <span class=\"lastest-time "+val.timeline+ "\">"+ u_time +"<\/span>\n";
+                                    strVar += "<\/div>\n";
+                                $(".message-menu").append(strVar);
+                            }
+                        });
+  
+
+                    }
+
+                    $('.person-message').remove().sort(function(a, b) {
+                        return $(b).find('.lastest-time').attr('class').replace("lastest-time ", "") - $(a).find('.lastest-time').attr('class').replace("lastest-time ", "");
+                    }).each(function(i, el) {
+                        $(".message-menu").append(el);
+                    });
+                },
+                beforeSend: function(){
+                   
+                },
+                dataType: 'json'
+            });
+        </script>
+
+    </body>
+</html>

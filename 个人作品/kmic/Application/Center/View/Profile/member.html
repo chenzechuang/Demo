@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>会员升级</title>
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+
+        <link rel="stylesheet" href="./Public/bootstrap/bootstrap.min.css"> 
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css"> 
+        <link rel="stylesheet" href="./Public/Profile/css/frozen.css">
+        <link rel="stylesheet" href="./Public/css/index.css">
+    
+        <script src="./Public/ga.js"></script>
+        <script async="" src="https://www.google-analytics.com/analytics.js"></script>
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <script src="./Public/js/index.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        
+    </head>
+    <body ontouchstart><input type="hidden" name="openid" value="{$Think.get.openid}" />
+
+        <header class="detail-header">
+            <div class="back">
+            </div>
+            <div class="header-title">
+                <p>开麦会员</p>
+            </div>
+            
+        </header>
+
+        <section class="user-info">
+            <div class="col-xs-12 info-group artist-list">
+                <div class="item member-item">
+                    <div class="col-xs-3 member-item-title">
+                       会员级别
+                    </div>
+                    <div class="col-xs-9 ismember">
+                       普通VIP会员
+                    </div>
+                </div>
+                
+                <div class="item member-item">
+                    <div class="col-xs-3 member-item-title">
+                       到期日
+                    </div>
+                    <div class="col-xs-9 member-time">
+                       {$user.expire|date='Y-m-d',###}
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="col-xs-12 info-group artist-list">
+                <img src="./Public/img/VIP.png" alt="">
+                <div class="item member-item">
+                    <div class="member-choice member-item-title">
+                       会员级别
+                    </div>
+                    <div class="col-xs-3 member-item-btn selected">
+                       普通VIP
+                    </div>
+                    <!-- <div class="col-xs-3 member-item-btn">
+                       高级VIP
+                    </div> -->
+                </div>
+                
+                <div class="item member-item">
+                    <div class="member-choice member-item-title">
+                       会员时长
+                    </div>
+                    <div class="col-xs-3 member-item-btn selected">
+                       1个月
+                    </div>
+                    <div class="col-xs-3 member-item-btn">
+                       3个月
+                    </div>
+                    <div class="col-xs-3 member-item-btn">
+                       6个月
+                    </div>
+
+                </div>
+
+                <div class="item member-item">
+                    <div class="col-xs-2 member-item-title pay-title">
+                       费用
+                    </div>
+                    <div class="col-xs-10 total-money">
+                       ￥<span class="total-money-count">10</span>元
+                    </div>
+                </div>
+
+                <div class="item member-item">
+                    <div class="member-choice member-item-title">
+                       未支付订单
+                    </div>
+                    <ul class="ui-list ui-list-pure orderBox">
+                        <foreach name="orders" item="vo">
+                            <eq name="vo.paid" value="0">
+                                <li class="ui-border-t">
+                                    <p><span>订单号:</span>{$vo.orderid}</p>
+                                    <p><span>价格:</span>{$vo.price}</p>
+                                    <p><span>创建时间:</span>{$vo.addtime|date='Y-m-d h:i:s',###}</p>
+                                    <p><span>状态:</span>未支付</p>
+                                    <button class="list_button" onclick="checkOrder('{$vo.orderid}')">继续完成 / 检查支付状态</button>
+                               
+                                </li>
+                            </eq>
+                        </foreach>
+                    </ul>
+                    <!-- 已支付 | 支付时间:{$vo.paidtime|date='m月d日 h:i',###} -->
+                </div>
+            
+            </div>
+
+            <div class="payoff-btn">
+                <a class="payoff" id="0" href="#">立即开通</a>
+            </div>
+
+           
+            
+            
+        </section>
+           <!--  <section class="ui-container" >
+               
+               
+               <style>
+                   body{font-family:"Microsoft YaHei",微软雅黑; font-size: 14px; color: #333}
+                   td,th{padding: 4px 0px}
+                   .l{background-color: #dedede; width: 50%;}
+                   .r{background-color:  #d1d1d1; width: 50% ;}
+                   .list_button{ background-color: #ff629a; font-size: 15px; color: #FFF; border-radius: 3px; text-align: center; padding: 8px 0px; width: 100%; margin-bottom: 12px; }
+                   .ui-border-t{ line-height: 28px;}
+               </style>
+           
+               <ul class="ui-list ui-list-pure ui-border-tb">
+                   <li class="ui-border-t">
+                       <p><span><div class="ui-reddot">您已是会员，到期时间为 {$user.expire|date='Y-m-d',###}</div></span></p>
+                   </li>
+                   <li class="ui-border-t">
+                       <p><span><div class="ui-reddot">如使用过程中有任何问题，请与管理员联系。</div></span></p>
+                   </li>
+                   <li class="ui-border-t">
+                       <p><span><div class="ui-reddot">如果发现付款了还没成为VIP的话，请不要着急。只要把付款页面(订单号)截图给管理员(技术客服微信 witheasy)。我们会尽快为您解决。</div></span></p>
+                   </li>
+               </ul>
+           
+               <div class="ui-btn-wrap">
+                   <button class="list_button pay" id="3">
+                       一年VIP 108元(省12元)
+                   </button><br/>
+                   <button class="list_button pay" id="2">
+                       半年VIP 55元(省5元)
+                   </button><br/>
+                   <button class="list_button pay" id="1">
+                       一个季度VIP 28元(省2元)
+                   </button><br/>
+                   <button class="list_button pay" id="0">
+                       一个月VIP 10元
+                   </button><br/>
+               </div> 
+                
+               
+           </section> -->
+        
+        <script>
+            $('.back').click(function() {
+                var mine = window.location.href.indexOf('mine');
+                if (mine != -1) {
+                    window.history.back();
+                } else {
+                    window.location.href = '?m=Center&c=Profile&openid={$Think.get.openid}'
+                }
+            });
+
+            var time = $('.member-time').html();
+            var memberTime = new Date($('.member-time').html());
+            var now = new Date();
+
+            if (time.indexOf('1970-01-01') != -1) {
+                $('.ismember').text('非VIP会员');
+                $('.member-time').html('——');
+            } else if (memberTime < now) {
+                $('.ismember').text('会员已过期');
+            } else {
+                $('.ismember').text('普通VIP会员');
+            }
+            
+            var el;
+            var openid = '{$Think.get.openid}';
+            $('.payoff').click(function(){
+                var this_id = $(this).attr("id");
+                el = $.loading({
+                    content: '加载中...'
+                })
+                ga('send', 'event', 'profile', 'memberPay', '{$Think.get.openid}');
+                location.href= './index.php/wxJsapi/?openid={$Think.get.openid}&type='+this_id;
+//                location.href= 'http://www.kmic168.com/index.php/wxJsapi/';
+            });
+            $('.check').click(function(){
+                el=$.loading({
+                    content:'加载中...',
+                })
+                location.href= '?m=Center&c=Profile&a=member&action=sus';
+            });
+            $('.index').click(function(){
+                el=$.loading({
+                    content:'加载中...',
+                })
+                location.href= '?m=Center&c=Profile';
+            });
+        
+            function checkOrder(order){
+                $.ajax({
+                    type: 'POST',
+                    url: "?m=center&c=profile&a=checkOrder",
+                    data: {'order':order},
+                    success: function(result){
+                        if (result.state==0) {
+                            if(confirm("支付未完成,继续支付吗？"))
+                            {
+                                location.href= './index.php/wxJsapi/?openid={$Think.get.openid}&type=';
+                            }
+                          
+                        }else if (result.state==4) {
+                        }else{
+                            alert('支付成功，您已经是会员了！谢谢您的支持！');
+                            location.href= '?m=Center&c=Profile&a=member&openid={$Think.get.openid}';
+                        }
+                    },
+                    dataType: 'json'
+                });  
+            }
+        
+        // <gt name="pendingOrder" value="1">
+        //     checkOrder('{$pendingOrder}');
+        // </gt>
+        
+            ga('send', 'event', 'profile', 'member', '{$Think.get.openid}');
+        </script>
+        
+ 
+    </body>
+</html>

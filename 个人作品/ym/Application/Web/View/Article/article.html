@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>约麦</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="stylesheet" href="./Public/css/index.css">  
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+        <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="./Public/js/YMPlayer.js"></script>
+        <script src="./Public/js/function.js"></script>      
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wx8ad1b47530e4c6a1', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}', // 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'hideMenuItems'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+
+            wx.ready(function () {
+                wx.onMenuShareTimeline({
+                    title: title, // 分享标题
+                    link: 'http://ym.yuemai168.com/index.php?m=web&c=article&a=article&channel={$Think.get.channel}&start=0', // 分享链接,将当前登录用户转为puid,以便于发展下线
+                    desc: title + '每日实时更新',
+                    imgUrl: "http://ym.yuemai168.com/" + topImg, // 分享图标
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    },
+                    trigger: function (res) {
+//                            alert("分享到朋友圈按钮点击");        
+                    },
+                    fail: function (res) {
+//                            alert(JSON.stringify(res));
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: title, // 分享标题
+                    desc: '用声音开启一段走心之旅', // 分享描述
+                    link: 'http://ym.yuemai168.com/index.php?m=web&c=article&a=article&channel={$Think.get.channel}&start=0', // 分享链接
+                    imgUrl: "http://ym.yuemai168.com/" + topImg, // 分享图标
+                    type: 'link', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                wx.hideMenuItems({
+                    menuList: ["menuItem:copyUrl", "menuItem:openWithQQBrowser", "menuItem:openWithSafari", "menuItem:share:email"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+                });
+            });
+        </script>
+
+    </head>
+    <body class="bgf4" style="padding-top: 30px;">
+        <div class="gq_article" style="display: none;">
+            <div class="top_img"><img class="img-responsive" src="./Public/img/gg_02.jpg"></div>
+            <div id="progress"></div>
+
+        </div>
+        <div class="content">
+            <div class="col-xs-12 lists">
+
+            </div>
+        </div>
+        <div class="baio">
+            <img class="img-responsive" src="./Public/img/fenx.png">
+        </div>
+        <div class="bg" onclick="bgcolse()"></div>
+        <script src="./Public/dist/dropload.min.js"></script>
+        <script>
+
+            var title = "";
+            var topImg = "";
+            $(function () {
+                var itemIndex = 0;
+                var start = 0;
+                var dropload = $('.content').dropload({
+                    scrollArea: window,
+                    loadDownFn: function (me) {
+                        $.ajax({
+                            type: 'post',
+                            url: 'index.php?m=api&c=article&a=dynamic',
+                            dataType: 'json',
+                            data: {
+                                range: start,
+                                topic_id: '{$Think.get.channel}',
+                                userid: '{$Think.get.openid}'
+                            },
+                            success: function (data) {
+                                console.log(data);
+                                var data = data.data;
+                                if (data.dynamic_list.length < 1) {
+                                    dropload.lock('down');
+                                    dropload.noData();
+                                }
+                                /* 
+                                 topImg = data.channel.img_url;
+                                 title = data.channel.title;
+                                 document.title = title;
+                                 $(".top_img").html('<img class="img-responsive" src="' + data.channel.img_url + '">')
+                                 */
+                                var result = '';
+                                for (var i = 0; i < data.dynamic_list.length; i++) {                                                                 
+                                    var headimg = data.dynamic_list[i].photo_url;
+                                    var name = data.dynamic_list[i].nick;
+                                    var pics_html = '';
+                                    var audio_html = '';
+                                    
+                                    
+                                    
+                                    if (data.dynamic_list[i].type == "1") {
+                                        pics_html += "<div onclick=\"clickListion(" + data.dynamic_list[i].userid + "," + data.dynamic_list[i].create_time +")\" data =\"" + data.dynamic_list[i].topic_id + "\" playno=\"0\" id=\"playerControl"+ data.dynamic_list[i].topic_id +"\"  class=\"gq_play play_but\" >\n";
+                                        pics_html += "	<img onclick=\"longAudio('"+data.dynamic_list[i].topic_id+"','"+data.dynamic_list[i].audio_lite+"','"+data.dynamic_list[i].audio_full+"')\" class=\"img-responsive\" src=\"./Public/img/dd_07.png\">\n";
+                                        pics_html += "	<\/div>\n";
+                                      
+                                        pics_html += "<audio id=\"player"+ data.dynamic_list[i].topic_id +"\"><\/audio>";
+                                        pics_html += "	<\/div>\n";
+                                        pics_html += " <div id='progress" + data.dynamic_list[i].topic_id + "'></div>";
+                                       // audio_html += " <audio src='" + data.dynamic_list[i].pics[0]['pic'] + "' class=\"audio\" data=\"" + data.dynamic_list[i].topic_id + "\" id='audio" + data.dynamic_list[i].topic_id + "' ></audio>";
+                                    }else{
+                                        pics_html += "	<\/div>\n";
+                                    }
+
+
+                                    var follow_html = "";
+
+                                    if (data.dynamic_list[i].follow > 0) {
+                                        follow_html += "<div  onclick=\"chfollow('1',{$Think.get.openid}," + data.dynamic_list[i].userid + ")\" id=\"follow" + data.dynamic_list[i].userid + "\" >\n";
+                                        follow_html += "<div class=\"active_gz_c\"><img src =\"./Public/img/gz_06.png\"></div>";
+                                        follow_html += "<\/div>\n";
+                                    } else {
+                                        follow_html += "<div  onclick=\"follow('1',{$Think.get.openid}," + data.dynamic_list[i].userid + ")\" id=\"follow" + data.dynamic_list[i].userid + "\" >\n";
+                                        follow_html += "<div class=\"active_gz_c\"><img src =\"./Public/img/gz_03.png\"></div>";
+                                        follow_html += "<\/div>\n";
+                                    }
+                                    result += "<div class=\"ddbox\">\n";
+                                    result += "	<div class=\"ddbox_title\">\n";
+                                    result += "		<div class=\"col-xs-9 plr0\">\n";
+                                    result += "			<div class=\"dd_box_headimg\">\n";
+                                    result += "				<a href=\"./index.php?m=web&openid={$Think.get.openid}&c=ym&a=article&uid=" + data.dynamic_list[i].userid + "\"><img class=\"img-responsive\" src=\"" + headimg + "\"><\/a>\n";
+                                    result += "			<\/div>\n";
+                                    result += "			<div class=\"dd_box_headtit\">\n";
+                                    result += "				<div class=\"dd_box_headtit_t\">\n";
+                                    result += "					" + name + "\n";
+                                    result += "				<\/div>\n";
+                                    result += "				<div class=\"dd_box_headtit_b\">\n";
+                                    result += "					 <img height=\"15\" src=\"./Public/img/dd_03.jpg\">" + data.dynamic_list[i].listen_count + " 收听\n";
+                                    result += "				<\/div>\n";
+                                    result += "			<\/div>\n";
+                                    result += "		<\/div>\n";
+                                    result += "<div class=\"col-xs-3  plr0 \">"
+                                    result += "			" + follow_html + "";
+                                    result += "		<\/div>\n";
+                                    result += "		<div class=\"clearfix\">\n";
+                                    result += "		<\/div>\n";
+                                    result += "	<\/div>\n";
+                                    result += "	<div class=\"ddbox_img\">\n";
+                                    result += "		<a href =\"index.php?m=web&c=article&a=articleContent&channel={$Think.get.channel}&create_time=" + data.dynamic_list[i].create_time + "&userid=" + data.dynamic_list[i].userid + "&openid={$Think.get.openid}\"><img class=\"img-responsive\" src=\"" + data.dynamic_list[i].cover + "\"><\/a>\n";
+                                    result += "" + pics_html + ""
+                                    
+
+                                  
+                                    result += "	<div class=\"ddbox_cont\">\n";
+                                    result += "		" + data.dynamic_list[i].content + "\n";
+                                    result += "	<\/div>\n";
+                                    result += "	<div class=\" bc1c1\">\n";
+                                    result += "	<\/div>\n";
+                                    result += "	<div class=\"ddbox_foot\">\n";
+                                    result += "		<div onclick=\"wx_share()\" class=\"col-xs-4\">\n";
+                                    result += "			<img width=\"25%\" src=\"./Public/img/dd_11.png\"> 分享\n";
+                                    result += "		<\/div>\n";
+                                    result += "		<div class=\"col-xs-4\">\n";
+                                    result += "			<a href =\"index.php?m=web&c=article&a=articleContent&channel={$Think.get.channel}&create_time=" + data.dynamic_list[i].create_time + "&userid=" + data.dynamic_list[i].userid + "&openid={$Think.get.openid}\"><img width=\"25%\" src=\"./Public/img/dd.png\"> " + data.dynamic_list[i].comment_count + "</a>\n";
+                                    result += "		<\/div>\n";
+                                    result += "		<div class=\"col-xs-4\">\n";
+                                    result += "			<a href =\"index.php?m=web&c=article&a=articleContent&channel={$Think.get.channel}&create_time=" + data.dynamic_list[i].create_time + "&userid=" + data.dynamic_list[i].userid + "&openid={$Think.get.openid}\"><img width=\"25%\" src=\"./Public/img/dd_d.png\"> " + data.dynamic_list[i].praise_count + "</a>\n";
+                                    result += "		<\/div>\n";
+                                    result += "	<\/div>\n";
+                                    result += "	<div class=\"clearfix\">\n";
+                                    result += "	<\/div>";
+                                    result += "<\/div>";
+                                             
+                                }
+                                start = start + 1;
+                                // 为了测试，延迟1秒加载
+                                setTimeout(function () {
+                                    $('.lists').eq(itemIndex).append(result);
+                                    // 每次数据加载完，必须重置
+                                    me.resetload();
+                                }, 1000);
+                            },
+                            error: function (xhr, type) {
+                                alert('Ajax error!');
+                                // 即使加载出错，也得重置
+                                //  me.resetload();
+                                dropload.lock('down');
+                            }
+
+                        });
+
+
+                    }
+                });
+            });
+
+            function wx_share() {
+                $(".baio").css('display', 'block');
+                $(".bg").css('display', 'block');
+            }
+            ;
+            function bgcolse() {
+                $(".baio").css('display', 'none');
+                $(".bg").css('display', 'none');
+            };
+
+
+
+        </script>
+
+    </body>
+</html>

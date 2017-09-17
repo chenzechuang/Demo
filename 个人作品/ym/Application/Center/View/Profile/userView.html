@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>主持人信息</title>
+        <link rel="stylesheet" href="./Public/Kmic/css/index.css">
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">   
+        <link rel="stylesheet" href="./Public/dist/APlayer.min.css">   
+        <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+        <script src="./Public/dist/APlayer.min.js"></script>         
+    </head>
+    <body class="bgeee">
+        <div class="col-xs-12 bgw mb10 pb10">
+            <div class="wx_user ptm20 ">
+                <div class="wx_user_head col-xs-4 mb5"></div>
+                <div class="col-xs-12">
+                    <div class="wx_user_name mb5"><span class="mmname">名字</span> <span class="ml15 mmsex"><img width="18" src="./Public/Kmic/mzindex_05.jpg"> <img width="18" src="./Public/Kmic/user_03.jpg"></span></div>
+                    <div class="wx_user_mh mb5 col999">麦麦号： <span class="mmhao"></span> <div class="pull-right"><img width="18" src="./Public/Kmic/map.jpg"> <span class="mmcity"></span></div></div>
+                </div> 
+                 <div class="clearfix"></div>
+            </div> 
+            
+            <div class="row">
+            <div class="col-xs-3 pr0 autio">TA的声音</div>
+            <div class="col-xs-9 pl0">            
+                <div class="aplay"> 
+                <div id="player1" class="aplayer"></div> 
+         
+                </div>
+            </div>
+            </div>    
+        </div>     
+        
+        <div class="col-xs-12 bgw ptm20 mb10">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="web_title"><span class="bl2px"></span> 基本信息</div>
+                </div>
+            </div>
+            
+            <div class="user_info">
+                <div class="row">
+                    <div class="col-xs-3 col999">身高</div>
+                    <div class="col-xs-9 pl0 stature"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>
+
+                 <div class="row">
+                    <div class="col-xs-3 col999">工作单位</div>
+                    <div class="col-xs-9 pl0 organization"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>
+
+                <div class="row">
+                    <div class="col-xs-3 col999">毕业学校</div>
+                    <div class="col-xs-9 pl0 school"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>
+
+                <div class="row">
+                    <div class="col-xs-3 col999">主持经验</div>
+                    <div class="col-xs-9 pl0 experience"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>      
+                
+                <div class="row">
+                    <div class="col-xs-3 col999 ">曾获荣誉</div>
+                    <div class="col-xs-9 pl0 honour"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>  
+
+                <div class="row">
+                    <div class="col-xs-3 col999">期望酬劳</div>
+                    <div class="col-xs-9 pl0 price"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>              
+                
+                <div class="row">
+                    <div class="col-xs-3 col999">擅长语言</div>
+                    <div class="col-xs-9 pl0 language"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>                 
+        </div>    
+        </div>
+        
+        <div class="col-xs-12 bgw ptm20 mb10">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="web_title"><span class="bl2px"></span> 形象展示</div>
+                </div>
+            </div>
+            <div class="row mb10 xx">
+           
+            </div>
+            
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="web_title_f">个人介绍</div>
+                    <div class="col999 user_desio info"></div>
+                </div>
+            </div>     
+        </div>  
+        
+        <div class="col-xs-12 bgw ptm20 mb10">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="web_title"><span class="bl2px"></span> 活动经历</div>
+                </div>
+            </div>  
+            
+            <div class="activity">
+
+            </div>
+        </div>
+          <script>
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url:"?m=Center&c=Profile&a=userView&action=msg&openid={$Think.get.openid}&uid={$Think.get.uid}",
+                data:$('#dosubmit').serialize(),// 序列号formid
+                async: false,
+                dataType: 'json',
+                error: function(request) {
+                    alert('提交超时，请稍候再试！');
+                },
+                success: function(data) {
+                   console.log(data);
+                    if (data.error == 0) {
+                        $(".mmname").text(data.name);
+                        $(".mmhao").text(data.id);
+                        $(".mmcity").text(data.city);
+                        var sex_html = "";
+                        if(data.sex=="1"){
+                            sex_html += '<img width="18" src="./Public/Kmic/mzindex_b_09.jpg">'
+                        }else if(data.sex=="2"){
+                            sex_html += '<img width="18" src="./Public/Kmic/mzindex_05.jpg">'
+                        }
+                        if(data.level>"0"){
+                            sex_html += '<img width="18" src="./Public/Kmic/user_03.jpg">'
+                        }
+                        $(".mmsex").html(sex_html);
+                        
+                        var headimgurl = '<img class="img-circle img-responsive b1999" src="'+data.headimgurl+'">'
+                        $(".wx_user_head").html(headimgurl);
+                        
+                        var ap1 = new APlayer({
+                            element: document.getElementById('player1'),
+                            narrow: false,
+                            autoplay: false,
+                            showlrc: false,
+                            music: {
+                                title: '',
+                                author: '',
+                                url: data.video,
+                                pic: ''
+                            }
+                        })
+                        ap1.init()
+                       
+                        $(".experience").text(data.experience);
+                        $(".honour").text(data.honour);
+                        $(".info").text(data.info);
+                        $(".language").text(data.language);
+                        $(".organization").text(data.organization);
+                        $(".price").text(data.price);
+                        $(".school").text(data.school);
+                        $(".stature").text(data.stature);
+                        
+                        var xx_html ="";                    
+                        for (var i=0;i<data.xx.img.length;i++){
+                            xx_html +='<div class="col-xs-4"><a href="'+data.xx.img[i].value+'"> <img src="'+data.xx.img[i].value+'" class="img-responsive"></a></div>'
+                        }
+                        $(".xx").html(xx_html);
+                        
+                        var activity_html = "";
+                        var activity_img_c = "";
+                            for (var i=0;i<data.activity.length;i++){
+                                
+                                activity_html += " <div class=\"web_title_f2\">"+data.activity[i].title+"<\/div>\n";
+                                activity_html += " <div class=\"col999 mb10\">"+data.activity[i].time+"<\/div>\n";
+                                activity_html += " <div class=\"row mb20 activityimg\">\n";
+                                if(data.activity[i].video ==""){
+                                     activity_html += " <div class=\"col-xs-4\"><img src=\"./Public/Kmic/none.jpg\" class=\"img-responsive\"><\/div>\n";
+                                }else{
+                                     activity_html += " <div class=\"col-xs-4\"><a href=\""+data.activity[i].video+"\"><img src=\"./Public/Kmic/video.jpg\" class=\"img-responsive\"></a><\/div>\n";
+                                }
+                            
+                               if(data.activity[i].img.length > "5"){
+                                   activity_img_c = "5"
+                               }else{
+                                   activity_img_c = data.activity[i].img.length;
+                               }
+                               
+                                for(var v=0;v<activity_img_c;v++){
+                                     activity_html += " <div class=\"col-xs-4\"><a href=\""+data.activity[i].img[v].value+"\"><img src=\""+data.activity[i].img[v].value+"\" class=\"img-responsive\"></a><\/div>\n";
+                                }          
+                                activity_html += "  <\/div> \n";
+                                activity_html += "  <div class=\"boder1px mb10\"><\/div>\n";
+      
+                        }
+                        $(".activity").html(activity_html);
+                        
+        
+                    }
+                }
+            });  
+            </script>
+    </body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>会员升级</title>
+        <link rel="stylesheet" href="./Public/Kmic/css/index.css">
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">   
+        <link rel="stylesheet" href="./Public/dist/APlayer.min.css">   
+        <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+        <script src="./Public/dist/APlayer.min.js"></script>         
+    </head>
+    <body class="bgeee">
+        <div class="col-xs-12 bgw mb10 pb10">
+            <div class="wx_user ptm20 ">
+                <div class="wx_user_head col-xs-4 mb5"><img class="img-circle img-responsive b1999" src="{:S('wx_info'.$_SESSION[openid])[headimgurl]}"></div>
+                <div class="col-xs-12">
+                    <div class="wx_user_name mb5">{:S('wx_info'.$_SESSION[openid])[nickname]} <span class="ml15"><img width="18" src="./Public/Kmic/mzindex_05.jpg"> <img width="18" src="./Public/Kmic/user_03.jpg"></span></div>
+                    <div class="wx_user_mh mb5 col999">麦麦号： {:S('udid'.$_SESSION[openid])} <div class="pull-right"><img width="18" src="./Public/Kmic/map.jpg"> 广州</div></div>
+                </div> 
+                 <div class="clearfix"></div>
+            </div> 
+            
+            <div class="row">
+            <div class="col-xs-3 pr0 autio">TA的声音</div>
+            <div class="col-xs-9 pl0">            
+                <div class="aplay"> 
+                <div id="player1" class="aplayer"></div> 
+                <script>
+                    var ap1 = new APlayer({
+                        element: document.getElementById('player1'),
+                        narrow: false,
+                        autoplay: false,
+                        showlrc: false,
+                        music: {
+                            title: '',
+                            author: '',
+                            url: 'http://www.w3school.com.cn//i/horse.ogg',
+                            pic: ''
+                        }
+                    });
+                    ap1.init();   
+                </script>            
+                </div>
+            </div>
+            </div>    
+        </div>     
+        
+        <div class="col-xs-12 bgw ptm20 mb10">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="web_title"><span class="bl2px"></span> 基本信息</div>
+                </div>
+            </div>
+            
+            <div class="user_info">
+                <div class="row">
+                    <div class="col-xs-3 col999">身高</div>
+                    <div class="col-xs-9 pl0">165CM</div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>
+
+                 <div class="row">
+                    <div class="col-xs-3 col999">工作单位</div>
+                    <div class="col-xs-9 pl0">165CM</div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>
+
+                <div class="row">
+                    <div class="col-xs-3 col999">毕业学校</div>
+                    <div class="col-xs-9 pl0">165CM</div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>
+
+                <div class="row">
+                    <div class="col-xs-3 col999">主持经验</div>
+                    <div class="col-xs-9 pl0">165CM</div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>      
+                
+                <div class="row">
+                    <div class="col-xs-3 col999">曾获荣誉</div>
+                    <div class="col-xs-9 pl0">165CM</div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>  
+
+                <div class="row">
+                    <div class="col-xs-3 col999">期望酬劳</div>
+                    <div class="col-xs-9 pl0">165CM</div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>              
+                
+                <div class="row">
+                    <div class="col-xs-3 col999">擅长语言</div>
+                    <div class="col-xs-9 pl0">165CM</div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>                 
+        </div>    
+        </div>
+        
+        <div class="col-xs-12 bgw ptm20 mb10">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="web_title"><span class="bl2px"></span> 形象展示</div>
+                </div>
+            </div>
+            <div class="row mb10">
+                <div class="col-xs-4"><img src="./Public/Kmic/video.jpg" class="img-responsive"></div>
+                <div class="col-xs-4"><img src="./Public/Kmic/video.jpg" class="img-responsive"></div>
+                <div class="col-xs-4"><img src="./Public/Kmic/video.jpg" class="img-responsive"></div>
+            </div>
+            
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="web_title_f">个人介绍</div>
+                    <div class="col999 user_desio">形象展示形象展示形象展示形象展示形象展示形象展示形象展示形象展示形
+                        象展示形象展示形象展示形象展示形象展示形象展示形象展示形象展示形象展示形象展示</div>
+                </div>
+            </div>     
+        </div>  
+        
+        <div class="col-xs-12 bgw ptm20 mb10">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="web_title"><span class="bl2px"></span> 活动经历</div>
+                </div>
+            </div>  
+            
+            <div class="web_title_f2">越秀地产开盘</div>
+            <div class="col999 mb10">2017年5月7</div>
+            <div class="row mb20">
+                <div class="col-xs-4"><img src="./Public/Kmic/video.jpg" class="img-responsive"></div>
+                <div class="col-xs-4"><img src="./Public/Kmic/video.jpg" class="img-responsive"></div>
+                <div class="col-xs-4"><img src="./Public/Kmic/video.jpg" class="img-responsive"></div>
+            </div> 
+            <div class="boder1px mb10"></div>
+  
+            <div class="web_title_f2">越秀地产开盘</div>
+            <div class="col999 mb10">2017年5月7</div>
+            <div class="row mb10">
+                <div class="col-xs-4"><img src="./Public/Kmic/video.jpg" class="img-responsive"></div>
+                <div class="col-xs-4"><img src="./Public/Kmic/video.jpg" class="img-responsive"></div>
+                <div class="col-xs-4"><img src="./Public/Kmic/video.jpg" class="img-responsive"></div>
+            </div>
+            
+        </div>
+        
+    </body>
+</html>

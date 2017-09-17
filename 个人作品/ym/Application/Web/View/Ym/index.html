@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>约麦</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="stylesheet" href="./Public/css/index.css">  
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+        <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+
+        <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="./Public/js/hideMenuItems.js"></script>
+         <script>
+            var fx_url = window.location.href;
+            fx_url = fx_url.replace('openid', 'fuid');
+            hideMenu("wx8ad1b47530e4c6a1","{$Think.session.timestamp}","{$Think.session.nonceStr}","{$signature}","约麦","用声音开启一段走心之旅",fx_url,"http://ym.yuemai168.com/Public/img/logo.jpg","http://ym.yuemai168.com//Public/img/logo.jpg");
+        </script>         
+    </head>
+    <body>
+
+        <div class="f_windown">
+            <div class="bg"></div>
+            <div class="ui-scroller">
+                <div id="f_close"><img src="./Public/img/data/close.png" width="30"/></div>
+                <div class="f_close_line"></div>
+                <div class="windown-info">
+                    <h1>下载约麦APP，体验全部功能。</h1>
+                    <!-- <p>下载APP可体验更多功能</p> -->
+                    <a href="">iOS版下载</a>
+                    <p>Android敬请期待</p>
+                </div>
+            </div>
+        </div> 
+
+        <div class="content user-content">
+            <div class="list clearfix">  
+                
+            </div>
+        </div>
+        
+        <!-- footer -->
+        <footer id="footer">
+            <ul class="clearfix">
+                <li><a href="index.php?m=web&c=article&a=square&openid={$Think.get.openid}"><i></i>广场</a></li>
+                <li class="current"><a href="index.php?m=web&c=ym&a=praise&openid={$Think.get.openid}"><i></i>麦主</a></li>
+                <li onclick="DLapp(event);"><a href="javascript:;"><i></i>发布</a></li>
+                <li onclick="DLapp(event);"><a href="javascript:;"><i></i>我的</a></li>
+            </ul>
+        </footer>
+        <script src="./Public/dist/dropload.min.js"></script>
+        <script>
+            $(window).scroll(function() {
+                if ($(document).scrollTop() != 0){
+                    sessionStorage.setItem("offsetTop", $(window).scrollTop());//保存滚动位置
+                } 
+            });
+
+            var start = 0,
+                itemIndex = 0,
+                back = window.location.href.indexOf('back'),
+                openid = '{$Think.get.openid}';
+            
+            if (back != -1) {
+                ifBack();
+            } else {
+                Listload();
+            }
+
+            function ifBack() {
+                start = sessionStorage.getItem("start");
+                var _list = sessionStorage.getItem("list");
+                var _offset = sessionStorage.getItem("offsetTop");
+                $('.list').html(_list);
+                Listload();
+                $(document).scrollTop(_offset); 
+            }
+
+            function Listload() {
+                var dropload = $('.content').dropload({
+                    scrollArea: window,
+                    loadDownFn: function (me) {
+                        $.ajax({
+                            type: 'POST',
+                            url: 'index.php?m=api&c=mz&a=mzlist',
+                            dataType: 'json',
+
+                            data:{
+                              userid:'{$Think.get.openid}',
+                              range:start,
+                              sex:'-1',
+                              comm_way:'-1',
+                              comm_status:'-1'
+                            },
+                            success: function (data) {
+                                var data = data.data;
+                                console.log(data);
+                                if (data.mz_list.length < 1) {
+                                    dropload.lock('down');
+                                    dropload.noData();
+                                }
+                                var result = '';
+                                var result = "";
+                                for (var i = 0; i < data.mz_list.length; i++) {
+                                    var headimg = data.mz_list[i].photo_url;
+                                    var name = data.mz_list[i].nick;
+                                    // var sexClass = "";
+                                    // if (data.mz_list[i].sex == "1") {
+                                    //     sexClass= "list_name_icon_v"
+                                    // } else {
+                                    //     sexClass= "list_name_icon_n"
+                                    // }
+                                    var xq = data.mz_list[i].interest_ids.split("|");
+                                    var list_tag = '';
+                                   
+                                    for(var t=0 ; t<xq.length; t++){
+                                        list_tag +="<li>#"+xq[t]+"<\/li>";
+                                    }
+                                
+                                   
+                                    result += "<div class=\"col-xs-6\">\n";
+                                    result += " <div class=\"list_img\">\n";
+                                    result += "     <a style=\"background-image: url('"+headimg+"');\" href=\"index.php?m=web&openid={$Think.get.openid}&c=ym&a=article&uid="+data.mz_list[i].userid+"&list\"></a>\n";
+                                    result += "<div class=\"contact\" onclick=\"DLapp(event)\"></div>"
+                                    result += " <\/div>\n";
+                                    result += " <div class=\"list_name_box\">\n";
+                                    // result += "      <div class=\""+sexClass+"\">\n";
+                                    // result += "      <\/div>\n";
+                                    result += "     <div class=\"list_name\">\n";
+                                    result += "         "+name+"\n";
+                                    result += "     <\/div>\n";
+                                    result += " <\/div>\n";
+                                    // result += "  <div class=\"list_tag\">\n";
+                                    // result += "      <ul>\n";
+                                    // result += "          "+list_tag+"";
+                                    // result += "      <\/ul>\n";
+                                    // result += "      <div class=\"clearfix\">\n";
+                                    // result += "      <\/div>\n";
+                                    // result += "  <\/div>\n";
+                                    result += "<\/div>\n";
+                                }
+                                start = Number(start) + 1;
+                                console.log(start);
+                                
+                                sessionStorage.setItem("start", start);
+            
+                                // 为了测试，延迟1秒加载
+                                $('.list').eq(itemIndex).append(result);
+                                sessionStorage.setItem("list", $('.list').html());
+                                console.log($('.list').html());
+                                // 每次数据加载完，必须重置
+                                me.resetload();
+                            },
+                            error: function (xhr, type) {
+                                alert('Ajax error!');
+                                // 即使加载出错，也得重置
+                                //  me.resetload();
+                                dropload.lock('down');
+                            }
+
+                        });
+
+
+                    }
+                });
+            }
+            
+
+            function DLapp(event) {
+                event.stopPropagation();
+                $('.f_windown').css('display','block');
+                $('.bg').css('display','block');
+
+                $('#f_close').click(function(){
+                    $('.f_windown').hide();
+                    $('.bg').hide();
+                }); 
+            }
+        </script>
+    </body>
+</html>

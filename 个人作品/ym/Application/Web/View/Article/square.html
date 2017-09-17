@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>约麦</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        
+        
+        <link rel="stylesheet" href="./Public/dist/dropload.css"> 
+        <link rel="stylesheet" href="./Public/dist/APlayer.min.css">     
+        <link rel="stylesheet" href="./Public/css/swiper.min.css">
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <link rel="stylesheet" href="./Public/css/index.css">
+
+	    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+        <script src="./Public/dist/APlayer.min.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="./Public/js/YMPlayer.js"></script>
+        <script src="./Public/js/function.js"></script> 
+        <script src="./Public/js/hideMenuItems.js"></script>
+        <script>
+            var fx_url = window.location.href;
+            fx_url = fx_url.replace('openid', 'fuid');
+            hideMenu("wx8ad1b47530e4c6a1","{$Think.session.timestamp}","{$Think.session.nonceStr}","{$signature}","约麦","用声音开启一段走心之旅.",fx_url,"http://ym.yuemai168.com/Public/img/logo.jpg","http://ym.yuemai168.com//Public/img/logo.jpg");
+        </script>
+    </head>
+    <body>
+        <ul class="clearfix index-nav">
+            <li class="nav-item article selected">听故事</li>
+            <li class="nav-item dynamic">看动态</li>
+        </ul>
+
+        <div class="article_swip mtx">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img class="img-responsive" src="./Public/img/banner1.jpg"></div>
+                    <div class="swiper-slide"><img class="img-responsive" src="./Public/img/banner2.jpg"></div>
+                    <div class="swiper-slide"><img class="img-responsive" src="./Public/img/banner3.jpg"></div>            
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+        
+        <div class="f_windown">
+            <div class="bg"></div>
+            <div class="ui-scroller">
+                <div id="f_close"><img src="./Public/img/data/close.png" width="30"/></div>
+                <div class="f_close_line"></div>
+                <div class="windown-info">
+                    <h1>下载约麦APP，体验全部功能。</h1>
+                    <!-- <p>下载APP可体验更多功能</p> -->
+                    <a href="">iOS版下载</a>
+                    <p>Android敬请期待</p>
+                </div>
+            </div>
+        </div> 
+
+        <section class="data">
+            <div class="data-menu">
+                
+            </div>
+
+            <div class="data-menu">
+                
+            </div>
+
+        </section>
+
+        <div class="clearfix"></div>
+        <div class="h45"></div>
+
+        <!-- footer -->
+        <footer id="footer">
+            <ul class="clearfix">
+                <li class="current"><a href="index.php?m=web&c=article&a=square&openid={$Think.get.openid}"><i></i>广场</a></li>
+                <li><a href="index.php?m=web&c=ym&a=praise&openid={$Think.get.openid}"><i></i>麦主</a></li>
+                <li onclick="DLapp(event);"><a href="javascript:;"><i></i>发布</a></li>
+                <li onclick="DLapp(event);"><a href="javascript:;"><i></i>我的</a></li>
+            </ul>
+        </footer>
+    <!-- Swiper JS -->
+    <script src="./Public/js/swiper.min.js"></script>
+   
+    <!-- Initialize Swiper -->
+     <script src="./Public/dist/dropload.min.js"></script>
+    <script src="./Public/js/data.js"></script>
+    <script>
+        $(window).scroll(function() {
+            if ($(document).scrollTop() != 0){
+                sessionStorage.setItem("offsetTop", $(window).scrollTop());//保存滚动位置
+            } 
+        });
+        var dropload = '',
+            start = 0,
+            start1 = 0,
+            
+            itemIndex = 0,
+            backV = window.location.href.indexOf('Voice'),
+            backA = window.location.href.indexOf('Article'),
+            openid = '{$Think.get.openid}';
+
+            if (sessionStorage.getItem("itemIndex") == null) {
+                sessionStorage.setItem("itemIndex", 0);
+            }
+
+        var tab1LoadEnd = false; 
+        var tab2LoadEnd = false; 
+
+        if (backV != -1 || backA != -1) {
+            ifBack();
+            
+        } else {
+            loadMsg();
+        }
+
+        function ifBack() {
+            itemIndex = parseInt(sessionStorage.getItem("itemIndex"));
+            $('.data-menu').eq(itemIndex).show().siblings('.data-menu').hide();
+            $('.index-nav li').eq(itemIndex).addClass('selected').siblings().removeClass('selected');
+            if (itemIndex == 0) {
+                start = parseInt(sessionStorage.getItem("start"));
+                var _list = sessionStorage.getItem("list");
+            } else {
+                start1 = parseInt(sessionStorage.getItem("start1"));
+                var _list = sessionStorage.getItem("list1");
+            }
+            var a_offset = sessionStorage.getItem("offsetTop");
+            
+            $('.data-menu').eq(itemIndex).html(_list);
+
+            loadMsg();
+            dropload.direction = "up";
+            $(document).scrollTop(a_offset);
+            setTimeout(function() {
+                $('.index-nav .nav-item').eq(itemIndex).click();
+            }, 500);
+        }
+        // tab 
+        $('.index-nav .nav-item').on('click',function(){ 
+            var $this = $(this); 
+            itemIndex = parseInt($this.index());
+            sessionStorage.setItem("itemIndex", itemIndex);
+            $('.data-menu').eq(itemIndex).show().siblings('.data-menu').hide(); 
+
+            dropClick(itemIndex);
+            // 重置 
+        });
+
+        function dropClick(itemIndex) {
+            // 如果选中菜单一 
+            if(itemIndex == '0'){ 
+                // 如果数据没有加载完 
+                if(!tab1LoadEnd){ 
+                    // 解锁 
+                    dropload.resetload(); 
+                }else{ 
+                    // 锁定 
+                    dropload.lock('down'); 
+                    dropload.noData(); 
+                } 
+            // 如果选中菜单二 
+            }else if(itemIndex == '1') {
+                if(!tab2LoadEnd){ 
+                    // 解锁 
+                    dropload.resetload(); 
+                }else{ 
+                    // 锁定 
+                    dropload.lock('down'); 
+                    dropload.noData(); 
+                } 
+            } 
+        }
+
+        function loadMsg() {
+            dropload = $('.data').dropload({
+                scrollArea: window,
+                loadUpFn: function (me) {
+                    if (itemIndex == 0) {
+                        $.ajax({
+                            type: 'post',
+                            url: 'index.php?m=api&c=article&a=dynamic',
+                            dataType: 'json',
+                            data: {
+                                range: "0",
+                                userid: '{$Think.get.openid}',
+                                topic_id: '-1'
+                            },
+                            success: function (data) {
+                                var data = data.data;
+                                if (data.dynamic_list.length < 1) {
+                                    dropload.lock('down');
+                                    dropload.noData();
+                                }
+                                var strVar = "";
+                                $.each(data.dynamic_list, function(i, val) {
+
+                                    var pics_html = "";
+                                    pics_html += "<div onclick=\"clickListion(" + data.dynamic_list[i].userid + "," + data.dynamic_list[i].create_time + ",this,event)\" data =\"" + data.dynamic_list[i].topic_id + "\" playno=\"0\" id=\"playerControl" + data.dynamic_list[i].topic_id + "\"  class=\"gq_play play_but\" >\n";
+                                    pics_html += "  <img onclick=\"longAudio('" + data.dynamic_list[i].topic_id + "','" + data.dynamic_list[i].audio_lite + "','" + data.dynamic_list[i].pics[0]['pic'] + "')\" class=\"img-responsive\" src=\"./Public/img/dd_07.png\">\n";
+                                    pics_html += "  <\/div>\n";
+
+                                    pics_html += "<audio id=\"player" + data.dynamic_list[i].topic_id + "\"><\/audio>";
+                                    pics_html += "  <\/div>\n";
+                                    pics_html += " <div id='progress" + data.dynamic_list[i].topic_id + "'></div>";
+
+                                    var follow_html = "<div onclick=\"DLapp(event);\" class=\"follow follow" + val.userid + "\">\n";
+                                    follow_html += "<img src =\"./Public/img/gz_03.png\"></div>";
+                                    // if (val.follow > 0) {
+                                    //     follow_html += "<div  onclick=\"chfollow('1',{$Think.get.openid}," + val.userid + ")\" class=\"follow follow" + val.userid + "\">\n";
+                                    //     follow_html += "<img src =\"./Public/img/gz_06.png\"></div>";
+                                    // } else {
+                                    //     follow_html += "<div onclick=\"follow('1',{$Think.get.openid}," + val.userid + ")\" class=\"follow follow" + val.userid + "\">\n";
+                                    //     follow_html += "<img src =\"./Public/img/gz_03.png\"></div>";
+                                    // }
+
+                                    var date = new Date(val.create_time * 1000);
+
+                                    date = (date.getMonth() + 1) + "/" + date.getDate();
+                                    strVar += "<div class=\"dynamic-item\">\n";
+                                    strVar += "<div class=\"item-content\">\n";
+                                    strVar += " <div class=\"header\">\n";
+                                    strVar += "     <img class=\"user-img img-circle\" src=\""+ val.photo_url +"\" alt=\"\" onclick=\"window.location.href='index.php?m=web&openid={$Think.get.openid}&c=ym&a=article&uid=" + val.userid + "&voice'\">\n";
+                                    strVar += "     <div class=\"header-msg\">\n";
+                                    strVar += "         <p class=\"user-name\">"+ val.nick +"<\/p>\n";
+                                    strVar += "         <p class=\"dynamic-info\"><span class=\"time\">"+ date +"<\/span> 发布 | <span class=\"listen\">"+ val.listen_count +"<\/span> 收听<\/p>\n";
+                                    strVar += "     <\/div>\n";
+
+                                    strVar += follow_html;
+
+                                    strVar += " <\/div>\n";
+                                    strVar += " <div onclick=\"window.location.href='index.php?m=web&c=article&a=articleContent&create_time=" + val.create_time + "&userid=" + val.userid + "&openid={$Think.get.openid}&voice'\">\n";
+                                    strVar += " <p class=\"dynamic-content\">"+ val.content +"<\/p>\n";
+
+                                    strVar += " <div class=\"video\" style=\"background:url('"+val.cover+"') no-repeat center center / cover;\" >\n";
+                                    // strVar += "<a class=\"voice-content\" href =\"index.php?m=web&c=article&a=articleContent&create_time=" + val.create_time + "&userid=" + val.userid + "&openid={$Think.get.openid}&voice\"><\/a>"
+                                    strVar += pics_html;
+
+                                    strVar += " <\/div>\n";
+                                    strVar += " <ul class=\"dynamic-follow\">\n";
+                                    strVar += "     <li class=\"gift\" onclick=DLapp(event);><\/li>\n";
+
+                                    strVar += "     <li class=\"like\" onclick=DLapp(event);>"+ val.praise_count +"<\/li>\n";
+
+                                    // $.ajax({
+                                    //     async: false,
+                                    //     type: "POST",
+                                    //     url: "index.php?m=api&c=Article&a=praise&openid={$Think.get.openid}",
+                                    //     data:{
+                                    //         userid: '{$Think.get.openid}',
+                                    //         uid: val.userid,
+                                    //         create_time: val.create_time,
+                                    //     },
+                                    //     success: function (data) {
+                                    //         if (data.status == 0) {
+                                    //             strVar += "     <li class=\"like\" onclick=Praise(this,"+ val.userid +","+ val.create_time +","+ val.praise_count +"); style=\"background:url('./Public/img/data/listen_icon_favorites@2x.png') no-repeat 0 center / 0.426667rem 0.4rem;\">"+ val.praise_count +"<\/li>\n";
+                                    //         } else if (data.status == 1) {
+                                    //             strVar += "     <li class=\"like\" onclick=Praise(this,"+ val.userid +","+ val.create_time +","+ val.praise_count +"); style=\"background:url('./Public/img/icon_like@2x.png') no-repeat 0 center / 0.426667rem 0.4rem;\">"+ val.praise_count +"<\/li>\n";
+                                    //         }
+                                    //     },
+                                    //     dataType: 'json'
+                                    // })
+
+                                    strVar += "     <li class=\"comment\" onclick=DLapp(event);>"+ val.comment_count +"<\/li>\n";
+                                    strVar += "     <li class=\"more\" onclick=DLapp(event);><\/li>\n";
+                                    strVar += " <\/ul>\n";
+                                    strVar += "<\/div>\n";
+
+                                    $.ajax({
+                                        async: false,
+                                        type: 'POST',
+                                        url: 'index.php?m=api&c=Article&a=commentlist&openid={$Think.get.openid}',
+                                        dataType: 'json',
+                                        data:{
+                                            create_time: val.create_time,
+                                            uid: val.userid,
+                                            range : "0"
+                                        },
+                                        success: function (data) {
+                                            var data =data.data
+                                            if (data.comment_list.length > 0) {
+
+
+                                                strVar += "<div class=\"item-comment\">\n";
+                                                strVar += "   <p class=\"comment-title\">精彩评论<\/p>\n";
+                                                for (var i = 0; i < data.comment_list.length; i++) {                             
+                                                    var headimg = data.comment_list[i].comment_user.photo_url;
+
+                                                    var name =  data.comment_list[i].comment_user.nick;
+                                                   
+                                                    var time_c = new Date(data.comment_list[i].comment_time * 1000);
+
+                                                    time_c = (time_c.getMonth() + 1) + "/" + time_c.getDate();
+
+                                                    var audioHtml ="";
+                                                    
+
+                                                    strVar += "   <div class=\"comment-list\">\n";
+                                                    strVar += "     <img class=\"img-circle comment-img\" src=\""+ headimg +"\">\n";
+                                                    strVar += "     <p class=\"comment-name\">"+ name +"<\/p>\n";
+
+                                                    if(data.comment_list[i].comment_type == 1){
+                                                          strVar += "<div class=\"mp3Box\" onclick=\"initAudio("+data.comment_list[i].id+")\"><div class=\"list_article_mp3\"><audio src=\""+data.comment_list[i].comment_mp3+"\" id=\"audio"+ data.comment_list[i].id+"\" class=\"audio\"><\/audio><\/div><\/div>\n";
+                                                    } else {
+                                                        strVar += "     <p class=\"comment-msg\">"+ data.comment_list[i].comment_content +"<\/p>\n";
+                                                    }
+                                                    
+                                                    strVar += "     <p class=\"comment-time\">"+ time_c +"<\/p>\n";
+                                                    strVar += "<\/div>\n";
+                                                    
+            
+                                                }
+                                                strVar += "<\/div>\n";
+                                            }
+
+                                        }
+
+                                    });
+                 
+                                    strVar += "<\/div>\n";
+
+                                });
+                                /* 
+                                 topImg = data.channel.img_url;
+                                 title = data.channel.title;
+                                 document.title = title;
+                                 $(".top_img").html('<img class="img-responsive" src="' + data.channel.img_url + '">')
+                                 */
+                                start = 1;
+                                // 为了测试，延迟1秒加载
+                                $('.data-menu').eq(itemIndex).html(strVar);
+                                    // 每次数据加载完，必须重置
+                                me.resetload();
+                            },
+                            error: function (xhr, type) {
+                                alert('Ajax error!');
+                                // 即使加载出错，也得重置
+                                //  me.resetload();
+                                dropload.lock('down');
+                            }
+
+                        });
+                    } else if (itemIndex == 1) {
+                        $.ajax({
+                            type: 'post',
+                            url: 'index.php?m=api&c=article&a=dynamic',
+                            dataType: 'json',
+                            data: {
+                                range: "0",
+                                userid: '{$Think.get.openid}',
+                                topic_id: '0'
+                            },
+                            success: function (data) {
+                                var data = data.data;
+                                if (data.dynamic_list.length < 1) {
+                                    dropload.lock('down');
+                                    dropload.noData();
+                                }
+                                var strVar = "";
+                                $.each(data.dynamic_list, function(i, val) {
+
+                                    var follow_html = "<div onclick=\"DLapp(event);\" class=\"follow follow" + val.userid + "\">\n";
+                                    follow_html += "<img src =\"./Public/img/gz_03.png\"></div>";
+                                    // if (val.follow > 0) {
+                                    //     follow_html += "<div  onclick=\"chfollow('1',{$Think.get.openid}," + val.userid + ")\" class=\"follow follow" + val.userid + "\">\n";
+                                    //     follow_html += "<img src =\"./Public/img/gz_06.png\"></div>";
+                                    // } else {
+                                    //     follow_html += "<div onclick=\"follow('1',{$Think.get.openid}," + val.userid + ")\" class=\"follow follow" + val.userid + "\">\n";
+                                    //     follow_html += "<img src =\"./Public/img/gz_03.png\"></div>";
+                                    // }
+
+                                    var date = new Date(val.create_time * 1000);
+
+                                    date = (date.getMonth() + 1) + "/" + date.getDate();
+                                    strVar += "<div class=\"dynamic-item\">\n";
+                                    strVar += "<div class=\"item-content\">\n";
+                                    strVar += " <div class=\"header\">\n";
+                                    strVar += "     <img class=\"user-img img-circle\" src=\""+ val.photo_url +"\" alt=\"\" onclick=\"window.location.href='index.php?m=web&openid={$Think.get.openid}&c=ym&a=article&uid=" + val.userid + "&dynamic'\">\n";
+                                    strVar += "     <div class=\"header-msg\">\n";
+                                    strVar += "         <p class=\"user-name\">"+ val.nick +"<\/p>\n";
+                                    strVar += "         <p class=\"dynamic-info\"><span class=\"time\">"+ date +"<\/span> 发布 | <span class=\"listen\">"+ val.listen_count +"<\/span> 阅读<\/p>\n";
+                                    strVar += "     <\/div>\n";
+
+                                    strVar += follow_html;
+
+                                    strVar += " <\/div>\n";
+                                    strVar += " <div onclick=\"window.location.href='index.php?m=web&c=article&a=articleContent&create_time=" + val.create_time + "&userid=" + val.userid + "&openid={$Think.get.openid}&dynamic'\">\n";
+                                    strVar += " <p class=\"dynamic-content\">"+ val.content +"<\/p>\n";
+
+                                    strVar += " <div class=\"photo\">\n";
+                                    // strVar += "<a href =\"index.php?m=web&c=article&a=articleContent&create_time=" + val.create_time + "&userid=" + val.userid + "&openid={$Think.get.openid}&dynamic\">"
+                                    strVar += "     <img class=\"poster\" src=\"./Public/img/data/img_cover.png\" style=\"background:url('"+val.cover+"') no-repeat top center / cover\" alt=\"\">\n";
+                                    // strVar += " <\/a>\n";
+                                    strVar += " <\/div>\n";
+                                    strVar += " <\/div>\n";
+                                    strVar += " <ul class=\"dynamic-follow\">\n";
+                                    strVar += "     <li class=\"gift\"  onclick=DLapp(event);><\/li>\n";
+                                    strVar += "     <li class=\"like\" onclick=DLapp(event);>"+ val.praise_count +"<\/li>\n";
+                                        
+                                    // $.ajax({
+                                    //     async: false,
+                                    //     type: "POST",
+                                    //     url: "index.php?m=api&c=Article&a=praise&openid={$Think.get.openid}",
+                                    //     data:{
+                                    //         userid: '{$Think.get.openid}',
+                                    //         uid: val.userid,
+                                    //         create_time: val.create_time,
+                                    //     },
+                                    //     success: function (data) {
+                                    //         if (data.status == 0) {
+                                    //             strVar += "     <li class=\"like\" onclick=Praise(this,"+ val.userid +","+ val.create_time +","+ val.praise_count +"); style=\"background:url('./Public/img/data/listen_icon_favorites@2x.png') no-repeat 0 center / 0.426667rem 0.4rem;\">"+ val.praise_count +"<\/li>\n";
+                                    //         } else if (data.status == 1) {
+                                    //              strVar += "     <li class=\"like\" onclick=Praise(this,"+ val.userid +","+ val.create_time +","+ val.praise_count +"); style=\"background:url('./Public/img/icon_like@2x.png') no-repeat 0 center / 0.426667rem 0.4rem;\">"+ val.praise_count +"<\/li>\n";
+                                    //         }
+                                    //     },
+                                    //     dataType: 'json'
+                                    // })
+
+                                    strVar += "     <li class=\"comment\" onclick=DLapp(event);>"+ val.comment_count +"<\/li>\n";
+                                    strVar += "     <li class=\"more\" onclick=DLapp(event);><\/li>\n";
+                                    strVar += " <\/ul>\n";
+                                    strVar += "<\/div>\n";
+
+                                    $.ajax({
+                                        async: false,
+                                        type: 'POST',
+                                        url: 'index.php?m=api&c=Article&a=commentlist&openid={$Think.get.openid}',
+                                        dataType: 'json',
+                                        data:{
+                                            create_time: val.create_time,
+                                            uid: val.userid,
+                                            range : "0"
+                                        },
+                                        success: function (data) {
+                                            var data =data.data
+                                            if (data.comment_list.length > 0) {
+
+
+                                                strVar += "<div class=\"item-comment\">\n";
+                                                strVar += "   <p class=\"comment-title\">精彩评论<\/p>\n";
+                                                for (var i = 0; i < data.comment_list.length; i++) {                             
+                                                    var headimg = data.comment_list[i].comment_user.photo_url;
+
+                                                    var name =  data.comment_list[i].comment_user.nick;
+                                                   
+                                                    var time_c = new Date(data.comment_list[i].comment_time * 1000);
+
+                                                    time_c = (time_c.getMonth() + 1) + "/" + time_c.getDate();
+
+                                                    
+                                                    strVar += "   <div class=\"comment-list\">\n";
+                                                    strVar += "     <img class=\"img-circle comment-img\" src=\""+ headimg +"\">\n";
+                                                    strVar += "     <p class=\"comment-name\">"+ name +"<\/p>\n";
+                                                    if(data.comment_list[i].comment_type == 1){
+                                                          strVar += "<div class=\"mp3Box\" onclick=\"initAudio("+data.comment_list[i].id+")\"><div class=\"list_article_mp3\"><audio src=\""+data.comment_list[i].comment_mp3+"\" id=\"audio"+ data.comment_list[i].id+"\" class=\"audio\"><\/audio><\/div><\/div>\n";
+                                                    } else {
+                                                        strVar += "     <p class=\"comment-msg\">"+ data.comment_list[i].comment_content +"<\/p>\n";
+                                                    }
+                                                    strVar += "     <p class=\"comment-time\">"+ time_c +"<\/p>\n";
+                                                    strVar += "<\/div>\n";
+                                                    
+                                                    // var audioHtml ="";
+                                                    // if(data.comment_list[i].comment_mp3 != ""){
+                                                    //       audioHtml ="<div class=\"col-xs-12 plr0class=\"mp3Box\" onclick=\"initAudio("+data.comment_list[i].id+")\"><div class=\"list_article_mp3\"><audio src=\""+data.comment_list[i].comment_mp3+"\" id=\"audio"+ data.comment_list[i].id+"\" class=\"audio\"><\/audio><\/div><\/div>\n";
+                                                    // }
+                                    
+                                                }
+                                                strVar += "<\/div>\n";
+                                            }
+
+                                        }
+
+                                    });
+
+                                    strVar += "<\/div>\n";
+                                
+
+
+                                });
+
+                                sessionStorage.setItem("dynamic", strVar);
+                                /* 
+                                 topImg = data.channel.img_url;
+                                 title = data.channel.title;
+                                 document.title = title;
+                                 $(".top_img").html('<img class="img-responsive" src="' + data.channel.img_url + '">')
+                                 */
+                        
+                                start1 = 1;
+                                // 为了测试，延迟1秒加载
+                                $('.data-menu').eq(itemIndex).append(strVar);
+
+                                // 每次数据加载完，必须重置
+                                me.resetload();
+
+                            },
+                            error: function (xhr, type) {
+                                alert('Ajax error!');
+                                // 即使加载出错，也得重置
+                                //  me.resetload();
+                                dropload.lock('down');
+                            }
+
+                        });
+                    }
+                },
+
+                loadDownFn: function (me) {
+                    if (itemIndex == 0) {
+                        $.ajax({
+                            type: 'post',
+                            url: 'index.php?m=api&c=article&a=dynamic',
+                            dataType: 'json',
+                            data: {
+                                range: start,
+                                userid: '{$Think.get.openid}',
+                                topic_id: '-1'
+                            },
+                            success: function (data) {
+                                var data = data.data;
+                                // if (data.dynamic_list.length < 1) {
+                                //     dropload.lock('down');
+                                //     dropload.noData();
+                                //     tab1LoadEnd = true;
+                                // }
+                                var strVar = "";
+                                $.each(data.dynamic_list, function(i, val) {
+
+                                    var pics_html = "";
+                                    pics_html += "<div onclick=\"clickListion(" + data.dynamic_list[i].userid + "," + data.dynamic_list[i].create_time + ",this,event)\" data =\"" + data.dynamic_list[i].topic_id + "\" playno=\"0\" id=\"playerControl" + data.dynamic_list[i].topic_id + "\"  class=\"gq_play play_but\" >\n";
+                                    pics_html += "  <img onclick=\"longAudio('" + data.dynamic_list[i].topic_id + "','" + data.dynamic_list[i].audio_lite + "','" + data.dynamic_list[i].pics[0]['pic'] + "')\" class=\"img-responsive\" src=\"./Public/img/dd_07.png\">\n";
+                                    pics_html += "  <\/div>\n";
+
+                                    pics_html += "<audio id=\"player" + data.dynamic_list[i].topic_id + "\"><\/audio>";
+                                    pics_html += "  <\/div>\n";
+                                    pics_html += " <div id='progress" + data.dynamic_list[i].topic_id + "'></div>";
+
+                                    var follow_html = "<div onclick=\"DLapp(event);\" class=\"follow follow" + val.userid + "\">\n";
+                                    follow_html += "<img src =\"./Public/img/gz_03.png\"></div>";
+                                    // if (val.follow > 0) {
+                                    //     follow_html += "<div onclick=\"chfollow('1',{$Think.get.openid}," + val.userid + ")\" class=\"follow follow" + val.userid + "\">\n";
+                                    //     follow_html += "<img src =\"./Public/img/gz_06.png\"></div>";
+                                    // } else {
+                                    //     follow_html += "<div onclick=\"follow('1',{$Think.get.openid}," + val.userid + ")\" class=\"follow follow" + val.userid + "\">\n";
+                                    //     follow_html += "<img src =\"./Public/img/gz_03.png\"></div>";
+                                    // }
+
+                                    var date = new Date(val.create_time * 1000);
+
+                                    date = (date.getMonth() + 1) + "/" + date.getDate();
+                                    strVar += "<div class=\"dynamic-item\">\n";
+                                    strVar += "<div class=\"item-content\">\n";
+                                    strVar += " <div class=\"header\">\n";
+                                    strVar += "     <img class=\"user-img img-circle\" src=\""+ val.photo_url +"\" alt=\"\" onclick=\"window.location.href='index.php?m=web&openid={$Think.get.openid}&c=ym&a=article&uid=" + val.userid + "&voice'\">\n";
+                                    strVar += "     <div class=\"header-msg\">\n";
+                                    strVar += "         <p class=\"user-name\">"+ val.nick +"<\/p>\n";
+                                    strVar += "         <p class=\"dynamic-info\"><span class=\"time\">"+ date +"<\/span> 发布 | <span class=\"listen\">"+ val.listen_count +"<\/span> 收听<\/p>\n";
+                                    strVar += "     <\/div>\n";
+
+                                    strVar += follow_html;
+
+                                    strVar += " <\/div>\n";
+
+                                    strVar += " <div onclick=\"window.location.href='index.php?m=web&c=article&a=articleContent&create_time=" + val.create_time + "&userid=" + val.userid + "&openid={$Think.get.openid}&voice'\">\n";
+                                    strVar += " <p class=\"dynamic-content\">"+ val.content +"<\/p>\n";
+                                    strVar += " <div class=\"video\" style=\"background:url('"+val.cover+"') no-repeat center center / cover;\" >\n";
+                                    // strVar += "<a class=\"voice-content\" href=\"index.php?m=web&c=article&a=articleContent&create_time=" + val.create_time + "&userid=" + val.userid + "&openid={$Think.get.openid}&voice\"><\/a>"
+                                    strVar += pics_html;
+
+                                    strVar += " <\/div>\n";
+                                    strVar += " <ul class=\"dynamic-follow\">\n";
+                                    strVar += "     <li class=\"gift\" onclick=DLapp(event);><\/li>\n";
+                                    strVar += "     <li class=\"like\" onclick=DLapp(event);>"+ val.praise_count +"<\/li>\n";
+                                    // $.ajax({
+                                    //     async: false,
+                                    //     type: "POST",
+                                    //     url: "index.php?m=api&c=Article&a=praise&openid={$Think.get.openid}",
+                                    //     data:{
+                                    //         userid: '{$Think.get.openid}',
+                                    //         uid: val.userid,
+                                    //         create_time: val.create_time,
+                                    //     },
+                                    //     success: function (data) {
+                                    //         if (data.status == 0) {
+                                    //             strVar += "     <li class=\"like\" onclick=Praise(this,"+ val.userid +","+ val.create_time +","+ val.praise_count +"); style=\"background:url('./Public/img/data/listen_icon_favorites@2x.png') no-repeat 0 center / 0.426667rem 0.4rem;\">"+ val.praise_count +"<\/li>\n";
+                                    //         } else if (data.status == 1) {
+                                    //              strVar += "     <li class=\"like\" onclick=Praise(this,"+ val.userid +","+ val.create_time +","+ val.praise_count +"); style=\"background:url('./Public/img/icon_like@2x.png') no-repeat 0 center / 0.426667rem 0.4rem;\">"+ val.praise_count +"<\/li>\n";
+                                    //         }
+                                    //     },
+                                    //     dataType: 'json'
+                                    // })
+
+                                    strVar += "     <li class=\"comment\" onclick=DLapp(event);>"+ val.comment_count +"<\/li>\n";
+                                    strVar += "     <li class=\"more\" onclick=DLapp(event);><\/li>\n";
+                                    strVar += " <\/ul>\n";
+                                    strVar += "<\/div>\n";
+
+                                    $.ajax({
+                                        async: false,
+                                        type: 'POST',
+                                        url: 'index.php?m=api&c=Article&a=commentlist&openid={$Think.get.openid}',
+                                        dataType: 'json',
+                                        data:{
+                                            create_time: val.create_time,
+                                            uid: val.userid,
+                                            range : "0"
+                                        },
+                                        success: function (data) {
+                                            var data =data.data
+                                            if (data.comment_list.length > 0) {
+
+
+                                                strVar += "<div class=\"item-comment\">\n";
+                                                strVar += "   <p class=\"comment-title\">精彩评论<\/p>\n";
+                                                for (var i = 0; i < data.comment_list.length; i++) {                             
+                                                    var headimg = data.comment_list[i].comment_user.photo_url;
+
+                                                    var name =  data.comment_list[i].comment_user.nick;
+                                                   
+                                                    var time_c = new Date(data.comment_list[i].comment_time * 1000);
+
+                                                    time_c = (time_c.getMonth() + 1) + "/" + time_c.getDate();
+
+                                                    
+                                                    strVar += "   <div class=\"comment-list\">\n";
+                                                    strVar += "     <img class=\"img-circle comment-img\" src=\""+ headimg +"\">\n";
+                                                    strVar += "     <p class=\"comment-name\">"+ name +"<\/p>\n";
+                                                    if(data.comment_list[i].comment_type == 1){
+                                                          strVar += "<div class=\"mp3Box\" onclick=\"initAudio("+data.comment_list[i].id+")\"><div class=\"list_article_mp3\"><audio src=\""+data.comment_list[i].comment_mp3+"\" id=\"audio"+ data.comment_list[i].id+"\" class=\"audio\"><\/audio><\/div><\/div>\n";
+                                                    } else {
+                                                        strVar += "     <p class=\"comment-msg\">"+ data.comment_list[i].comment_content +"<\/p>\n";
+                                                    }
+                                                    strVar += "     <p class=\"comment-time\">"+ time_c +"<\/p>\n";
+                                                    strVar += "<\/div>\n";
+                                                    
+                        
+                                                }
+                                                strVar += "<\/div>\n";
+                                            }
+
+                                        }
+
+                                    });
+                        
+                                    strVar += "<\/div>\n";
+
+                                });
+
+                                
+                                /* 
+                                 topImg = data.channel.img_url;
+                                 title = data.channel.title;
+                                 document.title = title;
+                                 $(".top_img").html('<img class="img-responsive" src="' + data.channel.img_url + '">')
+                                 */
+                                
+                                start = start + 1;
+                                
+                                // 为了测试，延迟1秒加载
+                                $('.data-menu').eq(itemIndex).append(strVar);
+
+                                sessionStorage.setItem("start", start);
+                                sessionStorage.setItem("list", $('.data-menu').eq(itemIndex).html());
+                                    // 每次数据加载完，必须重置
+                                me.resetload();
+                                
+                            },
+                            error: function (xhr, type) {
+                                alert('Ajax error!');
+                                // 即使加载出错，也得重置
+                                me.resetload();
+                                dropload.lock('down');
+                            }
+
+                        });
+                    } else if (itemIndex == 1) {
+                        $.ajax({
+                            type: 'post',
+                            url: 'index.php?m=api&c=article&a=dynamic',
+                            dataType: 'json',
+                            data: {
+                                range: start1,
+                                userid: '{$Think.get.openid}',
+                                topic_id: '0'
+                            },
+                            success: function (data) {
+                                var data = data.data;
+                                // if (data.dynamic_list.length < 1) {
+                                //     dropload.lock('down');
+                                //     dropload.noData();
+                                //     tab2LoadEnd = true;
+                                // }
+                                var strVar = "";
+                                $.each(data.dynamic_list, function(i, val) {
+
+                                    var follow_html = "<div onclick=\"DLapp(event);\" class=\"follow follow" + val.userid + "\">\n";
+                                    follow_html += "<img src =\"./Public/img/gz_03.png\"></div>";
+                                    // if (val.follow > 0) {
+                                    //     follow_html += "<div  onclick=\"chfollow('1',{$Think.get.openid}," + val.userid + ")\" class=\"follow follow" + val.userid + "\">\n";
+                                    //     follow_html += "<img src =\"./Public/img/gz_06.png\"></div>";
+                                    // } else {
+                                    //     follow_html += "<div onclick=\"follow('1',{$Think.get.openid}," + val.userid + ")\" class=\"follow follow" + val.userid + "\">\n";
+                                    //     follow_html += "<img src =\"./Public/img/gz_03.png\"></div>";
+                                    // }
+
+                                    var date = new Date(val.create_time * 1000);
+
+                                    date = (date.getMonth() + 1) + "/" + date.getDate();
+                                    strVar += "<div class=\"dynamic-item\">\n";
+                                    strVar += "<div class=\"item-content\">\n";
+                                    strVar += " <div class=\"header\">\n";
+                                    strVar += "     <img class=\"user-img img-circle\" src=\""+ val.photo_url +"\" alt=\"\" onclick=\"window.location.href='index.php?m=web&openid={$Think.get.openid}&c=ym&a=article&uid=" + val.userid + "&dynamic'\">\n";
+                                    strVar += "     <div class=\"header-msg\">\n";
+                                    strVar += "         <p class=\"user-name\">"+ val.nick +"<\/p>\n";
+                                    strVar += "         <p class=\"dynamic-info\"><span class=\"time\">"+ date +"<\/span> 发布 | <span class=\"listen\">"+ val.listen_count +"<\/span> 阅读<\/p>\n";
+                                    strVar += "     <\/div>\n";
+
+                                    strVar += follow_html;
+
+                                    strVar += " <\/div>\n";
+                                    strVar += " <div onclick=\"window.location.href='index.php?m=web&c=article&a=articleContent&create_time=" + val.create_time + "&userid=" + val.userid + "&openid={$Think.get.openid}&dynamic'\">\n";
+                                    strVar += " <p class=\"dynamic-content\">"+ val.content +"<\/p>\n";
+
+                                    strVar += " <div class=\"photo\">\n";
+                                    // strVar += "<a href =\"index.php?m=web&c=article&a=articleContent&create_time=" + val.create_time + "&userid=" + val.userid + "&openid={$Think.get.openid}&dynamic\">"
+                                    strVar += "     <img class=\"poster\" src=\"./Public/img/data/img_cover.png\" style=\"background:url('"+val.cover+"') no-repeat top center / cover\" alt=\"\">\n";
+                                    // strVar += " <\/a>\n";
+                                    strVar += " <\/div>\n";
+                                    strVar += " <\/div>\n";
+                                    strVar += " <ul class=\"dynamic-follow\">\n";
+                                    strVar += "     <li class=\"gift\"  onclick=DLapp(event);><\/li>\n";
+                                    strVar += "     <li class=\"like\" onclick=DLapp(event);>"+ val.praise_count +"<\/li>\n";
+                                    // $.ajax({
+                                    //     async: false,
+                                    //     type: "POST",
+                                    //     url: "index.php?m=api&c=Article&a=praise&openid={$Think.get.openid}",
+                                    //     data:{
+                                    //         userid: '{$Think.get.openid}',
+                                    //         uid: val.userid,
+                                    //         create_time: val.create_time,
+                                    //     },
+                                    //     success: function (data) {
+                                    //         if (data.status == 0) {
+                                    //             strVar += "     <li class=\"like\" onclick=Praise(this,"+ val.userid +","+ val.create_time +","+ val.praise_count +"); style=\"background:url('./Public/img/data/listen_icon_favorites@2x.png') no-repeat 0 center / 0.426667rem 0.4rem;\">"+ val.praise_count +"<\/li>\n";
+                                    //         } else if (data.status == 1) {
+                                    //              strVar += "     <li class=\"like\" onclick=Praise(this,"+ val.userid +","+ val.create_time +","+ val.praise_count +"); style=\"background:url('./Public/img/icon_like@2x.png') no-repeat 0 center / 0.426667rem 0.4rem;\">"+ val.praise_count +"<\/li>\n";
+                                    //         }
+                                    //     },
+                                    //     dataType: 'json'
+                                    // })
+
+                                    strVar += "     <li class=\"comment\" onclick=DLapp(event);>"+ val.comment_count +"<\/li>\n";
+                                    strVar += "     <li class=\"more\" onclick=DLapp(event);><\/li>\n";
+                                    strVar += " <\/ul>\n";
+                                    strVar += "<\/div>\n";
+
+                                    $.ajax({
+                                        async: false,
+                                        type: 'POST',
+                                        url: 'index.php?m=api&c=Article&a=commentlist&openid={$Think.get.openid}',
+                                        dataType: 'json',
+                                        data:{
+                                            create_time: val.create_time,
+                                            uid: val.userid,
+                                            range : "0"
+                                        },
+                                        success: function (data) {
+                                            var data =data.data
+                                            if (data.comment_list.length > 0) {
+
+
+                                                strVar += "<div class=\"item-comment\">\n";
+                                                strVar += "   <p class=\"comment-title\">精彩评论<\/p>\n";
+                                                for (var i = 0; i < data.comment_list.length; i++) {                             
+                                                    var headimg = data.comment_list[i].comment_user.photo_url;
+
+                                                    var name =  data.comment_list[i].comment_user.nick;
+                                                   
+                                                    var time_c = new Date(data.comment_list[i].comment_time * 1000);
+
+                                                    time_c = (time_c.getMonth() + 1) + "/" + time_c.getDate();
+
+                                                    
+                                                    strVar += "   <div class=\"comment-list\">\n";
+                                                    strVar += "     <img class=\"img-circle comment-img\" src=\""+ headimg +"\">\n";
+                                                    strVar += "     <p class=\"comment-name\">"+ name +"<\/p>\n";
+                                                    if(data.comment_list[i].comment_type == 1){
+                                                          strVar += "<div class=\"mp3Box\" onclick=\"initAudio("+data.comment_list[i].id+")\"><div class=\"list_article_mp3\"><audio src=\""+data.comment_list[i].comment_mp3+"\" id=\"audio"+ data.comment_list[i].id+"\" class=\"audio\"><\/audio><\/div><\/div>\n";
+                                                    } else {
+                                                        strVar += "     <p class=\"comment-msg\">"+ data.comment_list[i].comment_content +"<\/p>\n";
+                                                    }
+                                                    strVar += "     <p class=\"comment-time\">"+ time_c +"<\/p>\n";
+                                                    strVar += "<\/div>\n";
+                                                    
+                                    
+                                                }
+                                                strVar += "<\/div>\n";
+                                            }
+
+                                        }
+
+                                    });
+
+                                    strVar += "<\/div>\n";
+
+                                });
+
+                                /* 
+                                 topImg = data.channel.img_url;
+                                 title = data.channel.title;
+                                 document.title = title;
+                                 $(".top_img").html('<img class="img-responsive" src="' + data.channel.img_url + '">')
+                                 */
+                        
+                                start1 = start1 + 1;
+                                // 为了测试，延迟1秒加载
+                                $('.data-menu').eq(itemIndex).append(strVar);
+
+                                sessionStorage.setItem("start1", start1);
+                                sessionStorage.setItem("list1", $('.data-menu').eq(itemIndex).html());
+
+                                // 每次数据加载完，必须重置
+                                me.resetload();
+                                
+                            },
+                            error: function (xhr, type) {
+                                alert('Ajax error!');
+                                // 即使加载出错，也得重置
+                                //  me.resetload();
+                                dropload.lock('down');
+                            }
+
+                        });
+                    }
+
+                }
+            });
+        }
+
+        // function Praise(that, uid, time, count) {
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "index.php?m=api&c=Article&a=praise&openid={$Think.get.openid}",
+        //         data:{
+        //             userid: '{$Think.get.openid}',
+        //             uid: uid,
+        //             create_time: time,
+        //             action: 'click'
+        //         },
+        //         error: function (request) {
+        //             alert('提交超时，请稍候再试！');
+        //         },
+        //         success: function (data) {
+        //             console.log(data);
+        //             if (data.status == 1) {
+        //                 alert('您已经赞过了！');
+        //             } else if (data.status == 0) {
+        //                 var praiseRow = Number("" + count + "") + Number("1");
+        //                 $(that).text(praiseRow).css("background", "url('./Public/img/icon_like@2x.png') no-repeat 0 center / 0.426667rem 0.4rem");
+        //             }
+        //         },
+        //         dataType: 'json'
+        //     })
+        // }
+        var swiper = new Swiper('.swiper-container', {
+            pagination: '.swiper-pagination',
+            paginationClickable: '.swiper-pagination',
+            spaceBetween: 30,
+            autoplay : 5000,
+        });
+
+        /*$(document).on('click', '.cover', function() {
+                if (prevideo != "" && $(this).prev()[0] != prevideo) {
+                    prevideo.pause();
+                    $(prevideo).next().attr('src', './Public/img/data/btn_play@2x.png');
+                    prevideo = $(this).prev()[0];
+                    flag = 0;
+                }
+
+                if (flag == 0) {
+                    $(this).attr('src', './Public/img/data/btn_pause@2x.png');
+                    $(this).prev()[0].play();
+                    prevideo = $(this).prev()[0];
+                    flag = 1;
+                } else {
+                    $(this).attr('src', './Public/img/data/btn_play@2x.png');
+                    $(this).prev()[0].pause();
+                    flag = 0;
+                }
+                return false;
+        });*/
+
+        /* MP3 */  
+        var audio = '';
+        var upAudio = "0";
+        var listenKey = 0;
+        function initAudio(val){
+
+            //初始化对象
+            if(val){ 
+        
+                audio = document.getElementById('audio'+val);
+               
+            }else{
+               audio = document.getElementById('bgMusic');
+               console.log(audio)
+            }
+            
+             if(upAudio!="0" && upAudio != audio){ //如果上一音频不等于0，并且不是同个音频，则暂停播放
+                var upAudioID  = upAudio.id.replace("audio",""); //取ID换图片
+                $(".play_but"+upAudioID+"").html('<img class="img-responsive" src="./Public/img/dd_07.png">')
+                upAudio.pause();
+            }               
+            playOrPaused(val);
+        }
+
+
+        //暂停或播放
+        var progressTimer;
+        function playOrPaused(){
+            
+            if(audio.paused){
+                audio.play();
+                upAudio = audio;
+              //  progressTimer=window.setInterval(audioProgress,100);
+            //    document.getElementById("musicAudioPlayAndPause").setAttribute("src","img/shutdown.ico");
+               // var audio_html = '<img onclick="initAudio()" class="img-responsive" src="./Public/img/dd_07_b.png">'
+             
+                    if(listenKey == 0){ //添加收听数!
+                        $.ajax({
+                            cache: true,
+                            url: "index.php?m=web&c=article&a=articleListen",
+                            data: {
+                                article_id: '{$Think.get.articleId}',
+                                uid: '{$Think.get.openid}'
+                            },
+                            type: "POST",
+                            dataType: 'json',
+                            error: function (request) {
+                                alert('提交超时，请稍候再试！');
+                            },
+                            success: function (data) {
+                                listenKey = 1;
+                            }
+                        })   
+                    }
+                return;
+            }
+            audio.pause();
+              //  var audio_html = '<img onclick="initAudio()" class="img-responsive" src="./Public/img/dd_07.png">'
+           //     $(".gq_play").html(audio_html);               
+          //  document.getElementById("musicAudioPlayAndPause").setAttribute("src","img/wmp.ico")
+        }
+    </script>
+    </body>
+</html>

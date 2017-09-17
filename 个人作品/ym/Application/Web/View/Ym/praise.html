@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>约麦</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="stylesheet" href="./Public/css/index.css">  
+        <link rel="stylesheet" href="./Public/dist/dropload.css">
+        <link rel="stylesheet" href="./Public/dist/APlayer.min.css">          
+        <link rel="stylesheet" href="./Public/css/swiper.min.css">
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="./Public/js/hideMenuItems.js"></script>
+        <script src="./Public/js/function.js"></script>
+        <script>
+            var fx_url = window.location.href;
+            fx_url = fx_url.replace('openid', 'fuid');
+            hideMenu("wx8ad1b47530e4c6a1", "{$Think.session.timestamp}", "{$Think.session.nonceStr}", "{$signature}", "约麦", "用声音开启一段走心之旅", fx_url, "http://ym.yuemai168.com/Public/img/logo.jpg", "http://ym.yuemai168.com//Public/img/logo.jpg");
+        </script> 
+
+    </head>
+    <body>
+        <div class="said">
+            <div class="biao_menu">
+                <div class="up"><img src="./Public/img/s_04.png"></div>
+                <div class="down"><img src="./Public/img/s_06.png"></div>
+            </div>
+            <div class="usr_img text-center"></div>
+            <div class="w75">
+                <div class="pull-left"><span class="page">2</span>/<span class="page_row">10</span></div>
+                <div class="pull-right"><a class="more" href="index.php?m=web&c=ym&a=index&openid={$Think.get.openid}">更多麦主 ></a></div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        
+        <<div class="f_windown">
+            <div class="bg"></div>
+            <div class="ui-scroller">
+                <div id="f_close"><img src="./Public/img/data/close.png" width="30"/></div>
+                <div class="f_close_line"></div>
+                <div class="windown-info">
+                    <h1>下载约麦APP，体验全部功能。</h1>
+                    <!-- <p>下载APP可体验更多功能</p> -->
+                    <a href="">iOS版下载</a>
+                    <p>Android敬请期待</p>
+                </div>
+            </div>
+        </div> 
+
+        <div class="col-xs-10 col-xs-offset-1">
+            <div class="price_title_box">
+                <div class="limebl"> </div><div class="price_title">康小明</div>
+                <div class="price_title_pause" onclick="pause();"><div class="limebl"> </div><div class="limebl"> </div></div>
+                <div class="price_title_play"   onclick="play();"> <img src="./Public/img/sb_03.jpg"></div>
+                <div class="clearfix"></div>
+                <div class="price_title_iso mb10">康小明康小明康小明康小明康小明康小明康小明康小明康小明康小明康小明康小明康小明康小明</div>
+
+                <audio id="bgMusic">
+
+                </audio>  
+                <script>
+                    function play() {
+                        var audio = document.getElementById("bgMusic");
+                        // audio.src = "http://www.w3school.com.cn//i/horse.ogg";
+                        audio.play();
+                        $(".price_title_play").css("display", "none");
+                        $(".price_title_pause").css("display", "block");
+                    }
+                    function pause() {
+                        var audio = document.getElementById("bgMusic");
+                        // audio.src = "http://www.w3school.com.cn//i/horse.ogg";
+                        audio.pause();
+                        $(".price_title_pause").css("display", "none");
+                        $(".price_title_play").css("display", "block");
+                    }
+                </script>
+            </div>
+
+        </div>
+
+        <div class="text-center likebutton" onclick="DLapp(event);"><img src="./Public/img/s_07.jpg"></div>
+        <!-- <div class="text-center praise_r">
+            <div class="praise_r_img">
+
+
+            </div>
+            <div class="clrb2 praise_r_txt">等 <span class="praise">395</span> 人给TA点过赞</div>
+        </div> -->
+
+        <div class="clearfix"></div>
+        <div class="h45"></div>
+
+        <footer id="footer">
+            <ul class="clearfix">
+                <li><a href="index.php?m=web&c=article&a=square&openid={$Think.get.openid}"><i></i>广场</a></li>
+                <li class="current"><a href="index.php?m=web&c=ym&a=praise&openid={$Think.get.openid}"><i></i>麦主</a></li>
+                <li onclick="DLapp(event);"><a href="javascript:;"><i></i>发布</a></li>
+                <li onclick="DLapp(event);"><a href="javascript:;"><i></i>我的</a></li>
+            </ul>
+        </footer>
+        <script>
+            var jsonData = "";
+            var page = 0;
+            var strUid = 0;
+            var praiseListHtml = "";
+            var price_title_iso = "";
+            var headimg = "";
+            var firstName = "";
+            if (strUid == "") {
+                strUid = 0;
+            }
+            var mcsId = "";
+            $.ajax({
+                type: "POST",
+                url: "index.php?m=api&c=mz&a=recommendlist&openid={$Think.get.openid}",
+                //  data:$('#dosubmit').serialize(),// 序列号formid
+                // async: false,
+                dataType: 'json',
+                error: function (request) {
+                    alert('提交超时，请稍候再试！');
+                },
+                success: function (data) {
+                    console.log(data);
+                    console.log(data.data.mz_list);
+                    
+                    var strVar = "";
+                    if (data.state == 0) {
+
+                        jsonData = data.data.mz_list;
+                        headimg = jsonData[0].photo_url;
+                        $(".usr_img").html('<a href="index.php?m=web&openid={$Think.get.openid}&c=ym&a=article&uid=' + jsonData[0].userid + '"><img  src="' + jsonData[0].photo_url + '"></a>')
+                        $(".page_row").html(jsonData.length);
+                        $(".praise").html(jsonData[0].praise_row);
+                        var viewPage = page + 1;
+                        $(".page").html(viewPage);
+
+                        if (jsonData[0].praiseer_type > 0) {
+                            $(".likebutton").html('<img src="./Public/img/s_07_b.jpg">')
+                        } else {
+                            $(".likebutton").html('<img src="./Public/img/s_07.jpg">')
+                        }
+
+                       var firstName = jsonData[0].nick;
+        
+                        if (jsonData[0].last_comment_users.length > 0) {
+                            var praiseHeadimg = "";
+                            var praiseListHtml = "";
+
+                            for (var pl = 0; pl < jsonData[0].last_comment_users.length; pl++) {
+                               
+                                var praiseHeadimg = jsonData[0].last_comment_users[pl].photo_url;
+                               
+                                praiseListHtml += '<img class="imgr" src="' + praiseHeadimg + '">'
+                            }
+
+                            $('.praise_r_img').html(praiseListHtml);
+                        } else {
+                            $('.praise_r_img').html();
+                        }
+
+                        $(".price_title").html(firstName)
+                        price_title_iso = jsonData[0].introduction;
+                        $(".price_title_iso").html(jsonData[0].introduction)
+                        $("#bgMusic").html('<source src="' + jsonData[0].audio + '" type="audio/mp3">')
+                    }
+                    mcsId = jsonData[0].userid;
+                }
+            });
+            $(".down").click(function () {
+                var jsonDataLength = jsonData.length - 1;
+                if (page >= jsonDataLength) {
+                    location.href = "index.php?m=web&c=ym&a=index&openid={$Think.get.openid}&start=0"
+                    return false;
+                }
+                page = page + 1
+                headimg = jsonData[page].photo_url;
+                $(".usr_img").html('<a href="index.php?m=web&openid={$Think.get.openid}&c=ym&a=article&uid=' + jsonData[page].userid + '"><img width="100%" src="' + jsonData[page].photo_url + '"></a>')
+                $(".page_row").html(jsonData.length);
+                $(".praise").html(jsonData[page].like_row);
+                var viewPage = page + 1;
+                $(".page").html(viewPage);
+                if (jsonData[page].praiseer_type > 0) {
+                    $(".likebutton").html('<img src="./Public/img/s_07_b.jpg">')
+                } else {
+                    $(".likebutton").html('<img src="./Public/img/s_07.jpg">')
+                }
+                mcsId = jsonData[page].userid;
+
+     
+                var firstName = jsonData[page].nick
+     
+                if (jsonData[page].last_comment_users.length > 0) {
+                    var praiseHeadimg = "";
+                    var praiseListHtml = "";
+
+                    for (var pl = 0; pl < jsonData[page].last_comment_users.length; pl++) {
+                        praiseHeadimg = jsonData[page].last_comment_users[pl].photo_url;
+                        praiseListHtml += '<img class="imgr" src="' + praiseHeadimg + '">'
+                    }
+
+                    $('.praise_r_img').html(praiseListHtml);
+                } else {
+                    $('.praise_r_img').html("");
+                }
+
+                $(".price_title").html(firstName)
+                price_title_iso = jsonData[page].introduction;
+                $(".price_title_iso").html(jsonData[page].introduction)
+                $("#bgMusic").html('<source src="' + jsonData[page].audio + '" type="audio/mp3">');
+            })
+
+            $(".up").click(function () {
+                page = page - 1
+                if (page < 0) {
+                    page = 0;
+                    alert('没有了');
+                    return false;
+                }
+                headimg = jsonData[page].headimgurl_user;
+                $(".usr_img").html('<a href="index.php?m=web&openid={$Think.get.openid}&c=ym&a=article&uid=' + jsonData[page].userid + '"><img width="100%" src="' + jsonData[page].photo_url + '"></a>')
+                $(".page_row").html(jsonData.length);
+                $(".praise").html(jsonData[page].like_row);
+                var viewPage = page + 1;
+                $(".page").html(viewPage);
+                if (jsonData[page].praiseer_type > 0) {
+                    $(".likebutton").html('<img src="./Public/img/s_07_b.jpg">')
+                } else {
+                    $(".likebutton").html('<img src="./Public/img/s_07.jpg">')
+                }
+                mcsId = jsonData[page].userid;
+
+                var firstName = jsonData[page].nick
+     
+                if (jsonData[page].last_comment_users.length > 0) {
+                    var praiseHeadimg = "";
+                    var praiseListHtml = "";
+
+                    for (var pl = 0; pl < jsonData[page].last_comment_users.length; pl++) {
+                        praiseHeadimg = jsonData[page].last_comment_users[pl].photo_url;
+                        praiseListHtml += '<img class="imgr" src="' + praiseHeadimg + '">'
+                    }
+
+                    $('.praise_r_img').html(praiseListHtml);
+                } else {
+                    $('.praise_r_img').html("");
+                }
+
+                $(".price_title").html(firstName)
+                price_title_iso = jsonData[page].introduction;
+                $(".price_title_iso").html(jsonData[page].introduction)
+                $("#bgMusic").html('<source src="' + jsonData[page].audio + '" type="audio/mp3">');
+            })
+
+            // function like() {
+            //     $.ajax({
+            //         cache: true,
+            //         type: "GET",
+            //         url: "index.php?m=web&c=ym&a=like&openid={$Think.get.openid}&mcsId=" + mcsId,
+            //         error: function (request) {
+            //             alert('提交超时，请稍候再试！');
+            //         },
+            //         success: function (data) {
+            //             //      console.log(data);
+            //             var data = eval('(' + data + ')');
+            //             if (data.row == 0) {
+            //                 alert('您已点赞过了！')
+            //             } else if (data.row == 1) {
+            //                 var liek = Number($(".praise").html()) + 1;
+            //                 $(".praise").html(liek)
+            //                 alert('谢谢您的支持！')
+            //             }
+            //             $(".likebutton").html('<img src="./Public/img/s_07_b.jpg">');
+            //         }
+            //     })
+            // }
+        </script>
+
+    </body>
+</html>

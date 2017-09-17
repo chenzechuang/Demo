@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>管理后台</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+        <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+        <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+        <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+        <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <link href="Public/admin/css/dashboard.css" rel="stylesheet">
+    </head>
+    <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">管理后台</a>
+        </div>
+        <include file="./Public/admin/navbar.html" keywords="1" />
+
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+         <div class="col-sm-3 col-md-2">
+        <include file="./Public/admin/menu.html" keywords="1" />
+         </div>
+        <!--正式内容开始-->
+        <div class="col-sm-9 col-md-10  main">
+            <h1 class="page-header">说-添加</h1>
+
+            <form class="form-horizontal" role="form" action="{$url}" enctype="multipart/form-data" method="post">
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">栏目名</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput"  name="title" type="text" >
+                            </div>
+                    </div>
+
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">缩略图</label>
+                            <div class="col-sm-11">
+                                    <div class="form-group">                                 
+                                        <input type="file" name="pic" id="inputfile">
+                                    </div>
+                            </div>
+                    </div>
+                     <div class="form-group">
+                        <label class="col-sm-1 control-label">类型</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" name="type" type="text" >
+                                [ 1.音频 0.图片 ]
+                            </div>
+                    </div>       
+                
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">转跳URL</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" name="url" type="text" >
+                                 [ 加 http:// ] 
+                            </div>
+                    </div> 
+            
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">排序</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" name="sort" type="text" >
+                            </div>
+                    </div>   
+                
+                
+             
+                    
+                <div class="col-sm-3 col-sm-offset-1">
+                    <button type="submit" value="Submit">Submit</button>
+                </div>
+            </form>
+
+
+        </div>
+        <!--正式内容结束-->
+      </div>
+    </div>
+
+    </body>
+</html>

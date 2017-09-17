@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>手机验证</title>
+        <link rel="stylesheet" href="./Public/Profile/css/frozen.css">
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <script src="./Public/wxmenu.js"></script>
+    </head>
+    <body ontouchstart><input type="hidden" name="openid" value="{$Think.get.openid}" />
+<header class="ui-header ui-header-positive ui-border-b" style="background-color: #fb2e39; ">
+            <i class="ui-icon-return" onclick="location.href= '?m=Center&c=Profile&openid={$Think.get.openid}';"></i><h1>信息修改</h1>
+        </header>
+        <section class="ui-container" >
+            
+           
+            
+            <div class="ui-form ui-border-t">
+                <form role="form" method="post" name="dosubmit" id="dosubmit">
+                    <div class="ui-form-item ui-form-item-show ui-border-b">
+                        <label for="#">手机号码</label>
+                        <input type="text" value="" name="mob" placeholder="请输入11位手机号码">
+                    </div>
+                    <div class="ui-form-item ui-form-item-show ui-border-b">
+                        <label for="#">验证码</label>
+                        <input type="text" value="" name="verify" placeholder="请输入收到的手机验证吗">
+                    </div>
+                    
+                </form>
+                <div class="ui-btn-wrap submit">
+                    <button class="ui-btn-lg" >
+                        发送
+                    </button>
+                </div>
+            </div>
+            
+            
+        </section>
+        
+        <script>
+            var openid = '{$Think.get.openid}';
+            var el;
+//            $('.pay').click(function(){
+//                el=$.loading({
+//                    content:'加载中...',
+//                })
+//                location.href= '?m=Center&c=Profile&a=member&action=pay&payid='+$(this).attr('id');
+//            });
+        var countDown = 60;
+        function counting(){
+            if (countDown >1) {
+                countDown -- ;
+                $('.ui-btn-lg').html('验证('+countDown+'秒后重发)');
+                setTimeout(function() {  
+                counting()  
+                }, 1000);
+            }else{
+                countDown = 60;
+                $('.ui-btn-lg').html('重新发送');
+            }
+            
+        }
+        $('.submit').click(function(){
+            if (countDown == 60) {
+                $.ajax({
+                    type: 'POST',
+                    url: "?m=center&c=profile&a=verify&action=verify&openid="+openid,
+                    data: $('#dosubmit').serialize(),
+                    success: function(result){
+                        if (result.error == 0) {
+                            counting();
+                        }else{
+                            alert(result.msg);
+                        }
+                        el.loading("hide");
+                    },
+                    beforeSend: function(){
+                        el=$.loading({
+                            content:'加载中...',
+                        })
+                    },
+                    dataType: 'json'
+                }); 
+            }else{
+                $.ajax({
+                    type: 'POST',
+                    url: "?m=center&c=profile&a=verify&action=verifyCode&openid="+openid,
+                    data: $('#dosubmit').serialize(),
+                    success: function(result){
+                        if (result.error == 0) {
+                            alert(result.msg);
+                            countDown = 0;
+                            location.href= '?m=Center&c=Profile&openid='+openid;
+                        }else{
+                            alert(result.msg);
+                        }
+                        el.loading("hide");
+                    },
+                    beforeSend: function(){
+                        el=$.loading({
+                            content:'加载中...',
+                        })
+                    },
+                    dataType: 'json'
+                }); 
+            }
+            
+        });
+        
+//        (function (){
+//            var tab = new fz.Scroll('.ui-tab', {
+//                role: 'tab',
+//                autoplay: true,
+//                interval: 3000
+//            });
+//            /* 滑动开始前 */
+//            tab.on('beforeScrollStart', function(fromIndex, toIndex) {
+//                console.log(fromIndex,toIndex);// from 为当前页，to 为下一页
+//            })
+//        })();
+        </script>
+    </body>
+</html>

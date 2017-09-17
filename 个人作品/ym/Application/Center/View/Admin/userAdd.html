@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>管理后台</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+        <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+        <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+        <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+        <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <link href="Public/admin/css/dashboard.css" rel="stylesheet">
+    </head>
+    <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">管理后台</a>
+        </div>
+        <include file="./Public/admin/navbar.html" keywords="1" />
+
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+         <div class="col-sm-3 col-md-2">
+        <include file="./Public/admin/menu.html" keywords="1" />
+         </div>
+        <!--正式内容开始-->
+        <div class="col-sm-9 col-md-10  main">
+            <h1 class="page-header">会员-添加</h1>
+
+            <form class="form-horizontal" role="form" action="" enctype="multipart/form-data" method="post">
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">用户名</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput"  name="name_user" type="text" >
+                            </div>
+                    </div>
+                 
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">真实名字</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput"  name="real_name" type="text" >
+                            </div>
+                    </div>
+                
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">手机</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput"  name="mob" type="text" >
+                            </div>
+                    </div>
+                
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">用户头像</label>
+                            <div class="col-sm-11">
+                                    <div class="form-group">                                 
+                                        <input type="file" name="headimgurl_user" id="inputfile">
+                                    </div>
+                            </div>
+                    </div>  
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">性别</label>
+                            <div class="col-sm-11">
+                                    <div class="form-group">                                 
+                                        <select name="sex" class="form-control">
+                                            <option value="1">男</option>
+                                            <option value="2">女</option>
+                                        </select>
+                                    </div>
+                            </div>
+                    </div>    
+
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">身份</label>
+                            <div class="col-sm-11">
+                                    <div class="form-group">                                 
+                                        <select name="role_id" class="form-control">
+                                            <option value="0">用户</option>
+                                            <option value="1">麦主</option>
+                                        </select>
+                                    </div>
+                            </div>
+                    </div>                   
+                
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">音频</label>
+                            <div class="col-sm-11">
+                                    <div class="form-group">                                 
+                                        <input type="text" class="form-control" id="focusedInput" name="audio" >
+                                    </div>
+                            </div>
+                    </div>  
+                
+                           <div class="form-group">
+                            <label class="col-sm-1 control-label">视频计费</label>
+                            <div class="col-sm-11">
+                                    <div class="form-group">                                 
+                                        <input type="text" class="form-control" id="focusedInput" name="video_fee" >
+                                    </div>
+                            </div>
+                    </div>  
+                
+                           <div class="form-group">
+                            <label class="col-sm-1 control-label">音频计费</label>
+                            <div class="col-sm-11">
+                                    <div class="form-group">                                 
+                                        <input type="text" class="form-control" id="focusedInput" name="voice_fee" >
+                                    </div>
+                            </div>
+                    </div>  
+                    <div class="form-group">
+                            <label class="col-sm-1 control-label">相册</label>
+                            <div class="col-sm-11">
+                                    <div class="form-group">                                 
+                                        <input type="file" name="photoalbum1" id="inputfile">
+                                        <input type="file" name="photoalbum2" id="inputfile">
+                                        <input type="file" name="photoalbum3" id="inputfile">
+                                        <input type="file" name="photoalbum4" id="inputfile">
+                                        <input type="file" name="photoalbum5" id="inputfile">
+                                        <input type="file" name="photoalbum6" id="inputfile">
+                                        <input type="file" name="photoalbum7" id="inputfile">
+                                        <input type="file" name="photoalbum8" id="inputfile">
+                                        <input type="file" name="photoalbum9" id="inputfile">
+                                    </div>
+                            </div>
+                    </div>  
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">签名</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" name="signature" type="text" >
+                            </div>
+                    </div>   
+                
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">简介</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" name="introduction" type="text" >
+                            </div>
+                    </div>  
+                
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">微信号</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" name="wx_id" type="text" >
+                            </div>
+                    </div>        
+                
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">兴趣 </label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" name="interest_ids" type="text" >
+                                [ 用 | 隔开 ]
+                            </div>
+                    </div>                 
+                
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">行业</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" name="industry_ids" type="text" >
+                                [ 用 | 隔开 ]
+                            </div>
+                    </div>                 
+                             
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">关注</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" name="follow_ids" type="text" >
+                                [ 用 | 隔开 ]
+                            </div>
+                    </div>                     
+
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">经历</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" name="experience_ids" type="text" >
+                                [ 用 | 隔开 ]
+                            </div>
+                    </div> 
+
+                     <div class="form-group">
+                        <label class="col-sm-1 control-label">语言 </label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" name="language_ids" type="text" >
+                                [ 用 | 隔开 ]
+                            </div>
+                    </div>
+ 
+                     <div class="form-group">
+                        <label class="col-sm-1 control-label">声音</label>
+                            <div class="col-sm-11">
+                                <input class="form-control" id="focusedInput" name="voice_ids" type="text" >
+                                [ 用 | 隔开 ]
+                            </div>
+                    </div>
+                
+                <div class="col-sm-3 col-sm-offset-1">
+                    <button type="submit" value="Submit">Submit</button>
+                </div>
+            </form>
+
+
+        </div>
+        <!--正式内容结束-->
+      </div>
+    </div>
+
+    </body>
+</html>

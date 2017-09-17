@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>开麦</title>
+
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+
+        <link rel="stylesheet" href="./Public/bootstrap/bootstrap.css">
+        <link rel="stylesheet" href="./Public/js/datepicker/bootstrap-datetimepicker.min.css">
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+        <link rel="stylesheet" href="./Public/cityPicker/cityPicker.css">
+        <link rel="stylesheet" href="./Public/css/index.css">
+        
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/jquery.min.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+           
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['chooseImage','previewImage','checkJsApi','uploadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+        </script>
+
+    </head>
+    <body ontouchstart="">
+        <header class="detail-header">
+            <div class="back" onclick="window.location.href='./?m=web&openid={$Think.get.openid}'">
+            </div>
+            <div class="header-title">
+                <p>发通告</p>
+            </div>
+            <div class="header-confirm submit">
+                <p>发布</p>
+            </div>
+        </header>
+        <div id="dtBox"></div>
+
+        <section class="announcement-container">
+            <form role="form" method="post" name="dosubmit" id="dosubmit">
+                <div class="activity-intro"> 
+                    <div class="announcement-menu">
+                        <div class="title form-item">
+                            <label>标题</label>
+                            <input type="text" placeholder="请填写活动标题" name="title" required>
+                        </div>
+
+                        <div class="element_id form-item location">
+                            <label>活动地点</label>
+                            <input class="city" id="place" type="text" name="city" value="" placeholder ="请选择活动地点" readonly unselectable="on">
+                            <input type="hidden" class="province" name="province" value="">
+                            
+                            <!-- <div class="extra-btn">
+                                <p>其它城市</p>
+                                <input id="area" type="text" readonly unselectable="on">
+                            </div> -->
+
+                        </div>
+                        
+                        <div class="date form-item">
+                            <label>活动日期</label>      
+                            <input type="text" class="form_datetime" name="activity_time" placeholder="活动开始日期" readonly unselectable="on">
+                            <!-- <div class="extra-btn">
+                                <p>选择时间</p>
+                                <input id="date" class="form_datetime" type="text">
+                            </div> -->
+                        </div>
+                    </div> 
+                    
+                   
+
+					<div class="announcement-menu">
+
+                        <div class="form-item more-info">
+                            <textarea placeholder="输入活动的详细信息" name="original_desc"></textarea>
+                            <div class="text-limit">
+                                <p><span>0</span>/300</p>
+                            </div>
+                        </div>
+
+                        <div class="form-item">
+                            <label>预算</label>
+                            <div id="budget" class="clearfix">
+                                <input type="text" placeholder="请填写活动预算" name="price" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" >
+                                <a href="javascript:;" class="self-price">自报价格</a>
+                            </div>
+                        </div>
+                    
+                        <div class="form-item contact">
+                            <label>
+                                联系方式
+                            </label>
+                            <input type="text" placeholder="请输入手机号码" name="phone" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')">
+                            <input type="text" placeholder="请填写邮箱" name="email">
+                            <input type="text" placeholder="请填写微信号" name="echat">
+                            <input type="text" placeholder="请填写QQ" name="qq">
+                            <p><span class="tips">*</span>至少填写一种联系方式</p>
+                        </div>
+
+                        
+                    </div>
+
+                    <div class="announcement-menu">
+                        <div class="type form-item">
+                            <label>活动类型</label>
+                            <input type="hidden" id="activity_type_val"  name="activity_type">
+                            <div class ="activity_type_tab">
+                                <ul class="clearfix">
+                                    <foreach name='dictionary' item='vo'>
+                                        <li>{$vo.item_name}</li>
+                                    </foreach>                                
+                                </ul>
+                            </div>         
+                        </div>
+                        
+                        <!-- <div class="form-item file">
+                            <label>参考图片</label>
+                            <ul class="pics">
+                                <li class="add"></li>                                  
+                            </ul>
+                            <input type="hidden" name="pics" value="">
+                        </div> -->
+                    </div>
+
+					<div class="announcement-menu">
+                        <div class="form-item">
+                            <label>主持人性别</label>
+                            <input type="hidden" id="sex" name="sex">
+                            <ul id="sex">
+                                <li>男</li>
+                                <li>女</li>
+                                <li>不限</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="form-item">
+                            <div id="number">
+                                <p>主持人数量</p>
+                                
+                                <a class="reduce-number" href="javascript:;"></a>
+                                <input type="number" name="number" value="1" readonly>
+                                <a class="add-number" href="javascript:;"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </form>
+        </section>
+ 
+
+        <div class="ui-loading-block show">
+            <div class="ui-loading-cnt">
+                <i class="ui-loading-bright"></i>
+                <p>正在加载中...</p>
+            </div>
+        </div>
+
+        <div id="bg"></div>
+        <!--<script src="./Public/localResizeIMG/dist/lrz.bundle.js"></script>-->
+        <script>
+           $(document).on('click', '#hot-city dd', function(event) {
+               city = $(this).html();
+               if (city == '北京市' || city == '上海市' || city == '天津市' || city == '重庆市' ||city == '香港特别行政区' || city == '澳门特别行政区') {
+                    $('.province').val(city);
+               }
+           });
+ 
+            
+            var pics = new Array();
+            var picURLs = new Array();
+            $(".add").click(function(){
+                wx.chooseImage({
+                    count: 1, // 默认9
+                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: function (res) {
+                        var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                        localIds.forEach(function(e){  
+                            //
+                            
+                            wx.uploadImage({
+                                localId: e, // 需要上传的图片的本地ID，由chooseImage接口获得
+                                isShowProgressTips: 1, // 默认为1，显示进度提示
+                                success: function (res) {
+                                    var serverId = res.serverId; // 返回图片的服务器端ID
+                                    var url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token={:S('token')->access_token}&media_id="+serverId;
+                                    //alert(url);
+                                    picURLs.push(url);
+                                    //$(".imgList").append('<li><a href="#popupDialog" data-rel="popup" data-position-to="window" data-transition="flip" class="delete" onclick="sessionStorage.picID=\''+url+'\'"><img src="Public/Images/close.png" width="30"/></a><img src="'+url+'" onclick="checkImage(\''+url+'\');"/></li>');
+                                    $(".pics").prepend('<li><img src="'+url+'"></li>');
+                                },fail: function (res) {
+                                    alert('fail');
+                                }
+                            });
+                
+                
+                            pics.push(e);
+                                    
+                            
+                        });
+
+                    }
+                });
+            });
+            
+            
+
+            $(".submit").click(function(){
+                
+                if ($("input[name='title']").val()=='') {
+                    alert('标题不能为空');
+                    return;
+                }
+
+                if ($("input[name='city']").val()=='') {
+                    alert('地址不能为空');
+                    return;
+                }
+
+                if ($("input[name='activity_type']").val()=='') {
+                    alert('活动类型不能为空');
+                    return;
+                }
+
+                if ($("input[name='activity_time']").val()=='') {
+                    alert('活动日期不能为空');
+                    return;
+                }
+
+                if ($("input[name='sex']").val()=='') {
+                    alert('主持人性别不能为空');
+                    return;
+                }
+
+                if ($("input[name='phone']").val()=='' && $("input[name='qq']").val()=='' && $("input[name='echat']").val()=='' && $("input[name='email']").val()=='') {
+                    alert('至少填写一种联系方式');
+                    return;
+                }
+
+                $("input[name='pics']").val(picURLs.join("[-]"));
+
+                //alert(picURLs);
+                  
+                
+                console.log($('#dosubmit').serialize());
+                $.ajax({
+                    type: "POST",
+                    url: "?m=web&a=announcement&action=addann&openid={$Think.get.openid}",
+                    data: $('#dosubmit').serialize(),// 序列号formid
+                    dataType: 'json',
+                    error: function(request) {
+                        alert('提交超时，请稍候再试！');
+                        $('.show').fadeOut();
+                    },
+                    success: function(data) {
+                        $('.show').fadeOut();
+                   
+                        if (data.error == 0) {
+                            alert('发布成功！信息大约在5分钟左右显示出来!');
+                            window.location.href="?m=web&openid={$Think.get.openid}";
+                        }else if (data.error == 2) {
+                            alert('积分不够,请24小时后再试!');
+                        }else if (data.error == 3) {
+                            alert('您的用户数据出错,请取消关注后重试.或者与管理员联系.');
+                        }else{
+                            alert('提交超时，请稍候再试！');
+                        }
+                        
+                    },
+                    beforeSend: function(){
+                        $('.show').fadeIn();
+                     
+                    },
+                });
+            });
+            
+            $('.show').fadeOut();
+            var openid = "{$Think.get.openid}";
+        </script>
+
+        <script src="./Public/bootstrap/bootstrap.min.js"></script>
+        <script src="./Public/js/datepicker/bootstrap-datetimepicker.min.js"></script>
+        <script src="./Public/js/datepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+        <script src="./Public/cityPicker/cityPicker.js"></script>
+        <script src="./Public/js/index.js"></script>
+          
+        <script>
+
+            $(".city").CityPicker();
+
+            $(document).on('click', '#hot-city dd', function(event) {
+                event.preventDefault();
+
+                var city = $(this).html();
+
+                $(".picker-box").hide();
+                $(".pro-picker").show();
+                $('.city').val(city);
+
+            });
+
+            $('.artist-command-btn').click(function(event) {
+                $('.artist-command').show();
+                $('.activity-intro').hide();
+            });
+
+            $('.artist-close').click(function(event) {
+                $('.artist-command').hide();
+                $('.activity-intro').show();
+            });
+        </script>
+
+        <script>
+            $(".form_datetime").datetimepicker({
+                language: "zh-CN",
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: true,
+                minView: 'month',
+                maxView: 'decade',
+            });
+        </script>
+    </body>
+</html>
+ 
+

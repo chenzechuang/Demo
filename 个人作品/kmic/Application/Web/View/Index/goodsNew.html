@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>开麦</title>
+
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+
+        <link rel="stylesheet" href="./Public/bootstrap/bootstrap.css">
+        <link rel="stylesheet" href="./Public/js/datepicker/bootstrap-datetimepicker.min.css">
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+        <link rel="stylesheet" href="./Public/cityPicker/cityPicker.css">
+        <link rel="stylesheet" href="./Public/js/iosselect/iosSelect.css">
+        <link rel="stylesheet" href="./Public/css/index.css">
+        
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/jquery.min.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+           
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['chooseImage','previewImage','checkJsApi','uploadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+        </script>
+
+    </head>
+    <body ontouchstart="">
+        <header class="detail-header">
+            <div class="back" onclick="window.location.href='./?m=web&a=goods&openid={$Think.get.openid}'">
+            </div>
+            <div class="header-title">
+                <p>发物品</p>
+            </div>
+            <div class="header-confirm submit">
+                <p>发布</p>
+            </div>
+        </header>
+        <div id="dtBox"></div>
+
+        <section class="announcement-container mb0">
+            <form role="form" method="post" name="dosubmit" id="dosubmit">
+                <div class="activity-intro"> 
+                    <div class="announcement-menu">
+                        <h4>物品信息</h4>
+
+                        <div class="form-item">
+                            <label>名称</label>
+                            <input type="text" placeholder="请填写物品名称" name="title" required>
+                        </div>
+
+                        <div class="form-item">
+                            <label>尺码</label>
+                            <input type="hidden" id="size" name="size">
+                            <ul id="size">
+                                <li>S码</li>
+                                <li>M码</li>
+                                <li>L码</li>
+                                <li>均码</li>
+                            </ul>
+                        </div>
+
+                        <div class="form-item">
+                            <label>价格<span>*平台默认价格为包邮价</span></label>
+                             <input type="text" placeholder="请填写物品的价格" name="price" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')">
+                        </div>
+                    </div>
+
+                    <div class="announcement-menu">
+                        <h4>物品图片</h4>
+                        <div class="form-item file">
+                            <ul class="pics goods-pics">
+                                <li class="add">
+                                    <input id="goodsfile" type="file" accept="image/*" />
+                                </li>                                      
+                            </ul>
+                            <input type="hidden" name="pics" value="">
+                        </div>
+
+                        <input id="picID2" name="picId" type="hidden" value="" >
+                    </div>
+
+                    <div class="announcement-menu">
+                        <h4>其它信息</h4>
+                        
+                        <div class="form-item item-line">                 
+                            <label>新旧程度</label>                 
+                            <div class="pc-box">                     
+                                <input type="hidden" name="new" id="newId" value="">
+                                <p id="showNew">请选择新旧程度(选填)</p>  
+                            </div>             
+                        </div>
+
+                        <div class="form-item">
+                            <label>材料</label>
+                            <input type="text" placeholder="请填写物品的材料(选填)" name="material">
+                        </div>
+
+                        <div class="form-item">
+                            <label>三围</label>
+                            <input type="text" placeholder="请填写物品的三围尺寸(选填)" name="measurements">
+                        </div>
+
+                        <div class="form-item more-info">
+                            <label>描述</label>
+                            <textarea placeholder="请填写物品的描述(选填)" name="original_desc"></textarea>
+                            <div class="text-limit">
+                                <p><span>0</span>/300</p>
+                            </div>
+                        </div>
+                    </div> 
+
+                </div>
+                
+            </form>
+        </section>
+    
+        <div class="bg"></div>
+        <div class="delete-menu">
+           
+            <a class="delete-confirm" href="javascript:;">删除照片</a>
+            <a class="delete-cancel" href="javascript:;">取消</a>
+        </div>
+        
+        <div class="ui-loading-block show">
+            <div class="ui-loading-cnt">
+                <i class="ui-loading-bright"></i>
+                <p>正在加载中...</p>
+            </div>
+        </div>
+
+        <div id="bg"></div>
+        <div class="newBox"></div>
+        <script src="./Public/js/iosselect/new.js"></script>
+        <script src="./Public/js/iosselect/iscroll.js"></script>
+        <script src="./Public/js/iosselect/iosSelect.js"></script>
+        <script src="./Public/localResizeIMG/dist/lrz.bundle.js"></script>
+        <script>
+            var showBankDom = document.querySelector('#showNew');
+            var bankIdDom = document.querySelector('#newId');
+            showBankDom.addEventListener('click', function () {
+                var bankId = showBankDom.dataset['id'];
+                var bankName = showBankDom.dataset['value'];
+
+                var bankSelect = new IosSelect(1, 
+                    [data],
+                    {
+                        container: '.newBox',
+                        title: '新旧选择',
+                        itemHeight: 50,
+                        itemShowCount: 3,
+                        oneLevelId: bankId,
+                        showAnimate:true,
+                        callback: function (selectOneObj) {
+                            bankIdDom.value = selectOneObj.id;
+                            showBankDom.innerHTML = selectOneObj.value;
+                            showBankDom.dataset['id'] = selectOneObj.id;
+                            showBankDom.dataset['value'] = selectOneObj.value;
+                        }
+                });
+            });
+
+            picNum = 0;
+            var videoNum = 0;
+            $('#goodsfile').change(function () {
+                $('.show').fadeIn();
+                if (this.files.length === 0) {
+                    $('.show').fadeOut();
+                }
+                lrz(this.files[0],{width: 700})
+               .then(function (rst) {
+                    var xhr = new XMLHttpRequest();
+                    var data = {
+                        openid:'{$Think.get.openid}',
+                        base64: rst.base64,
+                        size: rst.base64.length // 校验用，防止未完整接收
+                    };
+                    xhr.open('POST', '?m=web&a=goodsNew&upload');
+                    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                    xhr.onreadystatechange = function () {
+                        //console.log(xhr.status);
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+
+                            console.log(xhr.response);
+                            var result = JSON.parse(xhr.response);
+                            if (result.error == 0) {
+                                var picId= $("#picID2").val()+","+result.picId;
+                                $("#picID2").val(picId);
+                                $(".goods-pics").prepend('<li id="'+picNum+'"><div class="delete" onclick="deletePic(\''+result.url+'\','+picNum+','+result.picId+')"></div><img class="artist-img" src="'+result.url+'"></li>');
+                                picNum++;
+                                $('.show').fadeOut();
+                            }
+                        }
+                        if (picNum >= 9) {
+                            $('.add').css('display','none');
+                        }
+                    };
+                    xhr.send(JSON.stringify(data)); // 发送base64
+
+                })
+                .catch(function (err) {
+                   // 处理失败会执行
+                   $('.show').fadeOut();
+                   console.log(rst);
+                })
+                .always(function () {
+                   $('.show').fadeOut();
+                   
+                });
+            });  
+            
+
+            $(".submit").click(function(){
+                if ($("input[name='title']").val()=='') {
+                    alert('请填写物品名称');
+                    return;
+                }
+
+                if ($("input[name='size']").val()=='') {
+                    alert('请选择物品尺码');
+                    return;
+                }
+
+                if ($("input[name='price']").val()=='') {
+                    alert('请填写物品价格');
+                    return;
+                }
+
+                if ($("input[name='picId']").val()=='') {
+                    alert('请上传物品图片');
+                    return;
+                }
+
+
+                $('.show').fadeIn();
+                console.log($('#dosubmit').serialize());
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url:"?m=web&a=goodsNew&action=addgoods&openid={$Think.get.openid}",
+                    data:$('#dosubmit').serialize(),// 序列号formid
+                    async: false,
+                    dataType: 'json',
+                    error: function(request) {
+                        alert('提交超时，请稍候再试！');
+                        $('.show').fadeOut();
+                    },
+                    success: function(data) {
+                        if (data.error == 0) {
+                            alert('发布成功！信息大约在5分钟左右显示出来!');
+                            window.location.href="?m=web&a=goods&openid={$Think.get.openid}";
+                        }else if (data.error == 2) {
+                            alert('积分不够,请24小时后再试!');
+                        }else if (data.error == 3) {
+                            alert('您的用户数据出错,请取消关注后重试.或者与管理员联系.');
+                        }else{
+                            alert('提交超时，请稍候再试！');
+                        }
+                       
+                    },
+                    beforeSend: function(){
+                        
+                    },
+                });
+            });
+            
+            
+            $('.show').fadeOut();
+             var openid = "{$Think.get.openid}";
+        </script>
+
+        <script src="./Public/bootstrap/bootstrap.min.js"></script>
+        <script src="./Public/js/datepicker/bootstrap-datetimepicker.min.js"></script>
+        <script src="./Public/js/datepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+        <script src="./Public/cityPicker/cityPicker.js"></script>
+        <script src="./Public/js/index.js"></script>
+          
+        <script>
+
+            $(".city").CityPicker();
+
+            $(document).on('click', '#hot-city dd', function(event) {
+                event.preventDefault();
+
+                var city = $(this).html();
+
+                $(".picker-box").hide();
+                $(".pro-picker").show();
+                $('.city').val(city);
+
+            });
+
+            $('.artist-command-btn').click(function(event) {
+                $('.artist-command').show();
+                $('.activity-intro').hide();
+            });
+
+            $('.artist-close').click(function(event) {
+                $('.artist-command').hide();
+                $('.activity-intro').show();
+            });
+        </script>
+
+        <script>
+            $(".form_datetime").datetimepicker({
+                language: "zh-CN",
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: true,
+                minView: 'month',
+                maxView: 'decade',
+            });
+        </script>
+    </body>
+</html>
+ 
+

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>通知</title>
+        <link rel="stylesheet" href="./Public/Profile/css/frozen.css">
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <script src="./Public/wxmenu.js"></script>
+        <style>
+            .line{border-bottom: lightgrey 1px solid;}
+            .subMsg{margin:5px; padding: 0 0 0 5px; border-bottom: #e4e4e4 1px dotted;border-left: #e4e4e4 2px solid;}
+            .msg{margin-bottom: 5px; }
+            body{font-family:"Microsoft YaHei",微软雅黑}
+        </style>
+    </head>
+    <body ontouchstart>
+        <input type="hidden" name="openid" value="{$Think.get.openid}" />
+<header class="ui-header ui-header-positive ui-border-b" style="background-color: #ff629a; ">
+            <i class="ui-icon-return index" ></i><h1>信息中心</h1>
+            <button class="ui-btn" style="color: #fb2e39;">刷新</button>
+        </header>
+        <section class="ui-container" >
+        
+            <ul class="ui-list ui-list-pure ui-border-tb">
+                <foreach name="list" item="vo">
+                    <li class="ui-border-t">
+                        <p><span class="date">{$vo['timeline']|date='Y-m-d H:i',###}
+                                <if condition="$vo.fromuid eq $myid">我发给{$vo.toName}
+                                <elseif condition="$vo.fromuid eq 0"/>
+                                管理员
+                                <else/>
+                                来自:{$vo.name}
+                                </if></span></p>
+                        <h4>
+                            <if condition="$vo.fromuid eq $myid">我发给{$vo.toName}的信息<div style="padding: 5px; margin: 5px; border: 1px #e4e4e4 solid;">{$vo.msg}</div><else/>{$vo.msg}</if></h4>
+                        <if condition="$vo.fromuid neq 0 and $vo.fromuid neq $myid and $vo.fromuid neq 112">
+                            <div class="ui-form-item ui-form-item-pure ui-border-b msg">
+                                <input type="text" placeholder="回复内容" id="t{$vo.id}" >
+                            </div>
+                            <button class="ui-btn" onclick="send({$vo.fromuid},{$vo.id},{$vo.id});">
+                                回复
+                            </button>    
+                        </if>
+                    <foreach name="vo.subMsg" item="subvo">
+                        <li class="subMsg" <if condition="$subvo.fromuid eq $myid">style="text-align: right;"</if>>
+                            <p><span class="date">{$subvo['timeline']|date='Y-m-d H:i',###} | 
+                                   <if condition="$subvo.fromuid eq $myid" value="">我发给{$vo.name}<else/>{$subvo.name}发给你</if>
+                                </span></p>
+                        <h4>{$subvo.msg}</h4>
+                        </li>
+                    </foreach>
+                        
+                    </li><div class="line"></div>
+                </foreach>
+                
+            </ul>
+        </section>
+        
+        <script>
+        $('.index').click(function(){
+            location.href= '?m=Center&c=Profile&openid={$Think.session.openid}';
+        });
+        function send(id,row,mainid){
+            if ($("#t"+row).val() == '') {
+                alert('信息不能为空');
+                return;
+            }
+//                console.log($("#t"+id).val());
+            var fromuid = "{$Think.session.id}";
+            $.ajax({
+                type: 'POST',
+                url: "?m=web&a=messages",
+                data: {'fromuid':fromuid,'touid':id,'msg':$("#t"+row).val(),'action':'send','mainid':mainid},
+                success: function(result){
+                    if (result.error==0) {
+                        alert('发送成功');
+                        location.href= '?m=Center&c=Profile&a=message&openid={$Think.session.openid}';
+                    }else{
+                        alert(result.msg);
+                    }
+
+
+                    $('#m'+id).remove();
+                },
+                dataType: 'json'
+            });    
+        }
+        var openid = '{$Think.session.openid}';
+        </script>
+         <script src="./Public/UnionInfo.js"></script>
+    </body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>会员升级</title>
+        <link rel="stylesheet" href="./Public/Profile/css/frozen.css">
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <script src="./Public/wxmenu.js"></script>
+    </head>
+    <body ontouchstart><input type="hidden" name="openid" value="{$Think.get.openid}" />
+<header class="ui-header ui-header-positive ui-border-b" style="background-color: #fb2e39; ">
+            <i class="ui-icon-return" onclick="history.back()"></i><h1>会员升级</h1>
+            <button class="ui-btn index" style="color: #fb2e39;">回首页</button>
+        </header>
+        <section class="ui-container" >
+            <div class="ui-btn-wrap">
+                <foreach name="configLevel" item="vo" key="key">
+                    <if condition="$vo.code neq level0">
+                        <button class="ui-btn-lg ui-btn-danger pay" id="{$key}">
+                        {$vo.name} {$vo.price}元
+                        </button><br/>
+                    </if>
+                </foreach>
+<!--                <if condition="$user.level neq 1">
+                    <button class="ui-btn-lg ui-btn-danger pay">
+                        立刻升级
+                    </button><br/>
+                    <button class="ui-btn-lg ui-btn-lg active check">
+                        已经支付，刷新状态
+                    </button>
+                    <else/>
+                    <button class="ui-btn-lg ui-btn-primary">
+                        已经购买高级会员
+                    </button>
+                </if>-->
+                
+            </div>
+            
+            <ul class="ui-list ui-list-pure ui-border-tb">
+            <li class="ui-border-t">
+                <p><span><div class="ui-reddot">推广期购买只需要29元！终身免费！</div></span></p>
+            </li>
+        </ul>
+            
+            
+        </section>
+        
+        <script>
+            $('.pay').click(function(){
+                console.log();
+                location.href= '?m=Center&c=Profile&a=member&action=pay';
+            });
+            
+        </script>
+    </body>
+</html>

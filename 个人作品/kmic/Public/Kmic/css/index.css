@@ -1,0 +1,81 @@
+    body{
+        margin: 0;
+        padding:0;
+        -webkit-tap-highlight-color:rgba(0,0,0,0);
+        -webkit-text-size-adjust:none;
+        font-family:"Microsoft YaHei",微软雅黑 !important;
+    }
+    ul{ margin: 0px; padding: 0px;}
+    li{ list-style-type: none;}
+    a{ color: #000; text-decoration: none;}
+    .language li{ border-bottom: 1px solid #FFF;}
+    .bgeee{background-color: #eeeeee;}
+    .bgw{ background: #FFFFFF;}
+    .ptb5{ padding: 5px 0px;}
+    .mb5{ margin-bottom:  5px;}
+    .col999{ color: #999999;}
+    .b1999{ border: 1px solid #eeeeee;}
+    .wx_user_name{ font-size: 15px; font-weight: bold;}
+    .wx_user_mh{}
+    .button_fj{ background:#fec93b; padding: 4px 12px; }
+    .ptm20{ padding: 20px 0px;}
+    .mb10{ margin-bottom: 10px;}
+    .user_list li a{ display: block; padding: 10px 0px;}
+    .user_list li a img{ width: 30px; margin: 0px 12px 0px 8px;}
+    .user_list li{ border-bottom: 1px solid #eeeeee;}
+    .footNav{ width: 100%; position: fixed; bottom: 0; line-height: 25px; text-align: center; padding-top: 5px; }
+    .footNav img{ width: 35px;}
+    .h80{ height: 80px; width: 100%;}
+    .user_edit{ color: #999;}
+    .user_edit input{ outline: none !important; border:0px;  padding: 0px !important;  margin: 0px !important; }
+    .user_edit li span{ color: #fec93b;}
+    .user_edit li{ border-bottom: 1px solid #eeeeee; padding: 10px 0px;}
+    .w100{ width: 100%;}
+    .m0{margin: 0px !important;}
+    .posb{ position:  absolute;bottom: 20px;}
+    .button_wbut{ background:#fec93b; padding: 8px 12px; border: 0px !important; width: 100%; font-size: 16px;  }
+    .pb10{ padding-bottom: 10px;}
+    .ml15{ margin-left: 15px;}
+    .mb20{ padding-bottom: 20px;}
+    .pt20{ padding-top: 20px;}
+    .pr0{ padding-right: 0px !important;}
+    .pl0{ padding-left: 0px !important;}    
+    .autio{ font-size: 15px; line-height: 28px;}
+    .web_title{ padding: 2px 0px; font-size: 15px; font-weight: bold; margin-bottom: 15px; }
+    .web_title_f{ padding: 2px 0px; font-size: 15px; font-weight: bold; margin-bottom: 5px; }
+    .web_title_f2{ padding: 2px 0px; font-size: 15px; font-weight: bold;}    
+    .bl2px{ border-left: 3px solid #fdca39;  padding-right: 8px;}
+    .boder1px{ border-bottom: 1px solid #e5e5e5;}
+    .user_info .row{ padding: 10px 0px;}
+    .user_info input{ border: 0px ; outline:none; width: 100%;}
+    .user_desio{ }
+    .set_info .row{ padding: 8px 0px 9px 0px; line-height: 28px;} 
+    .set_info a{ color: #333}
+    .setmassage li{ float: left; margin: 0px 10px; color: #999;}
+    .colw{ color: #ffc843 !important; border-bottom: 1px solid #ffc843 !important;}
+    .pics ul{ margin: 0px; padding: 0px;}
+    .pics li{list-style: none; float: left; border:#e9e9e9 1px solid; margin: 3px 4px; width: 31%; min-height: 105px;  background-color: white;}
+    .pics .add{background-image: url('../../Kmic/picadd_1.jpg'); background-color: #cfcfcf; background-repeat: no-repeat; background-position: center; background-size: 50px 50px;}
+    .file input {/*position: absolute;*/ font-size: 100px;/* right: 0;top: 0;*/opacity: 0;width: 103px; height: 103px;}
+    .delete{ position: absolute;}
+    .zhuyi{ color: #ba0612; border-radius:30px; width: 18px; height: 18px; border: 1px solid #ba0612; text-align: center; line-height: 15px; float: left; margin: 2px 5px 0px 0px; }
+    .user_content{ width: 100%; min-height: 120px; margin-top: 80px; border: 1px solid #eeeeee; outline: none;}
+     #dd{ position: fixed !important; left: 0 !important; right: 0 !important;  margin: 0px auto !important;}
+    #bg{ background-color: #000000; position: fixed; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.5; display: none; z-index: 1;}
+    .week,.days{ padding: 0px !important;}
+    .calendar-hd{ height: auto !important;}
+    .video img{ margin-right: 10px;}
+    .video input{ outline: none; border: 1px solid #eeeeee; border-radius: 5px; padding: 5px; width: 80%; }
+    .alert_box{ position:absolute;top: 40%; width: 100%; left: 0; right: 0; z-index: 3; display: none;}
+    .alert_box .progress{ height: 28px !important; padding: 5px;}
+    .header_user{ position: absolute; width:78%; overflow: hidden; opacity: 0;}
+    .user_view{ position: fixed; left: 0; top: 0; z-index: 99; right: 0; margin: 0 auto; height: 100%; overflow-y: auto; display: none; font-size: 14px !important;}
+    .user_view_close{ position: fixed; width: 30px; height: 30px; color: #FFF; right:20px; top:10px; z-index: 99; background-color: #000; text-align: center; line-height: 30px; font-weight: bold; border-radius: 5px; }
+    .h10{ height: 10px;}
+    .user_view .ptm20 { padding: 20px 15px;}
+    .wx_user_head img { max-height: 80px;}
+    .xx{ padding: 0px 15px;}
+    .xx div{ padding:0px 2px !important; margin:0px 0px 20px 0px; height: 120px; overflow: hidden;}
+    .activityimg div{padding:0px 2px !important; margin:0px 0px 20px 0px; height: 120px; overflow: hidden; background-color: #f4f4f4;}
+    .activityimg div img{ width: 100% !important;}
+    .address_select select{ float: left; max-width: 25%; overflow: hidden; margin: 0px 5px;}

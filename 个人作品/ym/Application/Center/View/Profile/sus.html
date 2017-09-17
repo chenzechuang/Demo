@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>付款成功</title>
+        <link rel="stylesheet" href="./Public/Profile/css/frozen.css">
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <script src="./Public/wxmenu.js"></script>
+    </head>
+    <body ontouchstart>
+        <input type="hidden" name="openid" value="{$Think.get.openid}" />
+<header class="ui-header ui-header-positive ui-border-b" style="background-color: #fb2e39; ">
+            <i class="ui-icon-return" onclick="history.back()"></i><h1>付款成功</h1>
+            <!--<button class="ui-btn index" style="color: #fb2e39;">回首页</button>-->
+        </header>
+        <section class="ui-notice">
+            <i></i>
+            <p>付款成功</p>
+            <div class="ui-notice-btn">
+                <a class="ui-btn-primary ui-btn-lg index" href="?m=Center&c=Profile">返回</a>
+            </div>
+            <div style="text-align:center; margin: 10px;"><font color="red" size="16">您的会员将会在10分钟后生效</font><br/>如果发现付款后10分钟还没成为VIP的话，请不要着急。只要把付款页面(订单号)截图给管理员。我们会尽快为您解决。</div>
+        </section>
+        
+        <script>
+            ga('send', 'event', 'profile', 'sus');
+//            $('.index').click(function(){
+//                location.href= '?m=Center&c=Profile';
+//            });
+        </script>
+        <script src="./Public/ga.js"></script>
+    </body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>发布的通告</title>
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <link rel="stylesheet" href="./Public/bootstrap/bootstrap.css"> 
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css"> 
+        <link rel="stylesheet" href="./Public/global.css">
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+        <link rel="stylesheet" href="./Public/css/index.css">
+        
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/json2.js"></script>
+        
+        <script src="./Public/js/index.js"></script> 
+
+    </head>
+    <body ontouchstart="">
+        <header class="detail-header">
+            <div class="back" onclick="window.location.href = '?m=Center&c=Profile&a=index&openid={$Think.get.openid}';">
+            </div>
+            <div class="header-title">
+                <p>发布的通告</p>
+            </div>
+            <div class="header-preview">
+                <a href="?m=web&a=announcement&openid={$Think.get.openid}"><i class="fa fa-file"></i></a>
+            </div>
+        </header>
+
+        <section class="announce-menu mine-announcement">    
+            <ul class="ui-list ui-border-tb list">
+            </ul>
+            
+        </section>
+        
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <script>
+            var el;
+            var page = 0;
+            var openid = '{$Think.session.openid}';
+            
+            var totalheight = 0;     //定义一个总的高度变量
+            var isLoading = 0;
+            var where = new Array();
+            var isEnd = 0;
+
+            getPage();
+            function loaddata()
+            { //下拉加载
+                totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());     //浏览器的高度加上滚动条的高度 
+
+                if ($(document).height() <= totalheight)     //当文档的高度小于或者等于总的高度的时候，开始动态加载数据
+                { 
+                    //加载数据
+            //        $("#container").append("我是新加载出来的数据<br/>");
+                    if (isLoading == 0 && isEnd != 1) {
+                        page++;
+                        getPage(page,where);
+                    }
+
+                } 
+            } 
+
+            $(window).scroll( function() { 
+                loaddata();
+            }); 
+
+
+            function getPage(){
+                var string = '';
+                for (value in where){
+                    if (where[value] != null) {
+                        string += value+'='+where[value]+',';
+                    }
+                }
+                console.log(string);  
+//                return; 
+                $.ajax({
+                    type: 'GET',
+                    url: "?m=Web&a=mine&openid={$Think.get.openid}&list",
+                    data: {'page':page,'where':string},
+                    complete:function(result){
+                       el.loading("hide");
+                    },
+                    success: function(result){
+                        $.each(result, function(i,val){
+                            console.log(val);
+                            var time = getDateDiff(val.modify_time);
+                            var sex = '';
+                            if (val.sex == -1) {
+                                sex = '不限 ';
+                            }else if (val.sex == 0) {
+                                sex = '{$Think.lang.L_SEX_M}主持人 ';
+                            }else {
+                                sex = '{$Think.lang.L_SEX_F}主持人 ';
+                            }
+                            var price_h = '';
+                            if (val.price_h != null) {
+                                if (val.price_h.length >1) {
+                                    price_h = "-"+val.price_h;
+                                }
+                            }
+                            var price = ''
+                            if (val.price  == -1 || val.price == 0) {
+                                price = '自报价格';
+                            } else {
+                                price = '{$Think.lang.L_CURRENCY_SIGN}'+val.price+price_h+'{$Think.lang.L_MONETARY_UNIT}';
+                            }
+                            
+                         
+                            var activity_time = val.activity_time==''?val.activity_time_input:val.activity_time.substring(5,10);
+                            if (activity_time.substring(5,10)=='00-00') {
+                                activity_time = '';
+                            }
+
+                    
+
+                            var img_url = './Public/Kmic/noPic.png';
+                            if (val.img_url != null) {
+
+                                var dataobj = val.img_url;
+                                if (dataobj != '[\"\"]') {
+                                    var pic = html_decode(dataobj[0]).replace(new RegExp(/(")/g),"");
+                                    var img_url = dataobj[0] =='' ?'./Public/Kmic/noPic.png':pic;
+                                    if (val.type == 0) {
+                                        img_url = dataobj[0] =='' ?val.wx_info.headimgurl:pic;
+                                    }else{
+                                        img_url = dataobj[0] =='' ?'./Public/Kmic/noPic.png':pic;
+                                    }
+                                }                
+                            }
+
+                            var city ='';
+                            if (val.city.length >1) {
+                                city = val.city;
+                            }else{
+                                city = val.province;
+                            }
+                            var type = '';
+                            if (val.type == 0) {
+                                type = '<div class="tag2">一手</div>';
+                            }
+                            var str = '';
+                            str += '<li class="ui-list-item" id="l'+val.id+'">';
+                            
+                            str += '<div class="list-menu" onclick="announcementPage(\''+openid+'\',\''+val.id+'\',\'mine\');" >';
+                           
+                            str += '<div class="time-split"></div>\n\
+                            <div class="list-time"><p>'+time+' 发布</p></div>';
+
+                            if (val.province == '北京市' || val.province == '上海市' || val.province == '天津市' || val.province == '重庆市' ||val.province == '香港特别行政区' || val.province == '澳门特别行政区') {
+                                str += '<div class="list-item list-title"><p>['+ val.province +'] '+val.title+'</p></div>';
+                            }
+                            else if (val.city) {
+                                str += '<div class="list-item list-title"><p>['+ val.city +'] '+val.title+'</p></div>';
+                            } else if (val.province) {
+                                str += '<div class="list-item list-title"><p>['+ val.province +'] '+val.title+'</p></div>';
+                            }
+
+                            str += '<div class="list-item list-act-time"><p>'+activity_time+'</p></div>\n\
+                            <div class="list-item list-number"><p>'+sex+val.number+'名</p></div>\n\
+                            <div class="list-item list-signup clearfix"><div class="price" style="float:left;"><p>'+price+'</p></div><div style="float:right;"><p class="d5"></p><button onclick="deleteData(event,'+val.id+')">删除</button></div>';
+                            
+                            str += '</div></li>';
+
+                            var offers = '';
+                            $.each(val.offers, function(i,offersVal){
+                                console.log(offersVal);
+                                offers += '<li class="offers"><div class="t">'+offersVal.name+'给您的报价是'+offersVal.price+'元/次。<a href="?m=web&a=artistPage&openid={$Think.session.openid}&uid='+offersVal.uid+'&mine=mine">点击查看他/她的资料</a></div></li>';
+                            });
+
+                            $('.list').append(str+offers);
+
+
+                            if (val.type == 0) {
+                                $.ajax({
+                                    type: 'GET',
+                                    url: "?m=web&action=signupcount&openid={$Think.session.openid}",
+                                    data: {'aid':val.id},
+                                    success: function(result){
+
+                                        $('#l'+val.id+' .d5').html('已有 '+ JSON.parse(result) +' 人报名');
+                                    },
+                                    beforeSend: function(){
+                                        
+                                    },
+                                    dataType: 'html'
+                                });
+
+                            }
+
+                        });
+                        sessionStorage.setItem("list", $('.list').html());
+                       
+                        $(".list").find("#loading").remove(); 
+                        
+                        /*if (result.length > 0) {
+                            $(".list").append('<li class="ui-border-t" id="loading"><img src="Public/Images/loading.gif" width="50"/></li>');
+                        }*/
+                        if (result.length>0) {
+                            $("#ui-border-tb").append('<li class="ui-border-t" id="loading">加载中...</li>');
+                        }else{
+                            $("#ui-border-tb").append('<li class="ui-border-t" id="loading">没有更多</li>');
+                            isEnd = 1;
+                        }
+                        isLoading = 0;
+                    },
+                    beforeSend: function(){
+                       el=$.loading({
+                           content:'加载中...',
+                       })
+                    },
+                    dataType: 'json'
+                }); 
+            }
+
+            var selectedID = 0;
+            
+            //结束
+            function end(id){
+                console.log(id);
+                $.ajax({
+                    type: 'POST',
+                    url: "?m=web&a=mine",
+                    data: {'id':id,'action':'end'},
+                    success: function(result){
+                        el.loading("hide");
+                        console.log(result);
+                        location.reload();
+        
+                    },
+                    beforeSend: function(){
+                        el=$.loading({
+                            content:'加载中...',
+                        })
+                    },
+                    dataType: 'json'
+                }); 
+            }
+            //已经找到
+            function find(id){
+                console.log(id);
+                $.ajax({
+                    type: 'POST',
+                    url: "?m=web&a=mine",
+                    data: {'id':id,'action':'find'},
+                    success: function(result){
+                        el.loading("hide");
+                        console.log(result);
+                        location.reload();
+        
+                    },
+                    beforeSend: function(){
+                        el=$.loading({
+                            content:'加载中...',
+                        })
+                    },
+                    dataType: 'json'
+                }); 
+            }
+            
+            //已经找到
+            function deleteData(event, id){
+                event.stopPropagation();
+                console.log(id);
+                if (confirm("是否删除")) {
+                   $.ajax({
+                       type: 'POST',
+                       url: "?m=web&a=mine",
+                       data: {'id':id,'action':'delete'},
+                       success: function(result){
+                           el.loading("hide");
+                           console.log(result);
+                           location.reload();
+                   
+                       },
+                       beforeSend: function(){
+                           el=$.loading({
+                               content:'加载中...',
+                           })
+                       },
+                       dataType: 'json'
+                   });  
+                }
+                
+            }
+            
+  
+            function html_decode(str) {   
+                var s = "";   
+                if (str.length == 0) return "";   
+                s = str.replace(/&gt;/g, "&");   
+                s = s.replace(/&lt;/g, "<");   
+                s = s.replace(/&gt;/g, ">");   
+                s = s.replace(/&nbsp;/g, " ");   
+                s = s.replace(/&#39;/g, "\'");   
+                s = s.replace(/&quot;/g, "\"");   
+                s = s.replace(/<br>/g, "\n");   
+                return s;   
+            }
+        </script>
+        
+    </body>
+</html>

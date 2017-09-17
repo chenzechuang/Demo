@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>设置</title>
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <script src="./Public/wxmenu.js"></script>
+        <link rel="stylesheet" href="./Public/Kmic/css/index.css">
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">   
+    </head>
+    <body><input type="hidden" name="openid" value="{$Think.session.openid}" />
+        <div class="col-xs-12 text-center ptm20 mb20">
+            <div class="col-xs-4 col-xs-offset-4 pt20">
+              <img class="img-responsive" src="./Public/Kmic/set_09.jpg">
+            </div>
+        </div>
+        <div class="clearfix mb10"></div>
+
+            <div class="set_info col-xs-12 pt20">
+                
+                <div class="row">
+                    <a href="?m=Center&c=profile&a=wallet&openid={$Think.session.openid}">
+                    <div class="col-xs-2 pr0 text-center"><img width="30" src="./Public/Kmic/set_47.jpg"></div>
+                    <div class="col-xs-10 pl0">我的钱包</div>
+                    </a>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>  
+                
+                <div class="row">
+                    <a href="{:U(verify)}">
+                        <div class="col-xs-2 pr0 text-center"><img width="30" src="./Public/Kmic/set_17.jpg"></div>
+                        <div class="col-xs-10 pl0">绑定手机</div>
+                        <div class="clearfix"></div> 
+                    </a>
+                </div>
+                <div class="boder1px"></div>
+
+                 <div class="row">
+                     <a href="?m=Center&c=profile&a=member&openid={$Think.session.openid}">
+                        <div class="col-xs-2 pr0 text-center"><img width="30" src="./Public/Kmic/set_27.jpg"></div>
+                        <div class="col-xs-10 pl0">VIP会员</div>
+                     </a>
+                    <div class="clearfix"></div>  
+                    
+                </div>
+                <div class="boder1px"></div>
+                
+              <!--
+                <div class="row">
+                <a href="javascript:void(0);" class="qrcode">
+                    <div class="col-xs-2 pr0 text-center"><img width="30" src="./Public/Kmic/set_37.jpg"></div>
+                    <div class="col-xs-10 pl0">二维码</div>
+                </a>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>
+              -->
+                
+                <div class="row">
+                    <a href="{:U(service)}">
+                    <div class="col-xs-2  pr0 text-center"><img width="30" src="./Public/Kmic/set_67.jpg"></div>
+                    <div class="col-xs-10 pl0">关于我们</div>
+                    </a>
+                    <div class="clearfix"></div>                 
+                </div>
+              
+        </div>  
+ <!--       
+    <div class="ui-dialog">
+        <div class="ui-dialog-cnt">
+          <header class="ui-dialog-hd ui-border-b">
+                      <h3>二维码推广</h3>
+                      <i class="ui-dialog-close" data-role="button"></i>
+                  </header>
+            <div class="ui-dialog-bd">
+      
+                <div>分享二维码到朋友圈,通过二维码关注将会得到5积分：</div>
+
+                <hr/>
+                您可以分享到朋友圈、发给朋友、发到QQ、微博等等
+            </div>
+            <div class="ui-dialog-ft">
+         
+                <button type="button" data-role="button" >查看我的二维码</button>
+            </div>
+        </div>        
+    </div>
+ -->
+        <script>
+                    <eq name="Think.get.show" value="qrcode">
+        qrcode();
+            </eq>
+        
+        $('.qrcode').click(function(){
+            qrcode();
+        });
+        
+        function qrcode(){
+            var el;
+            $.ajax({
+                type: 'GET',
+                url: "?m=Center&c=Index&a=getQRcode",
+                data: {'openid':$("input[name='openid']").val()},
+                success: function(result){
+//                    location.href= '?m=Center&c=Profile&a=qrcode';
+                    el.loading("hide");
+                    $(".ui-dialog").dialog("show");
+                    $(".ui-dialog").on("dialog:action",function(e){
+//                        console.log(e.index)
+//                            alert(e.index);
+//                        location.href= '?m=Center&c=Profile&a=qrcode';
+                        if (e.index ==1) {
+                            ga('send', 'event', 'profile', 'qrcode', $("input[name='openid']").val());
+                            location.href= '?m=Center&c=Profile&a=qrcode';
+                        }else if(e.index ==0){
+                            $(".ui-dialog").dialog("hide");
+                        }
+                    });
+                },
+                beforeSend: function(){
+                    el=$.loading({
+                        content:'加载中...',
+                    })
+                },
+                dataType: 'html'
+            }); 
+        }
+        var openid = '{$Think.session.openid}';
+        </script>
+            <script src="./Public/ga.js"></script>
+           <script src="./Public/UnionInfo.js"></script> 
+    </body>
+</html>

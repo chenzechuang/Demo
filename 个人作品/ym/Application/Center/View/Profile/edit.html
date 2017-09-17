@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>基本资料</title>
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <script src="./Public/wxmenu.js"></script>
+        <link rel="stylesheet" href="./Public/Kmic/css/index.css">
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">   
+    </head>
+    <body class="bgw" ontouchstart><input type="hidden" name="openid" value="{$Think.get.openid}" />
+        <div class="col-xs-12 ptm20">
+            <div class="col-xs-4 col-xs-offset-4">
+                                    <div class="ui-border-b file header_user" >
+                                        <ul class="pics">
+                                               <li class="add col-xs-3">
+                                                   <input id="file" type="file" accept="image/*" />
+
+                                               </li>             
+                                           </ul>                                    
+                                   </div>
+                <div class="AJAX_heard">
+                    <img class="img-circle b1999" height="80" width="80" src="{$user.headimgurl}">
+                </div>
+                </div>
+        </div>
+        <div class="col-xs-12">
+              <form role="form" method="post" name="dosubmit" id="dosubmit">
+                <div class="user_edit">
+                    <ul>
+                        <li>
+                             <div class="pull-left">姓名 <span>*</span></div>
+                             <div class="col-xs-10">
+                                 <input type="text" class="pull-right w100" value="{$user.name}" name="name">
+                             
+                             </div>
+                             <div class=" clearfix"></div>
+                        </li>
+                        <li>
+                             <div class="pull-left">性别 <span>*</span></div>
+                             <div class="col-xs-3">
+                                <label class="m0"><input type="radio" name='sex' <eq name='user.sex' value='1'>checked</eq> value="1"> 男</label>
+                             </div>
+                             <div class="col-xs-3">
+                                <label class="m0"><input type="radio" name='sex' <eq name='user.sex' value='2'>checked</eq> value="2"> 女</label>
+                             </div>
+                            <div class="col-xs-4">
+                                <label class="m0"><input type="radio" name='sex' <eq name='user.sex' value='0'>checked</eq> value="0"> 保密</label>
+                             </div>                
+                             <div class=" clearfix"></div>
+                        </li> 
+                        <li>
+                            <div class="pull-left">所在省 <span>*</span></div>
+                            <div class="col-xs-9"><input type="text" class="pull-right w100"  value="{$user.province}" placeholder="【如 广东省 就填写 广东，忽略 省 字】" name="province"></div>
+
+                            <div class=" clearfix"></div>
+                        </li>
+                    </ul>
+                </div>
+                  
+                  <input type="hidden" name="headimgurl" class="AJAX_heard_val" value="{$user.headimgurl}">
+                  <input type="hidden" name="action" value="save">
+              </form>
+            </div>
+        
+        <div class="col-xs-12 ">
+            <div class="h80"></div>
+            <div class="h80"></div>
+                <button class="button_wbut list_button submig">修改</button>
+        </div>     
+        <div class="alert_box">
+            <div class=" active col-xs-10 col-xs-offset-1">
+            <div class="progress progress-striped m0">
+                    <div class="progress-bar progress-bar-success " role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 60%;">
+                    </div>
+            </div>
+            </div>
+        </div> 
+        <div id="bg"></div>
+        <script src="./Public/localResizeIMG/dist/lrz.bundle.js"></script>
+        <script>
+            var picNum = 0;
+            var videoNum = 0;
+            document.querySelector('#file').addEventListener('change', function () {
+            $('.alert_box').css("display","block");
+            $('#bg').css("display","block");
+            lrz(this.files[0],{width: 700})
+                   .then(function (rst) {
+                       // 处理成功会执行
+//                       console.log(rst);
+                        var xhr = new XMLHttpRequest();
+                        var data = {
+                            base64: rst.base64,
+                            size: rst.base64.length // 校验用，防止未完整接收
+                        };
+                        xhr.open('POST', '?m=web&a=profiles&upload');
+                        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                        xhr.onreadystatechange = function () {
+//                            console.log(xhr.status);
+                            $('.alert_box').css("display","none");
+                            $('#bg').css("display","none"); 
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                var result = JSON.parse(xhr.response);
+                                if (result.error == 0) {
+                                    $(".AJAX_heard").html('<img class="img-circle b1999" height="80" width="80" src="'+result.url+'">')
+                                    $(".AJAX_heard_val").val(result.url);
+                                }
+                            }
+           
+                        };
+                        xhr.send(JSON.stringify(data)); // 发送base64
+//                        });
+                   })
+                   .catch(function (err) {
+                       // 处理失败会执行
+                      alert('error!');
+                       console.log(rst);
+                   })
+                   .always(function () {
+                       // 不管是成功失败，都会执行
+                       
+                   });
+           });
+           
+
+
+            var openid = '{$Think.get.openid}';
+            var el;
+            $('.pay').click(function(){
+                el=$.loading({
+                    content:'加载中...',
+                })
+                location.href= '?m=Center&c=Profile&a=member&action=pay&payid='+$(this).attr('id');
+            });
+        $('.submig').click(function(){
+            $.ajax({
+                type: 'POST',
+                url: "?m=center&c=profile&a=edit&openid="+openid,
+                data: $('#dosubmit').serialize(),
+                success: function(result){
+//                    alert(result);
+                    el.loading("hide");
+                    alert('修改成功');
+                },
+                beforeSend: function(){
+                    el=$.loading({
+                        content:'加载中...',
+                    })
+                },
+                dataType: 'html'
+            }); 
+        });
+        var openid = '{$Think.get.openid}';
+        </script>
+     <!--     <script src="./Public/UnionInfo.js"></script> -->
+    </body>
+</html>

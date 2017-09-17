@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>开麦</title>
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <script src="./Public/wxmenu.js"></script>
+        <script src="./Public/timeFormat.js"></script>
+        <link rel="stylesheet" type="text/css" href="./Public/DateTime/dist/DateTimePicker.css" />
+        <script src="./Public/jquery.min.js"></script>
+        <script type="text/javascript" src="./Public/DateTime/dist/DateTimePicker.js"></script>
+        <script src="./Public/pcSelect/jquery.cxselect.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <link rel="stylesheet" href="./Public/global.css">
+        <style>
+            label{color: #ff90b7;}
+            .pics li{list-style: none; float: left; width: 88px;height: 88px;border:#e9e9e9 1px solid; margin: 5px; padding: 0px; overflow: hidden;
+            text-height: 103px; background-color: white;}
+            .pics .add{background-image: url('./Public/Kmic/picAdd.jpg'); background-repeat: no-repeat; background-position: center; background-size: 50px 50px;}
+            .file input {
+                /*position: absolute;*/
+                font-size: 100px;
+/*                right: 0;
+                top: 0;*/
+                opacity: 0;
+                width: 103px; height: 103px;
+            }
+            .file:hover {
+                background: #AADFFD;
+                border-color: #78C3F3;
+                color: #004974;
+                text-decoration: none;
+            }
+            .tag li{margin-right: 3px;}
+            .selected{background-color: #ff629a; }
+            .pics .delete{position: absolute; }
+            
+            /*.video {width: 1}*/
+            .video li{list-style: none; float: left; width: 68px;height: 68px;border:#e9e9e9 1px solid; margin: 5px; padding: 0px; overflow: hidden;
+            text-height: 68px; background-color: white;
+            background-image: url('./Public/Kmic/video.png'); background-repeat: no-repeat; background-position: center; background-size: 68px 68px;}
+            .video .delete{position: absolute; }
+            .video .content{width: 68px;height: 68px;}
+        </style>
+        <script>
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: '{$AppID}', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['startRecord','stopRecord','onVoiceRecordEnd','playVoice','pauseVoice','stopVoice','onVoicePlayEnd','uploadVoice','downloadVoice'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+        </script>
+    </head>
+    <body ontouchstart=""><header class="ui-header ui-border-b" style="background-color: white;">
+            <h1>个人风采</h1><button class="ui-btn" onclick="window.location.href='./?m=web&a=artist&openid={$Think.get.openid}'">主持人</button>
+        </header>
+        <!--<footer class="ui-footer ui-footer-btn">-->
+            <!--<ul class="ui-tiled ui-border-t">-->
+                <!--<li data-href="./?m=web&a=artist&openid={$Think.get.openid}" class="ui-border-r"><a href="./?m=web&a=artist&openid={$Think.get.openid}"><div>主持人列表</div></a></li>-->
+                <!--<li data-href="./?m=web&a=profiles&openid={$Think.get.openid}" class="ui-border-r"><a href="./?m=web&a=profiles&openid={$Think.get.openid}"><div>个人信息</div></a></li>-->
+<!--                <li data-href="./?m=web&a=announcement&openid={$Think.get.openid}" class="ui-border-r"><a href="./?m=web&a=announcement&openid={$Think.get.openid}"><div>我的报名</div></a></li>
+                <li data-href="./?m=web&a=mine&openid={$Think.get.openid}"><a href="./?m=web&a=mine&openid={$Think.get.openid}"><div>我的消息</div></a></li>-->
+            <!--</ul>-->
+        <!--</footer>--> 
+        <div id="dtBox"></div>
+        <section class="ui-container">
+            <div class="ui-form ui-border-t">
+                <div class="ui-btn-wrap" style="">
+                    <eq name="isComplete" value="1">
+                    您有{$centerUserData.point}积分。使用提顶功能会消耗2积分，您的个人信息会提到顶部。重新获得更多人的关注。<a href="?m=center&c=profile&openid={$Think.get.openid}&show=qrcode">点击这里获得更多积分。</a>
+                    <button class="ui-btn-lg top" style="background:#ff629a;color: white;" >
+                            提顶个人信息
+                        </button></eq>
+                    </div>
+                
+                
+                <form role="form" method="post" name="dosubmit" id="dosubmit">
+                    
+                    
+                    
+                    <div class="ui-form-item ui-border-b" style="background-color: #f4f4f4;">
+                        必填内容
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b" style=" height: 70px;">
+                        <label style="margin-top: 14px">
+                            头像
+                        </label>
+                        <div class="ui-avatar" style="float:right; margin: 10px;">
+                            <span style="background-image:url({$wxData.headimgurl})"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            昵称
+                        </label>
+                        <input type="text" placeholder="" name="nickname" value="{$wxData.nickname}" readonly="">
+                    </div>
+                    
+                    
+                    
+                    <div class="ui-form-item ui-border-b element_id" style="height:130px;">
+                        <label>所在地</label>
+                        <div class="ui-select">
+                            <select class="province" data-value="{$myPrifile.province}" name="province">
+                                
+                            </select>
+                        </div>
+                        <div class="ui-select">
+                            <select class="city" data-value="{$myPrifile.city}" name="city">
+                            </select>
+                        </div>
+                        <div class="ui-select">
+                            <select class="area" data-value="{$myPrifile.area}" name="area">
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>性别</label>
+                        <input type="text" placeholder="" value="<if condition="$wxData.sex eq 1">男<else/>女</if>" name="sex" readonly>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            星座
+                        </label>
+                        <div class="ui-select">
+                            <select name="constellation">
+                                <empty name="$wxData.constellation"><option selected value="{$myPrifile.constellation}">{$myPrifile.constellation}</option></empty>
+                                <option value="白羊座">白羊座</option>
+                                <option value="金牛座">金牛座</option>
+                                <option value="双子座">双子座</option>
+                                <option value="巨蟹座">巨蟹座</option>
+                                <option value="狮子座">狮子座</option>
+                                <option value="处女座">处女座</option>
+                                <option value="天秤座">天秤座</option>
+                                <option value="天蝎座">天蝎座</option>
+                                <option value="射手座">射手座</option>
+                                <option value="摩羯座">摩羯座</option>
+                                <option value="水瓶座">水瓶座</option>
+                                <option value="双鱼座">双鱼座</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            身高/CM
+                        </label>
+                        <input type="text" placeholder="单位CM" value="{$myPrifile.stature}" name="stature" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" >
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            擅长语言
+                        </label>
+                    </div>
+                    <div class="ui-form-item ui-border-b" style='height: 95px;'>
+                        <div >
+                            <ul class='tag language'>
+                                <li class="ui-label <notempty name="language.0">selected</notempty>">普通话</li>
+                                <li class="ui-label <notempty name="language.1">selected</notempty>">粤语</li>
+                                <li class="ui-label <notempty name="language.2">selected</notempty>">英语</li>
+                                <li class="ui-label <notempty name="language.3">selected</notempty>">日语</li>
+                                <li class="ui-label <notempty name="language.4">selected</notempty>">韩语</li>
+                                <li class="ui-label <notempty name="language.5">selected</notempty>">法语</li>
+                                <li class="ui-label <notempty name="language.6">selected</notempty>">其他</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="ui-form-item ui-border-b" >
+                        <label>
+                            行业偏向
+                        </label>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b" style='height: 135px;'>
+                        <div>
+                            <ul class='tag industry'>
+                                <li class="ui-label <notempty name="industry.0">selected</notempty>">地产</li>
+                                <li class="ui-label <notempty name="industry.1">selected</notempty>">时尚</li>
+                                <li class="ui-label <notempty name="industry.2">selected</notempty>">财经</li>
+                                <li class="ui-label <notempty name="industry.3">selected</notempty>">娱乐</li>
+                                <li class="ui-label <notempty name="industry.4">selected</notempty>">婚庆</li>
+                                <li class="ui-label <notempty name="industry.5">selected</notempty>">美容</li>
+                                <li class="ui-label <notempty name="industry.6">selected</notempty>">汽车</li>
+                                <li class="ui-label <notempty name="industry.7">selected</notempty>">艺术</li>
+                                <li class="ui-label <notempty name="industry.8">selected</notempty>">教育</li>
+                                <li class="ui-label <notempty name="industry.9">selected</notempty>">其他</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b" >
+                        <label>
+                            才艺
+                        </label>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b" style='height: 95px;'>
+                        <div>
+                            <ul class='tag skill'>
+                                <li class="ui-label <notempty name="skill.0">selected</notempty>">舞蹈</li>
+                                <li class="ui-label <notempty name="skill.1">selected</notempty>">唱歌</li>
+                                <li class="ui-label <notempty name="skill.2">selected</notempty>">乐器</li>
+                                <li class="ui-label <notempty name="skill.3">selected</notempty>">体育</li>
+                                <li class="ui-label <notempty name="skill.4">selected</notempty>">魔术</li>
+                                <li class="ui-label <notempty name="skill.5">selected</notempty>">导演</li>
+                                <li class="ui-label <notempty name="skill.6">selected</notempty>">书法</li>
+                                <li class="ui-label <notempty name="skill.7">selected</notempty>">其他</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="ui-form-item ui-border-b" style="background-color: #f4f4f4;">
+                        选填内容
+                    </div>
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            年龄
+                        </label>
+                        <input type="text" placeholder="请输入年龄" value="{$myPrifile.age}" name="age" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" >
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            联系电话
+                        </label>
+                        <input type="text" placeholder="请输入联系电话" value="{$myPrifile.mob}" name="mob" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" >
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            联系QQ
+                        </label>
+                        <input type="text" placeholder="请输入联系QQ" value="{$myPrifile.qq}" name="qq" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" >
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            联系Email
+                        </label>
+                        <input type="text" placeholder="请输入联系Email" value="{$myPrifile.email}" name="email" >
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            联系微信
+                        </label>
+                        <input type="text" placeholder="请输入联系微信" value="{$myPrifile.wx}" name="wx"  >
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            期望酬劳
+                        </label>
+                        <input type="text" placeholder="请输入期望酬劳" value="{$myPrifile.price}" name="price" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" >
+               </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            主持风格
+                        </label>
+                        <input type="text" placeholder="" value="{$myPrifile.style}" name="style">
+                    </div>
+                    
+                    
+                    <div class="ui-form-item ui-form-item-textarea ui-border-b">
+                        <label>
+                            毕业学校
+                        </label>
+                        <textarea placeholder="输入毕业学校信息" name="school">{$myPrifile.school}</textarea>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            所属机构
+                        </label>
+                        <input type="text" placeholder="输入所属机构信息" name="organization" value="{$myPrifile.organization}">
+                    </div>
+                    
+                    <div class="ui-form-item ui-form-item-textarea ui-border-b">
+                        <label>
+                            个人介绍
+                        </label>
+                        <textarea placeholder="输入个人介绍信息" name="info">{$myPrifile.info}</textarea>
+                    </div>
+                    
+                    <div class="ui-form-item ui-form-item-textarea ui-border-b">
+                        <label>
+                            曾获荣誉
+                        </label>
+                        <textarea placeholder="输入曾获荣誉信息" name="honour">{$myPrifile.honour}</textarea>
+                    </div>
+                    
+                    
+                    <div class="ui-form-item ui-form-item-textarea ui-border-b">
+                        <ul class="ui-grid-trisect">
+                            <li style="width:100px;"><font size="2">我已阅读并同意</font></li>
+                            <li style="width:30px;"><label class="ui-checkbox-s">
+                                <input type="checkbox" name="checkbox" id="checkbox">
+                            </label></li>
+                            <li><font size="2"><a href="?m=web&a=clause">查看条款内容</a></font></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b file" style="height:180px; " >
+                        <div style="color: #ff90b7;">添加宣传图片</div>
+                        <ul class="pics">
+                            <li class="add">
+                                <input id="file" type="file" accept="image/*" />
+                                
+                            </li>
+                            
+                            
+                        </ul>
+                        <div id="clear"></div>
+                        
+                    </div>
+                    <div class="ui-form-item ui-border-b" style=" font-size:13px; text-align:center;" >不上传图片,信息不会被显示.</div>
+
+                    <div class="ui-form-item ui-border-b" style="height:168px; ">
+                        <div style="color: #ff90b7;">添加宣传视频</div>
+                        
+                        <div class="ui-form-item ui-form-item-r ui-border-b">
+                            <input type="text" placeholder="粘帖网址 加上 http://" name="videoInput">
+                            <!-- 若按钮不可点击则添加 disabled 类 -->
+                            <button type="button" class="ui-border-l addVideo">提交</button>
+                            <!--<a href="#" class="ui-icon-close"></a>-->
+                        </div>
+                        
+                        <ul class="video">
+                            
+                            
+                        </ul>
+                        <div id="clear"></div>
+                        
+                    </div>
+                    
+                    <input type="hidden" name="language" value="" />
+                    <input type="hidden" name="industry" value="" />
+                    <input type="hidden" name="skill" value="" />
+                </form>
+                <div class="ui-btn-wrap" style="">
+                    <button class="ui-btn-lg submit" style="background:#ff629a;color: white;" >
+                        立刻发布
+                    </button>
+                </div>
+                
+<!--                <div class="ui-btn-wrap" style="">
+                    <div><img src="Public/Images/mic.png" width="30"/></div>
+                </div>-->
+            </div>
+            
+        </section>
+        <div class="ui-loading-block show">
+            <div class="ui-loading-cnt">
+                <i class="ui-loading-bright"></i>
+                <p>正在加载中...</p>
+            </div>
+        </div>
+        <script src="./Public/localResizeIMG/dist/lrz.bundle.js"></script>
+        <script>
+            $('.show').fadeOut();
+            var picNum = 0;
+            var videoNum = 0;
+            
+            
+            document.querySelector('#file').addEventListener('change', function () {
+            $('.show').fadeIn();
+            lrz(this.files[0],{width: 700})
+                   .then(function (rst) {
+                       // 处理成功会执行
+//                       console.log(rst);
+                        var xhr = new XMLHttpRequest();
+                        var data = {
+                            base64: rst.base64,
+                            size: rst.base64.length // 校验用，防止未完整接收
+                        };
+                        xhr.open('POST', '?m=web&a=profiles&upload');
+                        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                        xhr.onreadystatechange = function () {
+//                            console.log(xhr.status);
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                
+                                var result = JSON.parse(xhr.response);
+                                if (result.error == 0) {
+                                    $(".pics").prepend('<li id="'+picNum+'"><div class="delete" onclick="deletePic(\''+result.url+'\','+picNum+')"><img src="./Public/Kmic/picDelete.png" /></div><img src="'+result.url+'" width="103"/></li>');
+                                    picNum++;
+                                    $('.show').fadeOut();
+                                }
+                            }
+                            if (picNum >= 9) {
+                                $('.add').css('display','none');
+                            }else if (picNum >= 6) {
+                                $('.file').css('height','420px');
+                            }else if (picNum >= 3) {
+                                $('.file').css('height','300px');
+                            }
+                        };
+                        xhr.send(JSON.stringify(data)); // 发送base64
+//                        });
+                   })
+                   .catch(function (err) {
+                       // 处理失败会执行
+                       $('.show').fadeOut();
+                       console.log(rst);
+                   })
+                   .always(function () {
+                       // 不管是成功失败，都会执行
+                       
+                   });
+           });
+           
+    {$jsPics}
+    {$jsVideos}
+             console.log(picNum);                       
+            $('.element_id').cxSelect({ 
+                url: './Public/pcSelect/cityData.min.js',               // 如果服务器不支持 .json 类型文件，请将文件改为 .js 文件 
+                selects: ['province', 'city', 'area'],  // 数组格式，请注意顺序 
+                nodata: 'none' 
+            }); 
+            
+            //
+            function deletePic(pic,num){
+                if(confirm("确定要删除数据吗？"))
+                {
+                    
+                }else{
+                    return;
+                }
+                $('#'+num).remove();
+                $('.add').css('display','block');
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url:"?m=web&a=profiles",
+                    data:{'delete':pic},// 序列号formid
+                    dataType: 'json',
+                    error: function(request) {
+                        
+                    },
+                    success: function(data) {
+                        console.log(data);
+                    }
+                });
+            }
+            //
+            function deleteVideo(video,num){
+                if(confirm("确定要删除数据吗？"))
+                {
+                    
+                }else{
+                    return;
+                }
+//                console.log(encodeURIComponent(video));
+//                return;
+                $('#v'+num).remove();
+                $('.add').css('display','block');
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url:"?m=web&a=profiles",
+                    data:{'delete':encodeURIComponent(video),'type':2},// 序列号formid
+                    dataType: 'json',
+                    error: function(request) {
+                        
+                    },
+                    success: function(data) {
+                        console.log(data);
+                    }
+                });
+            }
+            //
+            $(".top").click(function(){
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url:"?m=web&a=profiles&action=top&openid={$Think.get.openid}",
+                    data:$('#dosubmit').serialize()+'&action=top',// 序列号formid
+                    async: false,
+                    dataType: 'json',
+                    error: function(request) {
+                        alert('提交超时，请稍候再试！');
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data.error == 0) {
+                            alert('操作成功！');
+                            window.location.href="?m=web&a=profiles&openid={$Think.get.openid}";
+                        }else if (data.error == 1) {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            });
+            //
+            $(".submit").click(function(){
+                if ($("input[name='constellation']").val()=='') {
+                    alert('星座不能为空');
+                    return;
+                }
+                if ($("input[name='stature']").val()=='') {
+                    alert('身高不能为空');
+                    return;
+                }
+                if ($("input[name='province']").val()=='') {
+                    alert('省不能为空');
+                    return;
+                }
+                if ($("input[name='city']").val()=='') {
+                    alert('市不能为空');
+                    return;
+                }
+                if (picNum<1) {
+                    alert('请至少上传一张图片');
+                    return;
+                }
+                if ($("input[name='checkbox']").prop("checked")==false) {
+                    alert('请勾选[我已阅读并同意]');
+                    return;
+                }
+                
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url:"?m=web&a=profiles&action=add",
+                    data:$('#dosubmit').serialize(),// 序列号formid
+                    async: false,
+                    dataType: 'json',
+                    error: function(request) {
+                        alert('提交超时，请稍候再试！');
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data.error == 0) {
+                            alert('发布成功！');
+                            window.location.href="?m=web&a=profiles&openid={$Think.get.openid}";
+                        }else if (data.error == 1) {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            });
+            //
+            var langArr = new Array();
+            {$jsLanguage}
+            $("input[name='language']").val(langArr.join("-"));
+            $(".language li").click(function () {
+                var i = langArr.indexOf($(this).html());
+                if(i != -1) {
+                    langArr.splice(i, 1);
+                    $(this).removeClass("selected");
+                }else{
+                    langArr[$(this).index()]=$(this).html();
+                    $(this).addClass("selected"); 
+                }
+                $("input[name='language']").val(langArr.join("-"));
+            });
+            
+            var industryArr = new Array();
+            {$jsIndustry}
+            $("input[name='industry']").val(industryArr.join("-"));
+            $(".industry li").click(function () {
+                var i = industryArr.indexOf($(this).html());
+                if(i != -1) {
+                    industryArr.splice(i, 1);
+                    $(this).removeClass("selected");
+                }else{
+                    industryArr[$(this).index()]=$(this).html();
+                    $(this).addClass("selected"); 
+                }
+                $("input[name='industry']").val(industryArr.join("-"));
+            });
+            
+            var skillArr = new Array();
+            {$jsSkill}
+            $("input[name='skill']").val(skillArr.join("-"));
+            $(".skill li").click(function () {
+                var i = skillArr.indexOf($(this).html());
+                if(i != -1) {
+                    skillArr.splice(i, 1);
+                    $(this).removeClass("selected");
+                }else{
+                    skillArr[$(this).index()]=$(this).html();
+                    $(this).addClass("selected"); 
+                }
+                $("input[name='skill']").val(skillArr.join("-"));
+            });
+            
+            $(".addVideo").click(function(){
+                
+                if (videoNum >= 4) {
+                    alert('最多只能添加4个视频');
+                    return;
+                }
+                
+                var videoInput = $("input[name='videoInput']").val();
+                if (videoInput == '') {
+                    alert('视频网址不能为空');
+                    return ;
+                }
+                //
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url:"?m=web&a=profiles&action=addvideo",
+                    data:{'video':videoInput},// 序列号formid
+                    async: false,
+                    dataType: 'json',
+                    error: function(request) {
+                        alert('提交超时，请稍候再试！');
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data.error == 0) {
+                            alert('发布成功！');
+                            window.location.href="?m=web&a=profiles&openid={$Think.get.openid}";
+                        }else{
+                            alert('提交超时，请稍候再试！');
+                        }
+                    }
+                });
+            });
+            
+            function reviewVideo(video){
+                window.location.href=video;
+            }
+            
+        </script>
+        
+    </body>
+</html>

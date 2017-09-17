@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>我的声音</title>
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css"> 
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css"> 
+        <link rel="stylesheet" href="./Public/css/index.css">
+        
+        <script src="./Public/wxmenu.js"></script>
+        <script src="./Public/jquery.min.js"></script>
+        <script src="./Public/js/index.js"></script> 
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+        <style>
+            .bgw{ background-color: #f0f0f2;}
+        </style>
+        <script>
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: '{$AppID}', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['startRecord','stopRecord','onVoiceRecordEnd','playVoice','translateVoice','pauseVoice','stopVoice','onVoicePlayEnd','uploadVoice','downloadVoice'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            
+        </script>
+    </head>
+    <body class="bgw">
+        <header class="detail-header">
+            <div class="back" onclick="location.href= '?m=Center&c=Profile&openid={$Think.get.openid}';">
+            </div>
+            <div class="header-title">
+                <p>展示语音</p>
+            </div>
+            
+        </header>
+     
+        <section class="user-info user-voice">
+            <div class="voice-title">
+               当前语音：
+            </div>
+            <div class="col-xs-12 info-group">
+                <div class="voice">
+                   <a href="javascript:;" class="currentVoice">点击播放</a>
+                   <audio id="voice_Btn">
+                       <source src="{$voice}" type="audio/mp3"></source>
+                   </audio>
+                </div> 
+            </div>
+            <div class="voice-title tips">
+               重新录制会把当前语音删除
+            </div>
+            <div class="col-xs-12 info-group">
+                <div class="renew-record record-voice">
+                    <div class="member-item-title">
+                       <a>重新录制<i class="pull-right fa fa-chevron-right"></i></a>
+                    </div>
+                </div> 
+            </div>
+
+            <div class="recordVoice bgw">
+                <header class="detail-header">
+                    <div class="back"></div>
+                    <div class="header-title">
+                        <p>录制声音</p>
+                    </div>
+                    <div class="header-send saveRecord">
+                        <p>提交</p>
+                    </div>
+                </header>
+
+                <section class="user-info">
+                    <div class="voice-title">
+                       注意：
+                    </div>
+
+                    <div class="col-xs-12 info-group">
+                       <p class="record-voice">1、重新录制声音会把之前语音删除；</p>
+                       <p class="record-voice">2、最长可录制60秒语音。</p>
+                    </div>
+
+                        
+                    <div class="record-container">
+                        <div class="record-btn">
+                            <a class="record video" href="#"><img src="./Public/img/mic.png" alt="">点击开始录音</a>
+                        </div>
+                    </div>
+      
+                </section>
+            </div>
+    
+            
+        </section>
+
+        <script>
+            $('.currentVoice').click(function() {
+                var $this = $(this);
+                var voice = $this.next()[0];
+                if (voice.paused) {
+                    voice.play();
+                    $this.html("正在播放");
+                } else if (voice.play) {
+                    voice.pause();
+                    $this.html("点击播放");
+                }
+
+                voice.addEventListener('ended', function () {  
+                    voice.load();
+                    $this.html("点击播放");
+                }, false);
+            });
+            
+            $('.show').fadeOut();
+            var picNum = 0;
+            var videoNum = 0;
+            
+            $('.video').click(function(event) {
+               /* alert(recordArr.length + '\n' + isRecord+ '\n' +isPlaying+ '\n' + currentPlaying)*/
+                if (isRecord == 0 || isRecord == 1) {
+                    record();
+                } else {
+                    voice_time();
+                }
+                return false;
+            });
+            
+            $(".saveRecord").click(function(){
+                if (isRecord == 1 || isPlaying == 1) {
+                    alert('请先停止录音或停止播放');
+                    return;
+                }
+                
+                if (recordArr.length > 0) {
+                    i = 0;
+                    uploadToWx(recordArr[0]);
+                }else{
+                    alert('没有录音');
+                }
+            });
+            ////上传音频
+            var i = 0;
+            var link = '';
+            function uploadToWx(e){
+                wx.uploadVoice({
+                    localId: e, // 需要上传的音频的本地ID，由stopRecord接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {
+                        var serverId = res.serverId; // 返回音频的服务器端ID
+                        link += "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token={$access_token}&media_id="+serverId+"[-]"
+                        //
+                        i++;
+                        if (i<recordArr.length) {
+                            uploadToWx(recordArr[i]);
+                        }else{
+                            var id = "{$Think.session.id}";
+                            $.ajax({
+                                cache: true,
+                                type: "POST",
+                                url:"?m=web&a=asyncAction",
+                                data:{'link':link,'id':id},// 序列号formid
+                                dataType: 'json',
+                                error: function(request) {
+
+                                },
+                                success: function(data) {
+                                    if (data.error == 0) {
+                                        alert('提交成功！正在转码,5分钟后可正常播放。');
+                                        window.location.href="?m=web&a=profiles&openid={$Think.get.openid}";
+                                    }
+//                                    console.log(data);
+                                }
+                            });
+                        }
+                        
+                    }
+                });
+            }
+            
+            
+            var recordArr = new Array();
+            var isRecord = 0;
+            function record(){
+
+                if (isRecord == 0) {
+                    isRecord = 1; 
+                    wx.startRecord();
+                    indate = 1;
+                    counting = '';
+                    s = 0;
+                    recordArr = new Array();
+                    showTime();
+                } else if (isRecord == 1) {
+                    if (s < 5) {
+                        alert('录音不能少于5秒');
+                        return;
+                    }
+                    isRecord = 2; 
+
+                    stopRecord();
+                } 
+                
+                
+            };
+            
+            
+            function stopRecord(){
+                $(".video").text('录音结束，点击回放 ' + s + "\"");
+                voice_count = s;
+
+               
+                wx.stopRecord({
+                    success: function (res) {
+                        var localId = res.localId;
+                        recordArr.push(localId);
+
+                    }
+                });
+            }
+            
+            function stopAndContinue(){
+                wx.stopRecord({
+                    success: function (res) {
+                        var localId = res.localId;
+                        recordArr.push(localId);
+                        wx.startRecord();
+                    }
+                });
+            }
+            
+            wx.ready(function(){
+                wx.onVoiceRecordEnd({
+                    // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+                    complete: function (res) {
+                    //alert('录音时间（' + res.localId + '）已超过一分钟');
+                        var localId = res.localId; 
+                        recordArr.push(localId);
+                        setTimeout("wx.startRecord()",0);
+                    }
+                });
+                
+                wx.onVoicePlayEnd({
+                    success: function (res) {
+                        var localId = res.localId; 
+                        // 返回音频的本地ID
+                        if (recordArr.length > currentPlaying) {
+                        //alert(recordArr.length+'here'+currentPlaying);
+                            currentPlaying ++;
+                            wx.playVoice({
+                                localId: recordArr[currentPlaying] // 需要播放的音频的本地ID，由stopRecord接口获得
+                            });
+                        }
+                        
+                    }
+                });
+            })
+            
+            
+            //////计时
+            var indate = 1;
+            var counting = '';
+            var s = 0;
+            var m = 0;
+            var s_reveal = 0;
+            var voice_count = 0;
+            
+            function showTime(){
+
+                if (isRecord == 1) {
+                    if (s >= 59) {
+                        s = 0;
+                        stopRecord();
+                        return;
+
+                    }else{
+                        s++;
+                    }
+                    s = pad(s,2);
+                    s_reveal = (60-s);
+                    counting = pad(m,2) + ":" + pad(s,2)
+                    $('.video').text('正在录音，点击结束录音 '+ s_reveal + "\"");
+                    indate++;
+                    setTimeout("showTime()",1000);
+                }
+                
+            }
+            var isPlaying1 = 0;
+            function voice_time() {
+                if (isRecord == 2) {
+
+                    if (s == 0) {
+                        s = voice_count;
+                        $(".video").text('录音结束，点击回放 ' + s + "\"");
+                        return;
+                    } else {
+                        if (isPlaying1 == 1) {
+                            alert('正在回放,请勿重复点击');
+                            return;
+                        }
+
+                        if (isPlaying1 == 0) {
+                            wx.playVoice({
+                                localId: recordArr[0] // 需要播放的音频的本地ID，由stopRecord接口获得
+                            });
+                           
+                            isPlaying1 = 1;
+                            var timer = null;
+                            function playC() {
+                                s--; 
+                                $('.video').text('正在回放 '+ s + "\"");
+                                timer = setTimeout(playC, 1000);
+                                if (s == 0) {
+                                    isPlaying1 = 0;
+                                    clearTimeout(timer);
+                                    s = voice_count;
+                                    $(".video").text('录音结束，点击回放 ' + s + "\"");
+                                }
+                            }
+                            playC();
+                            
+                        }
+                        
+                    }
+                    
+                }
+            }
+            
+            function pad(num, n) {  
+                return (Array(n).join(0) + num).slice(-n);
+            }  
+
+
+            var isPlaying = 0;
+            function play(){
+                if (isRecord == 1) {
+                    alert('请先暂停录音');
+                    return;
+                }
+                if (recordArr.length == 0) {
+                    alert('没有录音');
+                    return;
+                }
+                if (isPlaying == 0) {
+
+                    isPlaying = 1;
+     
+                    wx.playVoice({
+                        localId: recordArr[0] // 需要播放的音频的本地ID，由stopRecord接口获得
+                    });
+                }else if (isPlaying == 1) {
+                
+                    isPlaying = 0;
+                    wx.stopVoice({
+                        localId: recordArr[currentPlaying-1] // 需要停止的音频的本地ID，由stopRecord接口获得
+                    });
+                   
+                }
+                
+            }
+            
+         if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+            //alert(navigator.userAgent);  
+        } else if (/(Android)/i.test(navigator.userAgent)) {
+            $('.note').html('安卓版本试听最长1分钟，保存录音后可完整播放。');
+        } else {
+//                window.location.href ="pc.html";
+        };
+            
+        </script>
+    </body>
+</html>

@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>开麦主持</title>
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>--> 
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/json2.js"></script>
+        <link rel="stylesheet" href="./Public/global.css">
+        <script src="./Public/jquery.min.js"></script>
+        <script src="./Public/jquery.session.js"></script>
+        <script src="https://cdn1.lncld.net/static/js/av-min-1.5.0.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+           
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            
+            wx.ready(function(){
+                    wx.onMenuShareTimeline({
+                        title: '开麦通告页面', // 分享标题
+                        link: 'http://www.kmic168.com/index.php?m=web', // 分享链接,将当前登录用户转为puid,以便于发展下线
+                        desc: '全国主持人通告，每日实时更新',
+                        imgUrl: 'http://www.kmic168.com/Public/share1.jpg', // 分享图标
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        },
+                        trigger: function (res) {
+//                            alert("分享到朋友圈按钮点击");        
+                        },
+                        fail: function (res) {
+//                            alert(JSON.stringify(res));
+                        }
+                    });
+                    
+                    wx.onMenuShareAppMessage({
+                        title: '开麦通告页面', // 分享标题
+                        desc: '全国主持人通告，每日实时更新', // 分享描述
+                        link: 'http://www.kmic168.com/index.php?m=web', // 分享链接
+                        imgUrl: 'http://www.kmic168.com/Public/share1.jpg', // 分享图标
+                        type: 'link', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                });
+        </script>
+        <style>
+            #selectsex{height: 50px;  overflow: hidden; }
+            #selectsex ul{ width: 100%; left: 0px;}
+            #selectprice{height: 50px;  overflow: hidden; }
+            #selectarea{height: 50px;  overflow: hidden; }
+            .ui-container{margin-top: 5px;}
+            .select li{height: 49px; background-color: white; border-bottom: #d9d9d9 1px solid; width: 80px; z-index: 10;}
+            .ui-border-t{}
+            .ui-border-tb .more{background-color: #f4f4f4; }
+            .ui-list li{margin: 0;padding: 0;}
+            .pic{margin: 5px;}
+            .pic .tag{position: absolute; background-image: url("./Public/Kmic/tag.png");
+                background-repeat: no-repeat;background-size: 45% 100%; top: 30px; width: 100px; color: white; font-size: 12px;
+            padding-left: 8px; height: 20px; background-position: 0px center; 
+            }
+            .pic .tag2{position: absolute; background-image: url("./Public/Kmic/tag2.png");
+                background-repeat: no-repeat;background-size: 45% 100%;  top: 55px; width: 100px; color: white; font-size: 12px;
+            padding-left: 8px; height: 20px; background-position: 0px center; }
+            .pic .tag3{position: absolute; background-image: url("./Public/Kmic/tag3.png");
+                background-repeat: no-repeat;background-size: 45% 100%;  top: 30px; width: 100px; color: white; font-size: 12px;
+            padding-left: 8px; height: 20px; background-position: 0px center; }
+            .d1{background-image: url("./Public/Kmic/d1.png"); background-repeat: no-repeat;background-size: auto 18px;
+            padding-left: 20px; background-position-y: 2px; }
+            .d2{background-image: url("./Public/Kmic/d2.png"); background-repeat: no-repeat;background-size: auto 18px;
+            padding-left: 20px; background-position-y: 3px;}
+            .d3{background-image: url("./Public/Kmic/d3.png"); background-repeat: no-repeat;background-size: auto 18px;
+            padding-left: 20px; background-position-y: 3px;  }
+            .dt{background-image: url("./Public/Kmic/arrowUp.png"); background-repeat: no-repeat; background-position-y: 9px;
+            background-position-x: 65px; background-size: auto 5px; width: 65px; background-color: #FFF; color: #999999; border: 1px solid #999999; padding:2px 10px 2px 5px;}
+            
+            .f_windown 
+                { 
+                /*border:1px solid red;*/   
+                position:fixed;
+                
+                
+                /*bottom:0px;*/ 
+                left:0px; 
+                right:0px; 
+                margin:auto auto; 
+                height:100%; 
+                width:100%; z-index: 10; 
+            } 
+            .f_windown .bg{
+                position: absolute;
+                height:100%; 
+                width:100%; 
+                -moz-opacity:0.8; /* Moz + FF 透明度20%*/
+                opacity: 0.8; /* 支持CSS3的浏览器（FF 1.5也支持）透明度20%*/
+                bottom:0; 
+                background-color:#000000; z-index: -1; 
+            }
+            .ui-scroller #f_close{position: absolute; margin: 5px; right: 0; top: 8%;}
+            .f_windown .title{background-color: #ff629a; color: white; padding: 5px;
+                -moz-border-radius: 5px 5px 0 0;      /* Gecko browsers */
+                -webkit-border-radius: 5px 5px 0 0;   /* Webkit browsers */
+                border-radius:5px 5px 0 0;  
+            }
+            .ui-scroller {width:auto; margin:20% 20px auto 20px;overflow:hidden; background-color: #f4f4f4;
+                -moz-border-radius: 5px;      /* Gecko browsers */
+                -webkit-border-radius: 5px;   /* Webkit browsers */
+                border-radius:5px;            /* W3C syntax */
+            }
+            .ui-scroller .c1{background-color: #ffffff; color: #989898; padding: 10px;}
+            .ui-scroller .info{background-color: #ffffff; color: #989898; padding: 10px;margin-bottom: 10px; height: 50px; }
+            .ui-scroller .info .name{margin:13px;  float: left;}
+            .ui-scroller .c2{background-color: #ffffff; color: #989898; padding: 10px; margin-top: 10px; }
+            /*.ui-scroller li {margin-bottom:10px;}*/
+            
+            #clear{clear:both; height: 0;}
+            textarea {
+                border:0;background:none;
+                margin-top: 5px;
+                width: 100%;height: 85%;
+            }
+            .tab{ position: absolute; width: 100%;  left: 0; background: #FFF;display: none; }
+            .tab ul{ padding:0px; margin: 0px; }
+            .tab li {  border-bottom: 1px solid #d8d8d8; height: 49px; width: 100%; padding:0px 12px; line-height: 49px; text-align: left !important; display: box; -webkit-box-align:inherit  !important;}
+            .cl{ clear: both; height: 0px; overflow: hidden;}
+            #bg{ background-color: #000000; position: fixed; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.5; display: none;}
+            #selectsex li{ border-right: 0px !important; }
+            #selectprice li{ border-right: 0px !important; }
+            #selectarea li{ border-right: 0px !important; }
+            body{font-family:"Microsoft YaHei",微软雅黑}
+            .menu{ font-size: 15px;}
+            .menu li{ border-right: 1px solid #dedede; }
+            .menu li:nth-child(4){border-right:0px;}
+            .pic{ margin: 0px 5px 0px 10px;}
+            .pic h2{ font-size: 16px !important;}
+            .pic .ui-avatar{ height: 130px; width: 100px; -webkit-border-radius:3px;}
+            .pic .ui-avatar>span{ -webkit-border-radius:3px;}
+            .ui-list-info{ padding-top: 0px; -webkit-box-pack:inherit  !important; padding: 10px 15px 0px 0px;}
+            .ui-list-info p{ padding: 3px 0px 3px 23px; font-size: 13px; }
+            .ui-list-info h4{ font-size: 14px !important; font-weight:bold; width: 78%; margin-bottom: 10px;}
+            .list_time{ position: absolute; right: 5px; font-size: 12px; color: #ccc; margin-top: -30px;}
+            .other_desc{ font-size: 14px; color: #666666; margin-bottom: 10px;}
+            .get_phone_button{ background-color: #ff629a; color: #FFF; border: 1px solid #ff629a; background-image: inherit;}
+            .ui-footer{ height: 40px;}
+            .list .pic_gg{ font-size:0px;}
+            /* .list .pic_gg{ display: none;}
+            .list .pic_gg:nth-child(3n){ display: block;} */
+            .la_button{background-image: url("./Public/Kmic/la_button.jpg"); background-repeat: no-repeat; background-position: center center; background-size: auto 100%; height: 20px; border-top: 1px solid #ebebeb;  margin-top: 80px;}
+        </style>
+        
+        <script>
+            var APP_ID = '29f9bXMjtcmOkhtzRCWtVlgM-gzGzoHsz';
+            var APP_KEY = 'FweIIrWPbdjifiD0GwQSEMna';
+            AV.init({
+              appId: APP_ID,
+              appKey: APP_KEY
+            });
+        </script>
+    </head>
+    <body ontouchstart=""><header class="ui-header ui-border-b" style="background-color: white;">
+            <ul class="ui-tiled menu" style="height: 50px; background-color: white; border-bottom: #d9d9d9 1px solid;">
+            <li><div class="select" id="selectall">{$Think.lang.L_NEW}</div></li>
+            <li><div class="select" id="selectsex"><ul><li>{$Think.lang.L_SEX}</li><div class="tab"><ul><li>{$Think.lang.L_SEX_M}</li><li>{$Think.lang.L_SEX_F}</li><li>不限</li><div class="cl"></div></ul><div class="la_button"></div></div></ul></div></li>
+            <li><div class="select" id="selectprice"><ul><li>{$Think.lang.L_PRICE}</li><div class="tab"><ul><li>1K以下</li><li>1K-3K</li><li>3K-5K</li><li>不限</li><div class="cl"></div></ul><div class="la_button"></div></div></ul></div></li>
+            <li><div class="select" id="selectarea"><ul><li>{$Think.lang.L_AREA}</li><li>北京市</li><li>上海市</li><li>广东省</li><li>浙江省</li><li>天津市</li><li>四川省</li><li>江苏省</li><li>其他</li></ul></div></li>
+        </ul>
+        </header>
+        <input type="hidden" name="openid" value="{$Think.session.openid}" />
+        <footer class="ui-footer ui-footer-btn">
+            <ul class="ui-tiled ui-border-t">
+                <li data-href="./?m=web&openid={$Think.get.openid}" class="ui-border-r"><a href="./?m=web&openid={$Think.get.openid}"><div>通告</div></a></li>
+                <li data-href="./?m=web&a=announcement&openid={$Think.get.openid}" class="ui-   border-r"><a href="./?m=web&a=announcement&openid={$Think.get.openid}"><div>发通告</div></a></li>
+                <!--<li data-href="./?m=web&a=mine&openid={$Think.get.openid}"><a href="./?m=web&a=mine&openid={$Think.get.openid}"><div>我发布的</div></a></li>-->
+            </ul>
+        </footer>
+        <section class="ui-container">
+            <div class="f_windown" style="display:none;">
+                <div class="bg"></div>
+                
+                <div class="ui-scroller">
+                    <div id="f_close"><img src="./Public/Kmic/close.png" width="30"/></div>
+                    
+                    <div class="title"></div>
+                    <div class="info">
+                        <div class="ui-avatar" style="float:left;">
+                            <span class="headimgurl" style="background-image:url(http://placeholder.qiniudn.com/100x100)"></span>
+                        </div>
+                        <div class="name">发布人:</div>
+                    </div>
+                    <div class="c1">
+                        <font size="4" color="#ff629a" class="price">{$Think.lang.L_CURRENCY_SIGN}元/天</font><br/>
+                        <div style="float:left;" class="time">35分钟前</div><div style="float:right;" class="signuUp"></div>
+                        <div id="clear"></div>
+                    </div>
+                    <div class="c2 sign">
+                        <!--<div style=" border-left: 2px #ff629a solid; padding-left: 10px; margin-left: 5px; font-size: 16px;">活动描述</div>-->
+                        
+                        <div class="ui-form-item ui-form-item-show ui-border-b">
+                            <label for="#">我的报价</label>
+                            <input name="price" type="text" placeholder="输入价钱 / 元" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" >
+                        </div>
+                    </div>
+                    <div class="ui-btn-wrap sign" style="">
+                        <button class="ui-btn-lg sent" style="background:#ff629a;color: white;" >
+                            立刻报名
+                        </button>
+                    </div>
+                </div>
+            </div> 
+            
+            <ul class="ui-list ui-border-tb">
+                <!--<li><div style="margin: 10px;padding: 10px; border: 1px gray solid;"><a href="">当您发一个通告会活的3积分,</a></div></li>-->
+                <li>
+                    <section class="ui-input-wrap ui-border-t" style="width:100%;">
+                    <div class="ui-input ui-border-radius">
+                        <input type="text" name="search" value="" placeholder="输入关键词">
+                    </div>
+                    <button class="ui-btn search">搜索</button>
+                </section>
+                </li>
+            </ul>
+<!--            <ul class="ui-list ui-border-tb">
+                <li><a href="https://itunes.apple.com/cn/app/kai-mai-zhu-chi/id1138672705?mt=8"><img src="Public/banner.jpg" width="100%"/></a></li>
+            </ul>-->
+<ul class="ui-list ui-border-tb">
+                <!--<li><a href="https://mp.weixin.qq.com/bizmall/mallshelf?id=&t=mall/list&biz=MzIzNTEyNjk1MA==&shelf_id=2&showwxpaytitle=1&pass_ticket=oy2Ppmmc0BJR0goJI7PznHW8v6CK6XFAfCkv7rUtpanDy%2BYPm0b9Zdxs1%2BL19Ksq"><img src="Public/banner1.jpg" width="100%"/></a></li>-->
+                <li><a href="http://mp.jingchang.tv/?camera_id=1036869&from=groupmessage&isappinstalled=0"><img src="Public/banner3.jpeg" width="100%"/></a></li>
+            </ul>
+           
+<!--            <div class="ui-tips ui-tips-info">
+                <i></i><span style="font-size: 12px;">开麦近期会有大规模的数据转移和服务器升级，可能部份小功能暂时无法使用，因此对您造成不便请谅解并和管理员反馈(微信号：witheasy)。您的支持是我们前进的动力!(iphone版本数据暂时不更新)</span>
+            </div>-->
+            <ul class="ui-list ui-border-tb list">
+                
+            </ul>
+            <div class="ui-loading-block show">
+                <div class="ui-loading-cnt">
+                    <i class="ui-loading-bright"></i>
+                    <p>正在加载中...</p>
+                </div>
+            </div>
+            <div class="ui-dialog">
+                <div class="ui-dialog-cnt">
+                    <div class="ui-dialog-bd">
+                        <div>
+                        <h4>标题</h4>
+                        <div>内容</div></div>
+                    </div>
+                    <div class="ui-dialog-ft ui-btn-group">
+                        <button type="button" data-role="button"  class="select" id="dialogButton<%=i%>">关闭</button> 
+                    </div>
+                </div>        
+            </div>
+        </section>
+        <div id="bg"></div>
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+ <script>
+            $('.show').fadeOut();
+            var el;
+            var page = 0;
+            
+            
+            var totalheight = 0;     //定义一个总的高度变量
+            var isLoading = 0;
+            var where = new Array();
+            var isEnd = 0;
+            
+            if ($.session.get('selectArea')!=null) {
+                page=0;
+                where['area'] = $.session.get('selectArea');
+                $('.list').html('');
+                getPage();
+            }else{
+                getPage();
+            }
+            function loaddata()
+            { //下拉加载
+                totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());     //浏览器的高度加上滚动条的高度 
+
+                if ($(document).height() <= totalheight)     //当文档的高度小于或者等于总的高度的时候，开始动态加载数据
+                { 
+                    //加载数据
+            //        $("#container").append("我是新加载出来的数据<br/>");
+                    if (isLoading == 0 && isEnd != 1) {
+                        page++;
+                        getPage(page,where);
+                    }
+
+                } 
+            } 
+
+            $(window).scroll( function() { 
+                loaddata();
+            }); 
+            var level = '{$Think.session.level}';
+            function getPage(){
+                var string = '';
+//                alert(where['area']);
+                for (value in where){
+                    if (where[value] != null) {
+                        string += value+'='+where[value]+',';
+                    }
+                }
+//                alert(string);
+                $.ajax({
+                    type: 'GET',
+                    url: "?m=Web&a=announcementList",
+                    data: {'page':page,'where':string},
+                    complete:function(result){
+//console.log('complete:function');
+                    },
+                    success: function(result){
+                        $.each(result, function(i,val){
+//                            console.log(val);
+                            
+                            
+                            var time = getDateDiff(val.modify_time);
+                            var sex = '';
+                            if (val.sex==-1) {
+                                sex = '不限';
+                            }else if (val.sex==0) {
+                                sex = '{$Think.lang.L_SEX_M}';
+                            }else {
+                                sex = '{$Think.lang.L_SEX_F}';
+                            }
+                            var price_h = '';
+                            if (val.price_h != null) {
+                                if (val.price_h.length >1) {
+                                    price_h = "-"+val.price_h;
+                                }
+                            }
+                            var price = ''
+                            if (val.price  == -1 || val.price == 0) {
+                                
+                                price = '自报';
+                            }else{
+                                price = '{$Think.lang.L_CURRENCY_SIGN}'+val.price+price_h+'{$Think.lang.L_MONETARY_UNIT}';
+                            }
+                            
+                            var original_desc = val.original_desc==null?'':val.original_desc;
+                            var other_desc = val.other_desc==null?'':val.other_desc;
+                            var activity_time = val.activity_time==null?'':val.activity_time;
+                            if (activity_time.substring(5,10)=='00-00') {
+                                activity_time = '';
+                            }
+                            //
+                            var img_url = './Public/Kmic/noPic.png';
+//                            console.log();
+//                            alert(val.wx_info.headimgurl);
+                            
+                            
+                            if (val.img_url != null) {
+                                console.log(val);
+                                var dataobj=eval("("+val.img_url+")");
+//                            console.log(dataobj);
+                                if (dataobj.length != '') {
+//                                    console.log(dataobj[0]);
+                                    if (dataobj[0].length == 0) { 
+                                        img_url = './Public/Kmic/noPic.png';
+                                    }else{
+                                        console.log('这里'+dataobj[0].length);
+                                        var pic=html_decode(dataobj[0]).replace(new RegExp(/(")/g),"");
+                                        var img_url = dataobj[0] =='' ?'./Public/Kmic/noPic.png':pic;
+                                        if (val.type == 0) {
+                                            img_url = dataobj[0] =='' ?val.wx_info.headimgurl:pic;
+                                        }else{
+                                            img_url = dataobj[0] =='' ?'./Public/Kmic/noPic.png':pic;
+                                        }
+                                    }
+                                    //val.wx_info.headimgurl
+                                    
+                                    console.log(img_url);
+                                }
+                                
+                            }else{
+                                
+                            }
+                            
+                            //
+                            var activity_type;
+                            
+//                            var statusCode = '';
+                            if (val.status == 0) {
+                                activity_type = val.activity_type==null?'<div class="tag">其他</div>':'<div class="tag">'+val.activity_type+'</div>';   
+                            }else{
+                                activity_type = val.status == 1?'<div class="tag3">结束</div>':'<div class="tag3">已聘</div>';
+//                                if (val.status == 1) {
+//                                    statusCode = '<div class="tag3">结束</div>';
+//                                }else if (val.status == 2) {
+//                                    statusCode = '<div class="tag3">已聘</div>';
+//                                }
+                            }
+//                            var contact = '';
+                            var echat ='';
+                            var email ='';
+                            var qq ='';
+                            var phone ='';
+                            if (val.echat.length >1) {
+                                echat = '微信:'+val.echat;
+                            }
+                            if (val.email.length >1) {
+                                email = 'Email:'+val.email;
+                            }
+                            if (val.qq.length >1) {
+                                qq = 'QQ:'+val.qq;
+                            }
+                            if (val.phone.length >1) {
+                                phone = '电话:'+val.phone;
+                            }
+                            var city ='';
+                            if (val.city.length >1) {
+                                city = val.city;
+                            }else{
+                                city = val.province;
+                            }
+                            var type = '';
+                            var enroll = '';
+                            if (val.type == 0) {
+                                type = '<div class="tag2">一手</div>';
+                                enroll = '<div style="position: absolute; right: 15px; top:45px;"><button class="ui-btn ui-btn-danger" onclick="open_f(\''+val.title+'\',\''+price+'\',\''+time+'\',\''+val.id+'\','+val.type+',\''+val.wx_info.nickname+'\',\''+escape(img_url)+'\','+val.status+');">\n\
+                                报名\n\
+                            </button></div>';
+                            }
+                            $('.list').append('<li class="ui-border-t" id="l'+val.id+'"><div class="pic" style="padding-top: 1px;" onclick="more('+val.id+',\''+escape(original_desc)+escape(other_desc)+'\',\''+escape(val.address)+'\',\''+escape(echat)+'\',\''+escape(email)+'\',\''+escape(qq)+'\',\''+escape(phone)+'\','+val.status+');">\n\
+                            '+activity_type+type+'\n\
+                            <div class="ui-avatar" >\n\
+            <span style="background-image:url('+img_url+')"></span>\n\
+        </div>\n\
+                        </div>\n\
+                        <div class="ui-list-info" >\n\
+                            <h4 class="ui-nowrap">'+val.title+'</h4>\n\
+                            '+enroll+'\n\
+                            <p class="ui-nowrap d1">'+sex+'('+val.number+'名)</p>\n\
+                            <p class="ui-nowrap d2">'+activity_time.substring(5,10)+' '+val.activity_time_input+'</p>\n\
+                            <div><div style="float:left;"><p class="ui-nowrap d3">'+city+'</p></div>\n\
+                                <div style="float:right; padding-right: 5px;"><div class="ui-badge-muted" style="background-color:gainsboro;">'+time+'</div></div></div>\n\
+                            <div> \n\
+                                <div style="float:left;"><a href="javascript:void(0);"><h2>'+price+'</h2></a></div>\n\
+                                <div style="float:right;"><div class="ui-badge-muted dt" id="'+val.id+'" onclick="more('+val.id+',\''+escape(original_desc)+escape(other_desc)+'\',\''+escape(val.address)+'\',\''+escape(echat)+'\',\''+escape(email)+'\',\''+escape(qq)+'\',\''+escape(phone)+'\','+val.status+');">查看详情&nbsp;</div></div>\n\
+                            </div>\n\
+                        </div>\n\
+                    </li>');
+                        });
+                        
+                        $(".list").find("#loading").remove(); 
+                        
+                        if (result.length>0) {
+                            $(".list").append('<li class="ui-border-t" id="loading"><img src="Public/Images/loading.gif" width="50"/></li>');
+                        }else{
+                            $(".list").append('<li class="ui-border-t" id="loading">没有更多</li>');
+                            isEnd = 1;
+                        }
+                        isLoading = 0;
+                        $('.show').fadeOut();
+                    },
+                    beforeSend: function(){
+                        $('.show').fadeIn();
+
+                    },
+                    dataType: 'json'
+                }); 
+            }
+            
+            //
+            
+            
+            
+            //
+            var listArr = new Array();
+            
+            function more(id,other_desc,address,echat,email,qq,phone,status){
+//                window.location.href="?m=web&a=announcementShare&aid="+id; 
+//                
+                
+                ga('send', 'event', 'ann', 'more', id);
+                if (status == 1) {
+                    alert('已经结束');
+                    return;
+                }else if (status == 2) {
+                    alert('已经聘请');
+                    return;
+                }
+                var contact = '<input name="contact" type="text" style="width:100%; border:0" value="';
+                contact += echat.length >2?unescape(echat)+' ':'';
+                contact += email.length >2?unescape(email)+' ':'';
+                contact += qq.length >1?unescape(qq)+' ':'';
+                contact += phone.length >1?unescape(phone)+' ':'';
+                contact += '">';
+                if (listArr['l'+id] != id) {
+                    var html = '<li class="ui-border-t more" id="m'+id+'">\n\
+                    <div class="ui-list-info" style="margin: 0 5px 0 5px;">\n\
+                        <h4 class="ui-nowrap">详细要求</h4>\n\
+                        <p style="">'+unescape(other_desc)+'</p>\n\
+                        <h4 class="ui-nowrap">详细地址</h4>\n\
+                        <p>'+unescape(address)+'</p>\n\
+                        <div class="ui-btn-wrap contact'+id+'">\n\
+                            <button class="ui-btn" onclick="checkContact('+id+')">\n\
+                                获取联系方式\n\
+                            </button>\n\
+                        </div>\n\
+                    ';
+                    if (level == '10') {
+                        html +='<p><div class="ui-btn ui-btn-danger" onclick="deleteData('+id+')">\n\
+                                删除\n\
+                            </div></p>';
+                     }
+                     html +='</div>\n\
+                    </li>';
+                    $('#l'+id).after(html);
+                    listArr['l'+id] = id; 
+                    
+                    $('#'+id).css('background-image','url("./Public/Kmic/arrowDown.png")');
+                }else{
+                    listArr['l'+id] = -1; 
+                    $('#'+id).css('background-image','url("./Public/Kmic/arrowUp.png")');
+                    $('#m'+id).remove();
+                }
+            }
+            
+       $("#selectsex .tab li").click(function(){
+                    
+                    page=0;
+                    if ($(this).index() == 0) {
+                        sexSelect = '0';
+                    }else if ($(this).index() == 1) {
+                        sexSelect = '1';
+                    }if ($(this).index() == 2) {
+                        sexSelect = null;
+                    }
+                    $('.list').html('');
+                    getPage();
+               
+            })
+            $("#selectprice .tab li").click(function(){
+                    page=0;
+                    if ($(this).index() == 0) {
+                        priceSelect = '1'; 
+                    }else if ($(this).index() == 1) {
+                        priceSelect = '1-3'; 
+                    }if ($(this).index() == 2) {
+                        priceSelect = '3-5'; 
+                    }if ($(this).index() == 3) {
+                        priceSelect = null; 
+                    }
+                    $('.list').html('');
+                    getPage();
+              
+            })
+            $("#selectarea li").click(function(){
+                if ($(this).index()>0) {
+                    page=0;
+                    where['area'] = $(this).html();
+                    $('.list').html('');
+                    getPage();
+                }
+            })
+            $("#selectall").click(function(){
+                where = new Array();
+                $('#bg').css('display','none');
+                $('.tab').css('display','none');
+                $('.list').html('');
+                getPage();
+            })
+            //
+            $('#selectsex').click(function(){
+                if ($('#selectsex .tab').css("display")=='none') {
+                    $('#selectsex .tab').css("display","block");
+                    $('#bg').css("display","block");
+                }else if ($('#selectsex .tab').css("display")=='block') {
+                    $('#selectsex .tab').css("display","none");
+                    $('#bg').css("display","none");
+                }
+                
+            $('#selectprice .tab').css("display","none");
+                $('#selectarea').css("overflow","hidden");
+            });
+            
+            $('#selectprice').click(function(){
+                if ($('#selectprice .tab').css("display")=='none') {
+                    $('#selectprice .tab').css("display","block");
+                    $('#bg').css("display","block");
+                }else if ($('#selectprice .tab').css("display")=='block') {
+                    $('#selectprice .tab').css("display","none");
+                     $('#bg').css("display","none");
+                }
+                $('#selectsex .tab').css("display","none");
+                $('#selectarea').css("overflow","hidden");
+            });
+            $('#selectarea').click(function(){
+//                if ($(this).css("overflow")=='hidden') {
+//                    $(this).css("overflow","visible");
+//                }else if ($(this).css("display")=='block') {
+//                    $(this).css("overflow","hidden");
+//                }
+//                $('#selectsex').css("overflow","hidden");
+//                $('#selectprice').css("overflow","hidden");
+                $.session.set('returnUrl', '?m=web&openid={$Think.session.openid}');
+                location.href= '?m=web&a=area';
+            });
+            
+            var selectedID = 0;
+            var sendingTitle = '';
+            function open_f(title,price,time,id,type,nickname,headimgurl,status){
+                ga('send', 'event', 'ann', 'offerOpen', id);
+                if (status == 1) {
+                    alert('已经结束');
+                    return;
+                }else if (status == 2) {
+                    alert('已经聘请');
+                    return;
+                }
+                sendingTitle = title;
+//                console.log(type);
+                selectedID = id;
+                $('.f_windown').css('display','block');
+                $('.ui-scroller .title').html(title);
+                $('.ui-scroller .price').html(price);
+                $('.ui-scroller .time').html(time);
+                
+                //
+                if (type == 0) {
+                    $('.ui-scroller .sign').css('display','block')
+                    $('.ui-scroller .info').css('display','block');
+                    $('.ui-scroller .name').html('发布人:'+nickname);
+                    $('.ui-scroller .headimgurl').css('background-image','url('+unescape(headimgurl)+')');
+                    $.ajax({
+                        type: 'GET',
+                        url: "?m=web&action=signupcount&openid={$Think.session.openid}",
+                        data: {'aid':selectedID},
+                        success: function(result){
+                            $('.ui-scroller .signuUp').html('一共有'+result+'人报名');
+                        },
+                        beforeSend: function(){
+
+                        },
+                        dataType: 'html'
+                    }); 
+                }else if (type == 1) {
+                    $('.ui-scroller .sign').css('display','none');
+                    $('.ui-scroller .info').css('display','none');
+                    
+                }
+                
+                
+                
+            }
+            $('#f_close').click(function(){
+                $('.f_windown').css('display','none');
+            });
+            //报价
+            $('.sent').click(function(){
+//                console.log(selectedID+'---'+$("input[name='price']").val() +'---'+'{$Think.session.id}');;
+                if ($("input[name='price']").val()=='') {
+                    alert('请输入一个价钱');
+                    return;
+                }
+                ga('send', 'event', 'ann', 'offerSent', $("input[name='price']").val());
+                $.ajax({
+                    type: 'GET',
+                    url: "?m=web&action=offer&openid={$Think.session.openid}",
+                    data: {'price':$("input[name='price']").val(),'aid':selectedID,'title':sendingTitle},
+                    success: function(result){
+//                        console.log(result);
+                        if (result.code==1) {
+                            alert(result.msg);
+                        }else if(result.code==2){
+                            if(confirm(result.msg))
+                            {
+                                location.href= '?m=Center&c=profile&a=member&openid={$Think.session.openid}';
+                            }
+                        }else if(result.code==3){
+                            if(confirm(result.msg))
+                            {
+                                location.href= '?m=web&a=profiles&openid={$Think.get.openid}';
+                            }
+                        }else{
+                            alert('报名成功，请等待对方与您联系。');
+                        }
+                        $('.f_windown').css('display','none');
+                        
+                    },
+                    beforeSend: function(){
+                    },
+                    dataType: 'json'
+                }); 
+            });
+            
+            
+            (function() {
+                
+                var scroll = new fz.Scroll('.ui-scroller', {
+                    scrollY: true
+                });
+//                 scroll.scrollTo(0, 200);
+
+                // 若 offsetX 和 offsetY 都是 true，则滚动到元素位于屏幕中央的位置；
+                scroll.scrollToElement("li:nth-child(3)", 1000, true, true);
+
+            })();
+            
+            function html_decode(str)   
+            {   
+                var s = "";   
+                if (str.length == 0) return "";   
+                s = str.replace(/&gt;/g, "&");   
+                s = s.replace(/&lt;/g, "<");   
+                s = s.replace(/&gt;/g, ">");   
+                s = s.replace(/&nbsp;/g, " ");   
+                s = s.replace(/&#39;/g, "\'");   
+                s = s.replace(/&quot;/g, "\"");   
+                s = s.replace(/<br>/g, "\n");   
+                return s;   
+            }
+            
+            function deleteData(id){
+                
+                if(confirm("确定要删除数据吗？"))
+                {
+                    $.ajax({
+                        type: 'GET',
+                        url: "?m=web&a=deleteData",
+                        data: {'id':id,'openid':$("input[name='openid']").val()},
+                        success: function(result){
+                            alert('删除成功,重进页面后会消除记录.');
+                        },
+                        dataType: 'json'
+                    });
+                }
+            }
+            $('.search').click(function(){
+                var search = $("input[name='search']").val();
+                if (search == '') {
+                    alert('信息不能为空');
+                    return;
+                }
+                where = new Array();
+                page = 0;
+                where['keyword'] = search;
+                $('.list').html('');
+                getPage(page,where);
+                $("input[name='search']").val('');
+            });
+            function checkContact(id){
+//                $('.contact'+id).html('df');
+//                alert('开发中');
+//                return;
+                ga('send', 'event', 'ann', 'checkContact', id);
+                $.ajax({
+                    type: 'POST',
+                    url: "?m=web&a=sentContact",
+                    data: {'id':id,'action':'ann'},
+                    success: function(result){
+                        if (result.error == 2 ) {
+                            if(confirm(result.msg))
+                            {
+                                
+                                location.href= '?m=Center&c=profile&a=member&openid={$Think.session.openid}';
+                            }
+                        }else{
+                            $('.contact'+id).html('<h4 class="ui-nowrap">联系方式</h4><ul><input name="contact" type="text" style="width:100%; border:0" value="'+result.msg+'"/><ul>');
+                        }
+                        
+                    },
+                    dataType: 'json'
+                });
+            }
+            
+          </script>        
+          
+    
+          <script src="./Public/UnionInfo.js"></script>
+          <script src="./Public/ga.js"></script>
+          
+    </body>
+</html>

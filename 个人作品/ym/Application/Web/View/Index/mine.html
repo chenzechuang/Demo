@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>开麦</title>
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/json2.js"></script>
+        <link rel="stylesheet" href="./Public/global.css">
+        
+        <style>
+            #selectsex{height: 50px;  overflow: hidden; }
+            #selectprice{height: 50px;  overflow: hidden; }
+            #selectarea{height: 50px;  overflow: hidden; }
+            .ui-container{margin-top: 5px;}
+            .select li{height: 49px; background-color: white; border-bottom: #d9d9d9 1px solid; width: 80px; z-index: 10;}
+            .ui-border-t{}
+            .ui-border-tb .more{background-color: #f4f4f4; }
+            .ui-list li{margin: 0;padding: 0;}
+            .pic{margin: 5px;}
+            .pic .tag{position: absolute; background-image: url("./Public/Kmic/tag.png");
+                background-repeat: no-repeat;background-size: 40px auto; left: 1px; top: 20px; width: 100px; color: white; font-size: 12px;
+            padding-left: 8px;}
+            .d1{background-image: url("./Public/Kmic/d1.png"); background-repeat: no-repeat;background-size: auto 18px;
+            padding-left: 20px; background-position-y: 2px;}
+            .d2{background-image: url("./Public/Kmic/d2.png"); background-repeat: no-repeat;background-size: auto 18px;
+            padding-left: 20px; background-position-y: 2px;}
+            .d3{background-image: url("./Public/Kmic/d3.png"); background-repeat: no-repeat;background-size: auto 18px;
+            padding-left: 20px; background-position-y: 2px;  }
+            .dt{background-image: url("./Public/Kmic/arrowUp.png"); background-repeat: no-repeat; background-position-y: 6px;
+            background-position-x: 62px; background-size: auto 5px; width: 65px;}
+            
+            .f_windown 
+                { 
+                /*border:1px solid red;*/   
+                position:fixed;
+                
+                
+                /*bottom:0px;*/ 
+                left:0px; 
+                right:0px; 
+                margin:auto auto; 
+                height:100%; 
+                width:100%; z-index: 10; 
+            } 
+            .f_windown .bg{
+                position: absolute;
+                height:100%; 
+                width:100%; 
+                -moz-opacity:0.8; /* Moz + FF 透明度20%*/
+                opacity: 0.8; /* 支持CSS3的浏览器（FF 1.5也支持）透明度20%*/
+                bottom:0; 
+                background-color:#000000; z-index: -1; 
+            }
+            .ui-scroller #f_close{position: absolute; margin: 5px; right: 0; top: 8%;}
+            .f_windown .title{background-color: #ff629a; color: white; padding: 5px;
+                -moz-border-radius: 5px 5px 0 0;      /* Gecko browsers */
+                -webkit-border-radius: 5px 5px 0 0;   /* Webkit browsers */
+                border-radius:5px 5px 0 0;  
+            }
+            .ui-scroller {width:auto; margin:20% 20px auto 20px;overflow:hidden; background-color: #f4f4f4;
+                -moz-border-radius: 5px;      /* Gecko browsers */
+                -webkit-border-radius: 5px;   /* Webkit browsers */
+                border-radius:5px;            /* W3C syntax */
+            }
+            .ui-scroller .c1{background-color: #ffffff; color: #989898; padding: 10px;}
+            .ui-scroller .c2{background-color: #ffffff; color: #989898; padding: 10px; margin-top: 10px; }
+            /*.ui-scroller li {margin-bottom:10px;}*/
+            
+            #clear{clear:both; height: 0;}
+            textarea {
+                border:0;background:none;
+                margin-top: 5px;
+                width: 100%;height: 85%;
+            }
+            .offers{border-bottom:#dcdcdc 1px solid; background-color: #f7f7f7;}
+            .offers .t{margin: 5px; }
+        </style>
+    </head>
+    <body ontouchstart="">
+        <header class="ui-header ui-border-b" style="background-color: white;">
+            <i class="ui-icon-return" onclick="window.location.href='./?m=web&openid={$Think.get.openid}'"></i><h1>我发布的</h1>
+        </header>
+<!--        <footer class="ui-footer ui-footer-btn">
+            <ul class="ui-tiled ui-border-t">
+                <li data-href="./?m=web&openid={$Think.get.openid}" class="ui-border-r"><a href="./?m=web&openid={$Think.get.openid}"><div>通告</div></a></li>
+                <li data-href="./?m=web&a=announcement&openid={$Think.get.openid}" class="ui-border-r"><a href="./?m=web&a=announcement&openid={$Think.get.openid}"><div>发通告</div></a></li>
+                <li data-href="./?m=web&a=mine&openid={$Think.get.openid}"><a href="./?m=web&a=mine&openid={$Think.get.openid}"><div>我发布的</div></a></li>
+            </ul>
+        </footer>-->
+        <section class="ui-container">
+            
+            <div class="f_windown" style="display:none;">
+                <div class="bg"></div>
+                
+                <div class="ui-scroller">
+                    <div id="f_close"><img src="./Public/Kmic/close.png" width="30"/></div>
+                    <div class="title"></div>
+                    <div class="c1">
+                        <font size="4" color="#ff629a" class="price">{$Think.lang.L_CURRENCY_SIGN}500元/天</font><br/>
+                        <div style="float:left;" class="time">35分钟前</div><div style="float:right;" class="signuUp"></div>
+                        <div id="clear"></div>
+                    </div>
+                </div>
+            </div> 
+            
+            
+            <ul class="ui-list ui-border-tb">
+            </ul>
+            
+        </section>
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <script>
+            var el;
+            var page = 0;
+            
+            
+            var totalheight = 0;     //定义一个总的高度变量
+            var isLoading = 0;
+            var where = new Array();
+            var isEnd = 0;
+            getPage();
+            function loaddata()
+            { //下拉加载
+                totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());     //浏览器的高度加上滚动条的高度 
+
+                if ($(document).height() <= totalheight)     //当文档的高度小于或者等于总的高度的时候，开始动态加载数据
+                { 
+                    //加载数据
+            //        $("#container").append("我是新加载出来的数据<br/>");
+                    if (isLoading == 0 && isEnd != 1) {
+                        page++;
+                        getPage(page,where);
+                    }
+
+                } 
+            } 
+
+            $(window).scroll( function() { 
+                loaddata();
+            }); 
+
+            function getPage(){
+                var string = '';
+                for (value in where){
+                    if (where[value] != null) {
+                        string += value+'='+where[value]+',';
+                    }
+                }
+                console.log(string);  
+//                return; 
+                $.ajax({
+                    type: 'GET',
+                    url: "?m=Web&a=mine&list",
+                    data: {'page':page,'where':string},
+                    complete:function(result){
+//                        el.loading("hide");
+                    },
+                    success: function(result){
+//                        el.loading("hide");
+
+                        $.each(result, function(i,val){
+                            
+                            var time = getDateDiff(val.modify_time);
+                            var sex = val.sex==0?'{$Think.lang.L_SEX_M}':'{$Think.lang.L_SEX_F}';
+                            
+                            var price_h = '';
+                            if (val.price_h != null) {
+                                if (val.price_h.length >1) {
+                                    price_h = "-"+val.price_h;
+                                }
+                            }
+                            var price = '';
+                            if (val.price  == -1 || val.price == 0) {
+                                price = '自报';
+                            }else{
+                                price = '{$Think.lang.L_CURRENCY_SIGN}'+val.price+price_h+'{$Think.lang.L_MONETARY_UNIT}';
+                            }
+        
+        
+                            var original_desc = val.original_desc==null?'':val.original_desc;
+                            var other_desc = val.other_desc==null?'':val.other_desc;
+                            
+                            var activity_time = val.activity_time==null?'':val.activity_time;
+                            if (activity_time.substring(5,10)=='00-00') {
+                                activity_time = '';
+                            }
+                            //
+                            var img_url = './Public/Kmic/noPic.png';
+//                            console.log(dataobj);
+//                            console.log(val.img_url);
+                            if (val.img_url != null) {
+                                var dataobj=eval("("+val.img_url+")");
+//                            console.log(dataobj);
+                                if (dataobj.length != '') {
+//                                    console.log(dataobj[0]);
+                                    var pic=html_decode(dataobj[0]).replace(new RegExp(/(")/g),"");
+                                    var img_url = dataobj[0] =='' ?'./Public/Kmic/noPic.png':pic;
+                                    console.log(img_url);
+                                }
+                                
+                            }else{
+                                
+                            }
+                            
+                            
+                            
+//                            console.log(dataobj);
+                            //
+                            var activity_type;
+                            
+                            if (val.status == 0) {
+                                activity_type = val.activity_type==null?'其他':val.activity_type;   
+                            }else{
+                                activity_type = val.status == 1?'结束':'已聘';
+                                status = val.status;
+                            }
+                            
+                            
+                            var contact = '';
+                            if (val.echat.length >1) {
+                                contact += '微信:'+val.echat;
+                            }
+                            if (val.email.length >1) {
+                                contact += '<br/>Email:'+val.email;
+                            }
+                            if (val.qq.length >1) {
+                                contact += '<br/>QQ:'+val.qq;
+                            }
+                            //offers
+                            var offers = '';
+                            $.each(val.offers, function(i,offersVal){
+                                console.log(offersVal);
+                                offers += '<li class="offers"><div class="t">'+offersVal.name+'给您的报价是'+offersVal.price+'元/次。<a href="?m=web&a=artistProfiles&uid='+offersVal.uid+'">点击查看他/她的资料</a></div></li>';
+                            });
+//                            console.log(val.offers);
+                            //
+                            $('.ui-border-tb').append('<li class="ui-border-t" id="l'+val.id+'"><div class="pic">\n\
+                            <div class="tag">'+activity_type+'</div>\n\
+                            <img src="'+img_url+'" height="130" width="104"/>\n\
+                        </div>\n\
+                        <div class="ui-list-info" >\n\
+                            <h4 class="ui-nowrap">'+val.title+'</h4>\n\
+                            <p class="ui-nowrap d1">'+sex+'('+val.number+'名)</p>\n\
+                            <p class="ui-nowrap d2">'+activity_time.substring(5,10)+' '+val.activity_time_input+'</p>\n\
+                            <div><div style="float:left;"><p class="ui-nowrap d3">'+val.city+'</p></div>\n\
+                                <div style="float:right; padding-right: 5px;"><div class="ui-badge-muted" style="background-color:gainsboro;">'+time+'</div></div></div>\n\
+                            <div>\n\
+                                <div style="float:left;" ><a href="javascript:void(0);"><h2>'+price+'</h2></a></div>\n\
+                                <div style="float:right;"><div class="ui-badge-muted dt" id="'+val.id+'" onclick="more('+val.id+',\''+escape(original_desc)+escape(other_desc)+'\',\''+escape(contact)+'\',\''+escape(val.address)+'\');">查看详情&nbsp;</div></div>\n\
+                            </div>\n\
+                        </div>\n\
+                    </li><li><div class="ui-btn-wrap"><button class="ui-btn" onclick="end('+val.id+')">活动结束</button>\n\
+                    &nbsp;&nbsp;<button class="ui-btn" onclick="find('+val.id+')">已找到主持</button>\n\
+                    &nbsp;&nbsp;<button class="ui-btn" onclick="deleteData('+val.id+')">删除</button></div></li>\n\
+                    '+offers);
+                        });
+                        
+                        $("#ui-border-tb").find("#loading").remove(); 
+                        
+                        if (result.length>0) {
+                            $("#ui-border-tb").append('<li class="ui-border-t" id="loading">加载中...</li>');
+                        }else{
+                            $("#ui-border-tb").append('<li class="ui-border-t" id="loading">没有更多</li>');
+                            isEnd = 1;
+                        }
+                        isLoading = 0;
+                    },
+                    beforeSend: function(){
+//                        el=$.loading({
+//                            content:'加载中...',
+//                        })
+                    },
+                    dataType: 'json'
+                }); 
+            }
+            
+            //
+            
+            
+            
+            //
+            var listArr = new Array();
+            
+            function more(id,other_desc,contact,address){
+                window.location.href="?m=web&a=announcementShare&aid="+id; 
+                return;
+                if (listArr['l'+id] != id) {
+                    $('#l'+id).after('<li class="ui-border-t more" id="m'+id+'">\n\
+                    <div class="ui-list-info" style="margin: 0 5px 0 5px;">\n\
+                        <h4 class="ui-nowrap">详细要求</h4>\n\
+                        <p style="">'+unescape(other_desc)+'</p>\n\
+                        <h4 class="ui-nowrap">联系方式</h4>\n\
+                        <p>'+unescape(contact)+'</p>\n\
+                        <h4 class="ui-nowrap">详细地址</h4>\n\
+                        <p>'+unescape(address)+'</p>\n\
+                    </div>\n\
+                    </li>');
+                    listArr['l'+id] = id; 
+                    
+                    $('#'+id).css('background-image','url("./Public/Kmic/arrowDown.png")');
+                }else{
+                    listArr['l'+id] = -1; 
+                    $('#'+id).css('background-image','url("./Public/Kmic/arrowUp.png")');
+                    $('#m'+id).remove();
+                }
+            }
+            
+            $("#selectsex li").click(function(){
+                if ($(this).index()>0) {
+                    if ($(this).index() == 1) {
+                        where['sex'] = 0;
+                    }else if ($(this).index() == 2) {
+                        where['sex'] = 1;
+                    }if ($(this).index() == 3) {
+                        where['sex'] = null;
+                    }
+                    $('.ui-border-tb').html('');
+                    getPage();
+                }
+            })
+            $("#selectprice li").click(function(){
+                if ($(this).index()>0) {
+                    if ($(this).index() == 1) {
+                        where['price'] = '1';
+                    }else if ($(this).index() == 2) {
+                        where['price'] = '1-3';
+                    }if ($(this).index() == 3) {
+                        where['price'] = '3-5';
+                    }if ($(this).index() == 4) {
+                        where['price'] = '0';
+                    }
+                    $('.ui-border-tb').html('');
+                    getPage();
+                }
+            })
+            $("#selectarea li").click(function(){
+                if ($(this).index()>0) {
+                    where['area'] = $(this).html();
+                    $('.ui-border-tb').html('');
+                    getPage();
+                }
+            })
+            $("#selectall").click(function(){
+                where = new Array();
+                $('.ui-border-tb').html('');
+                getPage();
+            })
+            //
+            $('#selectsex').click(function(){
+                if ($(this).css("overflow")=='hidden') {
+                    $(this).css("overflow","visible");
+                }else if ($(this).css("display")=='block') {
+                    $(this).css("overflow","hidden");
+                }
+                
+                $('#selectprice').css("overflow","hidden");
+                $('#selectarea').css("overflow","hidden");
+            });
+            $('#selectprice').click(function(){
+                if ($(this).css("overflow")=='hidden') {
+                    $(this).css("overflow","visible");
+                }else if ($(this).css("display")=='block') {
+                    $(this).css("overflow","hidden");
+                }
+                $('#selectsex').css("overflow","hidden");
+                $('#selectarea').css("overflow","hidden");
+            });
+            $('#selectarea').click(function(){
+                if ($(this).css("overflow")=='hidden') {
+                    $(this).css("overflow","visible");
+                }else if ($(this).css("display")=='block') {
+                    $(this).css("overflow","hidden");
+                }
+                $('#selectsex').css("overflow","hidden");
+                $('#selectprice').css("overflow","hidden");
+            });
+            var selectedID = 0;
+            function open_f(title,price,time,id){
+                selectedID = id;
+                $('.f_windown').css('display','block');
+                $('.ui-scroller .title').html(title);
+                $('.ui-scroller .price').html(price);
+                $('.ui-scroller .time').html(time);
+                
+                $.ajax({
+                    type: 'GET',
+                    url: "?m=web&action=signupcount",
+                    data: {'aid':selectedID},
+                    success: function(result){
+                        el.loading("hide");
+                        console.log(result);
+                        $('.ui-scroller .signuUp').html('一共有'+result+'人报名');
+                    },
+                    beforeSend: function(){
+                        el=$.loading({
+                            content:'加载中...',
+                        })
+                    },
+                    dataType: 'html'
+                }); 
+                
+            }
+            $('#f_close').click(function(){
+                $('.f_windown').css('display','none');
+            });
+            
+            //结束
+            function end(id){
+                console.log(id);
+                $.ajax({
+                    type: 'POST',
+                    url: "?m=web&a=mine",
+                    data: {'id':id,'action':'end'},
+                    success: function(result){
+                        el.loading("hide");
+                        console.log(result);
+                        location.reload();
+        
+                    },
+                    beforeSend: function(){
+                        el=$.loading({
+                            content:'加载中...',
+                        })
+                    },
+                    dataType: 'json'
+                }); 
+            }
+            //已经找到
+            function find(id){
+                console.log(id);
+                $.ajax({
+                    type: 'POST',
+                    url: "?m=web&a=mine",
+                    data: {'id':id,'action':'find'},
+                    success: function(result){
+                        el.loading("hide");
+                        console.log(result);
+                        location.reload();
+        
+                    },
+                    beforeSend: function(){
+                        el=$.loading({
+                            content:'加载中...',
+                        })
+                    },
+                    dataType: 'json'
+                }); 
+            }
+            
+            //已经找到
+            function deleteData(id){
+                console.log(id);
+                $.ajax({
+                    type: 'POST',
+                    url: "?m=web&a=mine",
+                    data: {'id':id,'action':'delete'},
+                    success: function(result){
+                        el.loading("hide");
+                        console.log(result);
+                        location.reload();
+        
+                    },
+                    beforeSend: function(){
+                        el=$.loading({
+                            content:'加载中...',
+                        })
+                    },
+                    dataType: 'json'
+                }); 
+            }
+            
+            
+            (function() {
+                
+                var scroll = new fz.Scroll('.ui-scroller', {
+                    scrollY: true
+                });
+//                 scroll.scrollTo(0, 200);
+
+                // 若 offsetX 和 offsetY 都是 true，则滚动到元素位于屏幕中央的位置；
+                scroll.scrollToElement("li:nth-child(3)", 1000, true, true);
+
+            })();
+            
+            function html_decode(str)   
+{   
+                var s = "";   
+                if (str.length == 0) return "";   
+                s = str.replace(/&gt;/g, "&");   
+                s = s.replace(/&lt;/g, "<");   
+                s = s.replace(/&gt;/g, ">");   
+                s = s.replace(/&nbsp;/g, " ");   
+                s = s.replace(/&#39;/g, "\'");   
+                s = s.replace(/&quot;/g, "\"");   
+                s = s.replace(/<br>/g, "\n");   
+                return s;   
+            }
+        </script>
+        
+    </body>
+</html>

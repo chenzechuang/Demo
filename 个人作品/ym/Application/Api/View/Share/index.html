@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>约麦</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="stylesheet" href="./Public/css/index.css">  
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+        <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+                <script src="./Public/js/YMPlayer.js"></script>
+        <style>
+            audio{display: none;}
+        </style>
+     
+    </head>
+
+    <body class="bgf4">
+        <div class="gq_list_article bgw">
+
+          
+            <div class="gq_play"  id="playerControl"></div>
+            <div class="top_img"><img class="img-responsive" src="./Public/img/gg_02.jpg"></div>
+            <div id="progress"></div>
+              <audio id="player1"></audio>
+        </div>
+
+        <div class="col-xs-12 bgw mb10 user_html">
+
+        </div>
+        <div class="clearfix"></div>
+        
+        <div class="col-xs-12 bgw">
+            <div class="replay_box">
+                <div class="replay_box_tit">评论</div>
+                <div class="replay_box_shu">555</div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="content">
+                <div class="lists msg_list">
+                    
+                </div>
+            </div>  
+        </div>
+         <div class="clearfix"></div>
+        <div class="h45"></div>
+        <div class="foot list_article_foot pd0">
+            <div class="downApp"><a href="https://itunes.apple.com/cn/app/id1247463818?mt=8">约麦App 下载</a></div>
+        </div>
+
+        <audio id="bgMusic">
+            <source src="" type="audio/mp3">
+        </audio>  
+        
+        <audio id="fen1">
+            <source src="" type="audio/mp3">
+        </audio>  
+        
+        <audio id="fen2">
+            <source src="" type="audio/mp3">
+        </audio>  
+      
+    
+        <div class="baio">
+            <img class="img-responsive" src="./Public/img/fenx.png">
+        </div>
+        <div class="bg" onclick="bgcolse()"></div>
+        <script src="./Public/dist/dropload.min.js"></script>
+        <!-- Initialize Swiper -->
+        <script>
+            
+            var praise = "";
+            var followClass = "";
+            var result = "";
+            var headimg = "";
+            var name = "";
+            var title = "";       
+            $.ajax({
+                cache: true,
+                type: "GET",
+                url: "index.php?m=api&c=share&uid={$Think.get.uid}&create_time={$Think.get.create_time}&action=aritcle",
+                error: function (request) {
+                    alert('提交超时，请稍候再试！');
+                },
+                success: function (data) {
+                    //      console.log(data);
+                    data = eval('(' + data + ')')
+                    var audio_lite = data.data.audio_lite;
+                    var audio_full = data.data.audio_full;
+//                    if(audio_lite){
+//                        alert('音频转换中。。');
+//                    }
+                   console.log(data);
+                    if(data.data.type == 1){
+                        longAudio(data.aid,audio_lite,audio_full); 
+                    }
+                    if (data.data.headimgurl_user == null) {
+                        headimg = data.data.headimgurl
+                    } else {
+                        headimg = data.data.headimgurl_user
+                    }
+                    
+                    if (data.data.name_user == null) {
+                        name = data.data.name
+                    } else {
+                        name = data.data.name_user
+                    }
+                    $(".top_img").html('<img class="img-responsive" src="'+data.data.cover+'">')
+                    $("#bgMusic").html('<source src="' + data.data.audio[0].pic + '" type="audio/mp3">')
+                    $(".praise").text(data.data.praise);
+                    $(".replay_box_shu").text(data.data.comments);
+                    praise = data.praise;
+                    if (data.state == 0) {
+                        if (data.follow == 0) {
+                          var  follow_html = "<div class=\"active_gz_b\"><img src =\"./Public/img/gz_03.png\"><\/div>";
+                        } else {
+                          var follow_html = "<div class=\"active_gz_c\"><img src =\"./Public/img/gz_06.png\"><\/div>";
+                        }
+                        title = data.data.title;    
+                        //  alert(data.data[0].id); 
+                        result += "<div class=\" list_article_replay\">\n";
+                        result += "	<div class=\"col-xs-9 plr0\">\n";
+                        result += "		<div class=\"col-xs-2 plr0\">\n";
+                        result += "			<a href=\"./index.php?m=web&openid={$Think.get.openid}&c=ym&a=article&uid="+data.uid+"\"><img class=\"img-responsive imgr\" src=\"" + headimg + "\"><\/a>\n";
+                        result += "		<\/div>\n";
+                        result += "		<div class=\"dd_box_headtit\">\n";
+                        result += "			<div class=\"dd_box_headtit_t\">\n";
+                        result += "				" + name + "\n";
+                        result += "			<\/div>\n";
+                        result += "			<div class=\"dd_box_headtit_b\">\n";
+                        result +="<div class=\"fl\">"+ data.data.log_time + " 发布 </div>"  
+                        if(data.data.type == '1'){
+                         result += "				<div class=\"fl\"><img height=\"15\" src=\"./Public/img/dd_03.jpg\">" + data.data.listen + " 收听 </div>\n";
+                        }else{
+                         result += "				<div class=\"fl\"> " + data.data.listen + " 查看 </div>\n";  
+                        }
+                        result += "<div class=\"cl\"></div>"               
+                        result += "			<\/div>\n";
+                        result += "		<\/div>\n";
+                        result += "	<\/div>\n";
+                        result += "	<div class=\"clearfix\">\n";
+                        result += "	<\/div>\n";
+                        result += "	<div class=\"list_article_replay_title\">\n";
+                        result += "		<div class=\"limebl\">\n";
+                        result += "		<\/div>\n";
+                        result += "		" + data.data.content + "\n";
+                        result += "	<\/div>\n";
+ 
+                        result += "<\/div>\n";
+                        $(".user_html").html(result);
+                    }
+
+                }
+
+            })
+            
+
+
+            $(function () {
+                var itemIndex = 0;
+                var start = 0;
+                var dropload = $('.content').dropload({
+                    scrollArea: window,
+                    loadDownFn: function (me) {
+                        $.ajax({
+                            type: 'GET',
+                            url: 'index.php?m=api&c=share&uid={$Think.get.uid}&create_time={$Think.get.create_time}&action=msg&start=' + start,
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.lists.length < 1) {
+                                    dropload.lock('down');
+                                    dropload.noData();
+                                }
+                                console.log(data);
+                               
+                                var result = '';
+                                for (var i = 0; i < data.lists.length; i++) {
+                                    var headimg = "";
+                                    if (data.lists[i].headimgurl_user == null) {
+                                        headimg = data.lists[i].headimgurl
+                                    } else {
+                                        headimg = data.lists[i].headimgurl_user
+                                    }
+
+                                    var name = "";
+                                    if (data.lists[i].name_user == null) {
+                                        name = data.lists[i].name
+                                    } else {
+                                        name = data.lists[i].name_user
+                                    }
+                                     var audioHtml ="";
+                                    if(data.lists[i].audio != ""){
+                                          audioHtml ="<div class=\"col-xs-12 plr0\" onclick=\"initAudio("+data.lists[i].msid+")\"><div class=\"list_article_mp3 pull-left\"><audio src=\""+data.lists[i].audio+"\" id=\"audio"+ data.lists[i].msid+"\" class=\"audio\"><\/audio><\/div><div class=\"pull-left\">"+data.lists[i].audio_time+"'<\/div><\/div>\n";
+                                    }
+                                    result += "<div class=\"col-xs-12 plr0 mb10\">\n";
+                                    result += "	<div class=\"col-xs-2 plr0 \">\n";
+                                    result += "		<img class=\"img-responsive imgr\" src=\"" + headimg + "\">\n";
+                                    result += "	<\/div>\n";
+                                    result += "	<div class=\"col-xs-10 plr0\">\n";
+                                    result += "		<div class=\"dd_box_headtit\">\n";
+                                    result += "			<div class=\"dd_box_headtit_t \">\n";
+                                    result += "				" + name + "<br>\n";
+                                    result += "				<span>\n";
+                                    result += "					" + data.lists[i].log_time.substr(data.lists[i].log_time.length - 8, 5) + "\n";
+                                    result += "				<\/span>\n";
+                                    result += "			<\/div>\n";
+                                    result += ""+audioHtml+""
+                                    result += "			<div class=\"list_article_replay_iso\">\n";
+                                    result += "				 " + data.lists[i].content + "\n";
+                                    result += "			<\/div>\n";
+                                    result += "		<\/div>\n";
+                                    result += "	<\/div>\n";
+                                    result += "<\/div>\n";
+                                    result += "<div class=\"clearfix\">\n";
+                                    result += "<\/div>\n";
+                                    result += "<div class=\"bc1c1 row mb10\">\n";
+                                    result += "<\/div>\n";
+                         
+                                }
+                                start = start + 1;
+                                // 为了测试，延迟1秒加载
+                                setTimeout(function () {
+                                    $('.lists').eq(itemIndex).append(result);
+                                    // 每次数据加载完，必须重置
+                                    me.resetload();
+                                }, 1000);
+                            }
+
+                        });
+
+
+                    }
+                });
+            });
+
+           
+
+           
+            
+            
+            var audio ='';
+            function play() {
+   
+                // audio.src = audio;
+                audio.currentTime = stopP;
+                audio.play();
+                window.setInterval(updateProgressVal,100);
+                var audio_html = '<img onclick="pause()" class="img-responsive" src="./Public/img/dd_07_b.png">'
+                $(".gq_play").html(audio_html);
+                
+
+            }
+            var stopP = '';
+            var stopP2 = '';
+            function pause() {
+
+                if(player1.paused){
+                      stopP = player2.currentTime;
+                }else{
+                      stopP = player1.currentTime;
+                }
+                audio = document.getElementById("bgMusic");
+                audio.pause();
+                player1.pause();
+                player2.pause();              
+                var audio_html = '<img onclick="play()" class="img-responsive" src="./Public/img/dd_07.png">'
+                $(".gq_play").html(audio_html);
+            }
+
+            function wx_share() {
+                $(".baio").css('display', 'block');
+                $(".bg").css('display', 'block');
+            }
+            function bgcolse() {
+                $(".baio").css('display', 'none');
+                $(".bg").css('display', 'none');
+            }
+            
+              $(".SendMessage").focus(function(){
+                $(".list_article_foot").css("height","20%");
+              });
+              $(".SendMessage").blur(function(){
+                $(".list_article_foot").css("height","auto");
+              });
+              
+              
+            /* MP3 */  
+            var audio = '';
+            var upAudio = "0";
+            var listenKey = 0;
+            function initAudio(val){
+                //初始化页面
+                 Player.pause();
+
+                //初始化对象
+                if(val){ 
+
+                    audio = document.getElementById('audio'+val);
+                }else{
+
+                   audio = document.getElementById('bgMusic');
+                   console.log(audio)
+                }
+                
+                 if(upAudio!="0" && upAudio != audio){ //如果上一音频不等于0，并且不是同个音频，则暂停播放
+                    var upAudioID  = upAudio.id.replace("audio",""); //取ID换图片
+                    $(".play_but"+upAudioID+"").html('<img class="img-responsive" src="./Public/img/dd_07.png">')
+                    upAudio.pause();
+                }               
+                playOrPaused(val);
+            }
+            
+            //更新进度条当前值
+    
+            
+            //更新进度条当前值
+            function updateProgressVal(){
+                var progressVal=audio.currentTime/audio.duration*140;
+                document.getElementById("musicAudioProgress").style.width=progressVal+"px";
+            }
+
+            //暂停或播放
+            var progressTimer;
+            function playOrPaused(){
+                if(audio.paused){
+                    upAudio = audio;
+                    audio.play();
+                  //  progressTimer=window.setInterval(audioProgress,100);
+                 //    document.getElementById("musicAudioPlayAndPause").setAttribute("src","img/shutdown.ico");
+                  //  var audio_html = '<img onclick="initAudio()" class="img-responsive" src="./Public/img/dd_07_b.png">'
+                  //  $(".gq_play").html(audio_html);
+                        if(listenKey == 0){ //添加收听数!
+                            $.ajax({
+                                cache: true,
+                                url: "index.php?m=web&c=article&a=articleListen",
+                                data: {
+                                    article_id: '{$Think.get.articleId}',
+                                    uid: '{$Think.get.openid}'
+                                },
+                                type: "POST",
+                                dataType: 'json',
+                                error: function (request) {
+                                    alert('提交超时，请稍候再试！');
+                                },
+                                success: function (data) {
+                                    listenKey = 1;
+                                }
+                            })   
+                        }
+                    return;
+                }
+                audio.pause();
+                    var audio_html = '<img onclick="initAudio()" class="img-responsive" src="./Public/img/dd_07.png">'
+                    $(".gq_play").html(audio_html);               
+              //  document.getElementById("musicAudioPlayAndPause").setAttribute("src","img/wmp.ico")
+            }
+
+            function audioProgress(){
+                if(audio.currentTime <audio.duration){
+                    if(audio.played){
+                        //更新进度条
+                        updateProgressVal();
+                    }
+                }else{
+                    clearInterval(progressTimer);
+                }
+            }           
+
+            var Player ='';
+            function longAudio(id,urlLite,urlFull){
+                    Player = new YMPlayer({
+                    id: id,
+                    urlLite: urlLite,
+                    urlFull: urlFull,
+                    player: document.getElementById('player1'),
+                    playerControl: {'div': '#playerControl',
+                        'playing': '<img  class="img-responsive" src="./Public/img/dd_07_b.png">',
+                        'paused': '<img class="img-responsive" src="./Public/img/dd_07.png">',
+                        'loading': '加载中'},
+                    progress: {'div': '#progress',
+                        'css': 'background-color: red; height: 8px;'}
+                });
+                }
+
+            $("#checkStatus").click(function () {
+                console.log(Player.status()); //返回 paused 时 就是暂停      返回 playing 时 就是播放
+            })
+            $("#stop").click(function () {
+                Player.pause();
+            })
+        </script>
+    </body>
+</html>

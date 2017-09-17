@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>开麦</title>
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        <script src="./Public/timeFormat.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="./Public/calendar/calendar.css" />
+        <script src="./Public/jquery.min.js"></script>
+        <script src="./Public/calendar/js/calendar.js"></script>
+        <script src="./Public/pcSelect/jquery.cxselect.js"></script>
+        <link rel="stylesheet" href="./Public/global.css">
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+           
+      
+        <style>
+            label{color: #ff90b7;}
+            .pics li{list-style: none; float: left; width: 88px;height: 88px;border:#e9e9e9 2px dashed; margin: 5px; padding: 0px; overflow: hidden;
+            text-height: 103px;}
+            .pics .add{background-image: url('./Public/Kmic/picAdd.jpg'); background-repeat: no-repeat; background-position: center; background-size: 50px 50px;}
+            .file input {
+                /*position: absolute;*/
+                font-size: 100px;
+/*                right: 0;
+                top: 0;*/
+                opacity: 0;
+                width: 103px; height: 103px;
+            }
+            .file:hover {
+                background: #AADFFD;
+                border-color: #78C3F3;
+                color: #004974;
+                text-decoration: none;
+            }
+            body{font-family:"Microsoft YaHei",微软雅黑; font-size: 14px;}
+            body label{ font-size: 14px;}
+            body input{ font-size: 14px;}
+            body select{ font-size: 14px;}
+            body textarea{ font-size: 14px;}
+            .element_id .ui-select{ border-bottom: 1px solid #e0e0e0;}
+            #radio{ position: absolute; margin-left: 90px;}
+            #radio li:nth-child(odd){float: left; width: 25px; font-size: 14px;}
+             #radio li:nth-child(even){float: left; font-size: 14px;}
+            #radio li input{}
+            
+            .address_select{ width: 22%; float: left; margin: 0px 5px 0px 0px !important;}
+            .address_select:nth-child(2){ margin-left: 90px  !important;}
+            #dd{ position: fixed !important; left: 0 !important; right: 0 !important;  top: 20% !important; margin: 0px auto !important;}
+            #bg{ background-color: #000000; position: fixed; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.5; display: none;}
+            .activity_type_tab{ position:  absolute; top: 45px; left: 0px; background: #FFF; width: 100%; display: none; z-index: 9; }
+            .activity_type_tab ul{ padding:10px 15px;}
+            .activity_type_tab li{ float: left; padding:6px 15px; margin: 8px; border: 1px solid #e0e0e0;}
+            .cl{ clear: both; height: 0px; overflow: hidden;}
+            .la_button{background-image: url("./Public/Kmic/la_button.jpg"); background-repeat: no-repeat; background-position: center center; background-size: auto 100%; height: 20px; border-top: 1px solid #ebebeb;  margin-top: 80px; width: 100%;}
+        </style>
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['chooseImage','previewImage','checkJsApi','uploadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+        </script>
+
+    </head>
+    <body ontouchstart=""><header class="ui-header ui-border-b" style="background-color: white;">
+            <i class="ui-icon-return" onclick="window.location.href='./?m=web&openid={$Think.get.openid}'"></i><h1>发通告</h1>
+        </header>
+        <div id="dtBox"></div>
+
+        <section class="ui-container">
+            <div class="ui-form ui-border-t">
+                <form role="form" method="post" name="dosubmit" id="dosubmit">
+                    <div class="ui-form-item ui-border-b" style="background-color: #f4f4f4;">
+                        必填内容 
+                    </div>
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            标题
+                        </label>
+                        <input type="text" placeholder="如某某活动需要女主持一名" name="title">
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>活动类型</label>
+                        <input type="text" id="activity_type_val"  name="activity_type"  placeholder="活动类型">           
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b" style="height:90px;">
+                        <label>活动日期</label>      
+                        <input type="text" id="dt"  name="activity_time"  placeholder="活动开始日期">
+                        <div id="dd"></div>
+ 
+                        <div class=" ui-border-b" style=" margin-left: 90px; height: 1px;"></div>
+                        <input type="text" placeholder="日期更多信息,如:5,6,7号早上" name="activity_time_input">
+                    </div>
+                    
+                    <div class="ui-form-item element_id" style="padding-right:0px;" >
+                        <label>活动地址</label>
+                        <div class="ui-select address_select">
+                            <select class="province" data-value="广东省" name="province">
+                                
+                            </select>
+                        </div>
+                        <div class="ui-select address_select">
+                            <select class="city" data-value="广州市" name="city">
+                            </select>
+                        </div>
+                        <div class="ui-select address_select">
+                            <select class="area" name="area">
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="ui-form-item ui-form-item-textarea ui-border-b" style="height:60px;">
+
+                        <textarea placeholder="请输入详细地址" name="address" style="height:40px;" id="address"></textarea>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>主持人性别</label>
+                        
+                         
+                        <div id="radio">
+                            <ul>
+                                <li><input name="sex" type="radio" value="0" /></li>
+                                <li>男</li>
+                                <li><input name="sex" type="radio" value="1" /></li>
+                                <li>女</li>
+                                <li><input name="sex" type="radio" value="-1" /></li> 
+                                <li>不限</li>
+                            </ul>
+                        </div>
+                      
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>主持人数量</label>
+                          <div id="radio">
+                            <ul>
+                                <li><input name="number" type="radio" value="1" /></li>
+                                <li>1个</li>
+                                <li><input name="number" type="radio" value="2" /></li>
+                                <li>2个</li>
+                                <li><input name="number" type="radio" value="3" /></li> 
+                                <li>3个</li>
+                                <li><input name="number" type="radio" value="-1" /></li> 
+                                <li>3个以上</li>                                
+                            </ul>
+                        </div>
+
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b" style="height:90px;">
+                        <label>
+                            价格/天<br/><font size="1">留空为价格自报</font>
+                        </label>
+                        <input type="text" placeholder="填写起点价格" name="price" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" >
+                        <input type="text" placeholder="填写最高价格" name="price_h" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" >
+
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b" style="background-color: #f4f4f4;">
+                        选填内容
+                    </div>
+                    
+                    <div class="ui-form-item ui-form-item-textarea ui-border-b" style="height:120px;">
+                        <label>
+                            详细内容
+                        </label>
+                        <textarea placeholder="输入活动的详细信息" name="original_desc" style="height:100px;"></textarea>
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            电话
+                        </label>
+                        <input type="text" placeholder="请输入电话" name="phone">
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            QQ
+                        </label>
+                        <input type="text" placeholder="请输入QQ" name="qq">
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            微信号
+                        </label>
+                        <input type="text" placeholder="请输入微信号" name="echat">
+                    </div>
+                    
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            Email
+                        </label>
+                        <input type="text" placeholder="请输入Email" name="email">
+                    </div>
+                    
+                    
+                    
+                    
+                    <div class="ui-form-item file">
+                        <div style="color: #ff90b7;">添加宣传图片</div>
+                        <ul class="pics">
+                            
+                            <li class="add">
+                                
+                            </li>
+                            
+                            
+                        </ul>
+                        <div id="clear"></div>
+                        <input type="hidden" name="pics" value="" />
+                    </div>
+                </form><div style="height:0; clear: both;"></div>
+                <div class="ui-btn-wrap" style="">
+                    您有{$centerUserData.point}积分。发布一条通告送3积分。
+<!--                    <a href="?m=center&c=profile&openid={$Think.get.openid}&show=qrcode">点击这里获得更多积分。</a>-->
+                </div>
+                
+
+
+                <div class="ui-btn-wrap" style="">
+                        <button class="ui-btn-lg submit" style="background:#ff629a;color: white;" >
+                            立刻发布|送3积分
+                        </button>
+                    </div>
+            </div>
+            
+        </section>
+        <div class="ui-loading-block show">
+            <div class="ui-loading-cnt">
+                <i class="ui-loading-bright"></i>
+                <p>正在加载中...</p>
+            </div>
+        </div>
+            <div class ="activity_type_tab">
+                <ul>
+                    <foreach name='dictionary' item='vo'>
+                        <li>{$vo.item_name}</li>
+                    </foreach>                                
+                </ul>
+                <div class="cl"></div>
+                <div class="la_button"></div>
+            </div>
+        <div id="bg"></div>
+        <!--<script src="./Public/localResizeIMG/dist/lrz.bundle.js"></script>-->
+        <script>
+            
+            $("#activity_type_val").click(function(){
+                $(".activity_type_tab").css("display","block");
+                $("#bg").css("display","block");
+            });
+            
+             $(".activity_type_tab").click(function(){
+                $(".activity_type_tab").css("display","none");
+                $("#bg").css("display","none");
+            });           
+            
+            $(".activity_type_tab li").click(function(){
+                val = $(this).html()
+                $("#activity_type_val").val(val);
+                $(".activity_type_tab").css("display","none");
+                $("#bg").css("display","none");
+            })
+            
+            $('#dd').calendar({
+                trigger: '#dt',
+                zIndex: 999,
+                        format: 'yyyy-mm-dd',
+                onSelected: function (view, date, data) {
+                    console.log('event: onSelected')
+                },
+                onClose: function (view, date, data) {
+                    console.log('event: onClose')
+                    console.log('view:' + view)
+                    console.log('date:' + date)
+                    console.log('data:' + (data || 'None'));
+                }
+            });
+
+            $("#dt").click(function(){
+                $("#bg").css("display","block");
+            })
+            
+            $("#bg").click(function(){
+                $("#bg").css("display","none");
+            })    
+            $("#dd").click(function(){
+                $("#bg").css("display","none");
+            })   
+            
+            var pics = new Array();
+            var picURLs = new Array();
+            $(".add").click(function(){
+                wx.chooseImage({
+                    count: 1, // 默认9
+                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: function (res) {
+                        var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                        localIds.forEach(function(e){  
+                            //
+                            
+                            wx.uploadImage({
+                                localId: e, // 需要上传的图片的本地ID，由chooseImage接口获得
+                                isShowProgressTips: 1, // 默认为1，显示进度提示
+                                success: function (res) {
+                                    var serverId = res.serverId; // 返回图片的服务器端ID
+                                    var url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token={:S('token')->access_token}&media_id="+serverId;
+//                                    alert(url);
+                                    picURLs.push(url);
+//                                    $(".imgList").append('<li><a href="#popupDialog" data-rel="popup" data-position-to="window" data-transition="flip" class="delete" onclick="sessionStorage.picID=\''+url+'\'"><img src="Public/Images/close.png" width="30"/></a><img src="'+url+'" onclick="checkImage(\''+url+'\');"/></li>');
+                                    $(".pics").prepend('<li><img src="'+url+'" width="103"/></li>');
+                                },fail: function (res) {
+                                    alert('fail');
+                                }
+                            });
+                
+                
+                            pics.push(e);
+                                    
+                            
+                        });
+
+                    }
+                });
+            });
+            
+//            $(".pics").prepend('<li><img src="'+result.url+'" width="103"/></li>');
+            
+//            var picArr = new Array();
+//            document.querySelector('#file').addEventListener('change', function () {
+//                $('.show').fadeIn();
+//            lrz(this.files[0],{width: 700})
+//                   .then(function (rst) {
+//                       // 处理成功会执行
+////                       console.log(rst);
+//                        var xhr = new XMLHttpRequest();
+//                        var data = {
+//                            base64: rst.base64,
+//                            size: rst.base64.length // 校验用，防止未完整接收
+//                        };
+//                        xhr.open('POST', '?m=web&a=announcement&upload');
+//                        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+//                        xhr.onreadystatechange = function () {
+////                            console.log(xhr.status);
+//                            if (xhr.readyState === 4 && xhr.status === 200) {
+//                                
+//                                var result = JSON.parse(xhr.response);
+//                                if (result.error == 0) {
+//                                    $(".pics").prepend('<li><img src="'+result.url+'" width="103"/></li>');
+//                                    picArr.push('"'+result.url+'"');
+//                                    console.log(picArr);
+//                                }
+////                                console.log(result);
+//                                
+////                                result.error
+////                                    ? alert('服务端错误，未能保存图片')
+////                                    //: demo_report('服务端实存的图片', result.src, result.size);
+////                                                                : alert('上传OK');
+//                            }
+//                        };
+//                        xhr.send(JSON.stringify(data)); // 发送base64
+////                        });
+//                   })
+//                   .catch(function (err) {
+//                       // 处理失败会执行
+//                       console.log(rst);
+//                   })
+//                   .always(function () {
+//                       // 不管是成功失败，都会执行
+//                       $('.show').fadeOut();
+//                   });
+//           });
+           
+
+            
+            $('.element_id').cxSelect({ 
+                url: './Public/pcSelect/cityData.min.js',               // 如果服务器不支持 .json 类型文件，请将文件改为 .js 文件 
+                selects: ['province', 'city', 'area'],  // 数组格式，请注意顺序 
+                nodata: 'none' 
+            }); 
+            
+            //
+            $(".submit").click(function(){
+                
+                if ($("input[name='title']").val()=='') {
+                    alert('标题不能为空');
+                    return;
+                }
+                if ($("input[name='activity_type']").val()=='') {
+                    alert('活动类型不能为空');
+                    return;
+                }
+                if ($("input[name='province']").val()=='') {
+                    alert('省不能为空');
+                    return;
+                }
+                if ($("input[name='city']").val()=='') {
+                    alert('市不能为空');
+                    return;
+                }
+                if ($("input[name='activity_time']").val()==''&& $("input[name='activity_time_input']").val()=='' ) {
+                    alert('活动日期不能为空');
+                    return;
+                }
+//                var address = $("#address").val();
+//                if (address == '' ) {
+//                    alert('活动地址不能为空');
+//                    return;
+//                }
+                if ($("input[name='sex']").val()=='') {
+                    alert('主持人性别不能为空');
+                    return;
+                }
+                if ($("input[name='number']").val()=='') {
+                    alert('主持人数量不能为空');
+                    return;
+                }
+                if ($("input[name='phone']").val()==''&&$("input[name='qq']").val()==''&&
+                        $("input[name='echat']").val()==''&&$("input[name='email']").val()=='') {
+                    alert('至少填写一种联系方式');
+                    return;
+                }
+                $("input[name='pics']").val(picURLs.join("[-]"));
+                
+//                alert(picURLs);
+                $('.show').fadeIn();
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url:"?m=web&a=announcement&action=addann&openid={$Think.get.openid}",
+                    data:$('#dosubmit').serialize(),// 序列号formid
+                    async: false,
+                    dataType: 'json',
+                    error: function(request) {
+                        alert('提交超时，请稍候再试！');
+                        $('.show').fadeOut();
+                    },
+                    success: function(data) {
+                        if (data.error == 0) {
+                            alert('发布成功！信息大约在5分钟左右显示出来!');
+                            window.location.href="?m=web&a=announcement&openid={$Think.get.openid}";
+                        }else if (data.error == 2) {
+                            alert('积分不够,请24小时后再试!');
+                        }else if (data.error == 3) {
+                            alert('您的用户数据出错,请取消关注后重试.或者与管理员联系.');
+                        }else{
+                            alert('提交超时，请稍候再试！');
+                        }
+                        $('.show').fadeOut();
+                    },
+                    beforeSend: function(){
+                        
+                    },
+                });
+            });
+            
+            
+            $('.show').fadeOut();
+            var openid = '{$Think.session.openid}';
+        </script>
+         <script src="./Public/UnionInfo.js"></script>
+        <script src="./Public/ga.js"></script>
+    </body>
+</html>
+ 
+

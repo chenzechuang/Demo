@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>开麦主持</title>
+
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+
+        <link rel="stylesheet" href="./Public/bootstrap/bootstrap.css">
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+        <link rel="stylesheet" href="./Public/cityPicker/cityPicker.css">
+        <link rel="stylesheet" href="./Public/css/index.css">
+
+        <script src="./Public/json2.js"></script>
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/jquery.min.js"></script>
+        <script src="./Public/jquery.session.js"></script>
+        <!-- <script src="https://cdn.bootcss.com/hammer.js/2.0.8/hammer.min.js"></script> -->
+        <script src="./Public/bootstrap/bootstrap.min.js"></script>
+        <script src="https://cdn1.lncld.net/static/js/av-min-1.5.0.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            wx.ready(function(){
+                wx.onMenuShareTimeline({
+                    title: '全国主持人通告', // 分享标题
+                    link: 'http://www.kmic168.com/index.php?m=web', // 分享链接,将当前登录用户转为puid,以便于发展下线
+                    desc: '实时更新，每次点开都有新通告噢',
+                    imgUrl: 'http://www.kmic168.com/Public/img/logo.jpg', // 分享图标
+                    success: function () { 
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                        // 用户取消分享后执行的回调函数
+                    },
+                    trigger: function (res) {
+                    //alert("分享到朋友圈按钮点击");        
+                    },
+                    fail: function (res) {
+                    //alert(JSON.stringify(res));
+                    }
+                });
+                
+                wx.onMenuShareAppMessage({
+                    title: '全国主持人通告', // 分享标题
+                    desc: '实时更新，每次点开都有新通告噢', // 分享描述
+                    link: 'http://www.kmic168.com/index.php?m=web', // 分享链接
+                    imgUrl: 'http://www.kmic168.com/Public/img/logo.jpg', // 分享图标
+                    type: 'link', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () { 
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+            });
+        </script>
+        
+        <script>
+            var APP_ID = '29f9bXMjtcmOkhtzRCWtVlgM-gzGzoHsz';
+            var APP_KEY = 'FweIIrWPbdjifiD0GwQSEMna';
+            AV.init({
+              appId: APP_ID,
+              appKey: APP_KEY
+            });
+        </script>
+    </head>
+    <body ontouchstart=""><input type="hidden" name="openid" value="{$Think.session.openid}"> 
+        
+        <!-- header -->
+        <header class="detail-header">
+            <div class="location">
+               <input type="text" name="city" class="city" value="全国" readonly>
+            </div>
+            <div class="header-title">
+                <p>通告</p>
+            </div>
+            <div class="filter">
+                
+                <div class="filter-content">
+                    <header class="detail-header">
+                        <div class="back">
+                        </div>
+                        <div class="header-title">
+                            <p>筛选</p>
+                        </div>
+                        <div class="filter-close">
+                            
+                        </div>
+                    </header>
+                    <section class="filter-menu">
+                        <ul class="filter-list">
+                            <li class="sex filter-item">
+                                <p>{$Think.lang.L_SEX}</p>
+                                <ul>
+                                    <li>{$Think.lang.L_SEX_M}主持</li>
+                                    <li>{$Think.lang.L_SEX_F}主持</li>
+                                    <li>不限</li>
+                                </ul>
+                            </li>
+                            <li class="price filter-item">
+                                <p>{$Think.lang.L_PRICE}</p>
+                                <ul>
+                                    <li>1K以下</li>
+                                    <li>1K~3K</li>
+                                    <li>3K以上</li>
+                                    <li>面议</li>
+                                </ul>
+                            </li>
+                            <li class="filter-btn filter-item clearfix">
+                                <a class="reset" href="javascript:;">重置</a>
+                                <a class="confirm" href="javascript:;">确定</a>
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+                
+            </div>
+        </header>
+        
+
+        <div class="f_windown">
+            <div class="bg"></div>
+            <div class="ui-scroller">
+                <div id="f_close"><img src="./Public/Kmic/close.png" width="30"/></div>
+                <div class="f_close_line"></div>
+                <div class="windown-info">
+                    <p>报名成功</p>
+                    <p>已把您的资料投递到商家，请耐心等候恢复</p>
+                    <a href="">确定</a>
+                </div>
+            </div>
+        </div> 
+
+        <div class="f_windown1">
+            <div class="bg"></div>
+            <div class="ui-scroller">
+                <div id="f_close1"><img src="./Public/Kmic/close.png" width="30"/></div>
+                <div class="f_close_line"></div>
+                <div class="windown-info">
+                    <p>您的报价 (单位/元)</p>
+                    <input name="price" type="text" placeholder="输入价钱 / 元" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" >
+                    <a class="sent" href="javascript:;">立即报名</a>
+                </div>
+            </div>
+        </div> 
+
+        <!-- main -->
+        <section class="announce-menu">
+            <!-- banner carousel -->
+            <a class="banner" href="./Public/zm/index.html"><img src="./Public/img/webwxgetmsgimg00ANOVSV.jpg" alt="banner"></a>
+            <!-- <div data-ride="carousel" class="carousel slide" id="carousel-example-generic">
+                <ol class="carousel-indicators">  http://mp.weixin.qq.com/s/3kFTY0VfSR6gltu8ZXCtTA
+                    <li class="" data-slide-to="0" data-target="#carousel-example-generic"></li>
+                    <li data-slide-to="1" data-target="#carousel-example-generic" class="active"></li>
+                    <li data-slide-to="2" data-target="#carousel-example-generic" class=""></li>
+                    <li data-slide-to="3" data-target="#carousel-example-generic" class=""></li>
+                </ol>
+                <div role="listbox" class="carousel-inner">
+                    <div class="item">
+                        <img alt="First slide" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/1/default.jpg" data-holder-rendered="true">
+                    </div>
+                    <div class="item active">
+                        <img alt="Second slide [1140x500]" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/2/default.jpg" data-holder-rendered="true">
+                    </div>
+                    <div class="item">
+                        <img alt="Third slide [1140x500]" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/3/default.jpg" data-holder-rendered="true">
+                    </div>
+                    <div class="item">
+                        <img alt="Four slide [1140x500]" src="http://images3.c-ctrip.com/rk/201407/ll580x145.jpg" data-holder-rendered="true">
+                    </div>
+                </div>
+            </div> -->
+           
+            
+            <!-- announce -->
+            <ul class="ui-list ui-border-tb list">
+            </ul>
+            
+
+            <!-- loading -->
+
+            <div class="ui-loading-block show">
+                <div class="ui-loading-cnt">
+                    <i class="ui-loading-bright"></i>
+                    <p>正在加载中...</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- footer -->
+        <footer id="footer">
+            <ul>
+                <li class="current"><a href="?m=web&c=index&openid={$Think.get.openid}"><i></i>通告</a></li>
+                <li><a href="?m=web&c=index&a=artist&openid={$Think.get.openid}"><i></i>主持人</a></li>
+                <li><a href="?m=web&c=index&a=goods&openid={$Think.get.openid}"><i></i>闲置</a></li>
+                <li><a href="?m=Center&c=Profile&a=index&openid={$Think.get.openid}"><i></i>我</a></li>
+            </ul>
+        </footer>
+
+        <!-- 发通告 -->
+        <div class="announce">
+            <a href="?m=web&a=announcement&openid={$Think.get.openid}"></a> 
+        </div>  
+
+        <script src="./Public/cityPicker/cityPicker.js"></script>
+        <script src="./Public/js/index.js"></script>  
+        
+        <script>
+            $('.show').fadeOut();
+            $(".city").CityPicker();
+            
+            $(window).scroll(function() {
+                if ($(document).scrollTop() != 0){
+                    sessionStorage.setItem("offsetTop", $(window).scrollTop());//保存滚动位置
+                } 
+                loaddata();
+            });
+
+
+            var el,
+                totalheight = 0,     //定义一个总的高度变量
+                isLoading = 0,
+                city = "",
+                province = "",
+                where = new Array(),
+                page = 0,
+                isEnd = 0,
+                level = '{$Think.session.level}',
+                openid = '{$Think.session.openid}',
+                back = window.location.href.indexOf('back'),
+                uncache = window.location.href.indexOf('uncache');
+
+
+            if (back != -1 || uncache != -1) {
+                ifBack();
+            } else {
+                sessionStorage.setItem("city", "全国");
+                var _city = sessionStorage.getItem("city");
+                cityPage(_city);
+            }
+
+            
+
+            $(document).on('click', '.city-picker li', function(event) {
+                citySelect(event, this);
+            });
+
+            $(document).on('click', '#hot-city dd', function(event) {
+                citySelect(event, this);
+            });
+            
+
+            function getPage(){
+                sessionStorage.setItem("page", parseInt(page)+1);
+                console.log("save:"+sessionStorage.getItem("page"));
+                var string = '';
+                for (value in where){
+                    if (where[value] != null) {
+                        string += value+'='+where[value]+',';
+                        console.log(string);
+                    }
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    url: "?m=Web&a=announcementList",
+                    data: {'page':page,'where':string},
+                    complete:function(result){
+                    },
+
+                    success: function(result){
+                        $.each(result, function(i,val){
+                            // console.log(val);
+                            var time = getDateDiff(val.modify_time);
+                            var sex = '';
+                            if (val.sex == -1) {
+                                sex = '不限 ';
+                            }else if (val.sex == 0) {
+                                sex = '{$Think.lang.L_SEX_M}主持人 ';
+                            }else {
+                                sex = '{$Think.lang.L_SEX_F}主持人 ';
+                            }
+                            var price_h = '';
+                            if (val.price_h != null) {
+                                if (val.price_h.length >1) {
+                                    price_h = "-"+val.price_h;
+                                }
+                            }
+                            var price = ''
+                            if (val.price  == -1 || val.price == 0) {
+                                price = '自报价格';
+                            } else {
+                                price = '{$Think.lang.L_CURRENCY_SIGN}'+val.price+price_h+'{$Think.lang.L_MONETARY_UNIT}';
+                            }
+                            
+                         
+                            var activity_time = val.activity_time==''?val.activity_time_input:val.activity_time.substring(5,10);
+                            if (activity_time.substring(5,10)=='00-00') {
+                                activity_time = '';
+                            }
+
+                            var strVar_html ='';
+                            if (level == '10') {
+                                strVar_html ='<div class="lx_button" onclick="deleteData(event,'+val.id+')">删除</div>';
+                            }
+        
+
+                            var img_url = './Public/Kmic/noPic.png';
+                            if (val.img_url != null) {
+
+                                var dataobj = val.img_url;
+                                if (dataobj != '[\"\"]') {
+                                    var pic = html_decode(dataobj[0]).replace(new RegExp(/(")/g),"");
+                                    var img_url = dataobj[0] =='' ?'./Public/Kmic/noPic.png':pic;
+                                    if (val.type == 0) {
+                                        img_url = dataobj[0] =='' ?val.wx_info.headimgurl:pic;
+                                    }else{
+                                        img_url = dataobj[0] =='' ?'./Public/Kmic/noPic.png':pic;
+                                    }
+                                }                
+                            }
+
+                            var city ='';
+                            if (val.city.length >1) {
+                                city = val.city;
+                            }else{
+                                city = val.province;
+                            }
+                            var type = '';
+                            if (val.type == 0) {
+                                type = '<div class="tag2">一手</div>';
+                            }
+                            var str = '';
+                            str += '<li class="ui-list-item" id="l'+val.id+'">';
+                            
+                            str += '<div class="list-menu" onclick="announcementPage(\''+openid+'\',\''+val.id+'\');" >';
+                           
+                            str += strVar_html;
+                            str += '<div class="time-split"></div>\n\
+                            <div class="list-time"><p>'+time+' 发布</p></div>';
+
+                            if (val.province == '北京市' || val.province == '上海市' || val.province == '天津市' || val.province == '重庆市' ||val.province == '香港特别行政区' || val.province == '澳门特别行政区') {
+                                str += '<div class="list-item list-title"><p>['+ val.province +'] '+val.title+'</p></div>';
+                            }
+                            else if (val.city) {
+                                str += '<div class="list-item list-title"><p>['+ val.city +'] '+val.title+'</p></div>';
+                            } else if (val.province) {
+                                str += '<div class="list-item list-title"><p>['+ val.province +'] '+val.title+'</p></div>';
+                            }
+
+                            str += '<div class="list-item list-act-time"><p>'+activity_time+'</p></div>\n\
+                            <div class="list-item list-number"><p>'+sex+val.number+'名</p></div>\n\
+                            <div class="list-item list-signup clearfix"><div class="price" style="float:left;"><p>'+price+'</p></div>';
+                            if (val.type == 0) {
+                                str += '<div style="float:right;"><p class="d5"></p><button onclick="open_f(event,\''+openid+'\',\''+val.title+'\',\''+val.price+'\',\''+val.modify_time+'\',\''+val.id+'\','+val.type+',\''+val.wx_info.nickname+'\',\''+escape(img_url)+'\','+val.status+');">报名\n\
+                                </button></div>';
+                            } else {
+                                str += '<div style="float:right;"><button>查看详情\n\
+                                </button></div>';
+                            }
+                            str += '</div></li>';
+
+                            $('.list').append(str);
+
+                            if (val.type == 0) {
+                                $.ajax({
+                                    type: 'GET',
+                                    url: "?m=web&action=signupcount&openid={$Think.session.openid}",
+                                    data: {'aid':val.id},
+                                    success: function(result){
+
+                                        $('#l'+val.id+' .d5').html('已有 '+ JSON.parse(result) +' 人报名');
+                                    },
+                                    beforeSend: function(){
+
+                                    },
+                                    dataType: 'html'
+                                });
+
+                            }
+                        });
+                        sessionStorage.setItem("list", $('.list').html());
+                       
+                        $(".list").find("#loading").remove(); 
+                        
+                        /*if (result.length > 0) {
+                            $(".list").append('<li class="ui-border-t" id="loading"><img src="Public/Images/loading.gif" width="50"/></li>');
+                        }*/
+                        if (result.length == 0){
+                            $(".list").append('<li class="ui-border-t" id="loading">没有更多</li>');
+                            isEnd = 1;
+                        }
+                        isLoading = 0;
+                        $('.show').fadeOut();
+                    },
+                    beforeSend: function(){
+                        $('.show').fadeIn();
+
+                    },
+                    dataType: 'json'
+                }); 
+            }
+                    
+        </script>    
+        
+        <script src="./Public/ga.js"></script>
+    </body>
+</html>

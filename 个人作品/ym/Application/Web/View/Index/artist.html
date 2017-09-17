@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>开麦</title>
+         <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">   
+        <link rel="stylesheet" href="./Public/frozenui/css/frozen.css">
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/json2.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="./Public/jquery.min.js"></script>
+        <script src="./Public/jquery.session.js"></script>
+        <link rel="stylesheet" href="./Public/Kmic/css/index.css">
+        <link rel="stylesheet" href="./Public/dist/APlayer.min.css">   
+        <script type="text/javascript">
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone','previewImage','checkJsApi'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            
+            
+            function previewImage(current,all){
+//                console.log(current,all);
+//                wx.checkJsApi({
+//                    jsApiList: [
+//                      'getNetworkType',
+//                      'previewImage'
+//                    ],
+//                    success: function (res) {
+//                      alert(JSON.stringify(res));
+//                    }
+//                  });
+
+                var additionalStrs= new Array(); //定义一数组 
+                    additionalStrs=all.split(",");
+                    
+                $.each(additionalStrs, function(i,val){
+                    additionalStrs[i] = 'http://'+window.location.host+'/'+val.substr(2);
+                });
+                
+                var json = JSON.stringify(additionalStrs);
+                
+//                console.log(current.substr(2),json);
+                
+                console.log(json);
+
+                wx.previewImage({
+                    current: 'http://'+window.location.host+'/'+current.substr(2),
+                    urls: additionalStrs
+                  });
+
+//wx.previewImage({
+////      current: 'http://img5.douban.com/view/photo/photo/public/p1353993776.jpg',
+//current: 'http://'+window.location.host+'/'+current.substr(2),
+//      urls: [
+//        'http://img3.douban.com/view/photo/photo/public/p2152117150.jpg',
+//        'http://img5.douban.com/view/photo/photo/public/p1353993776.jpg',
+//        'http://img3.douban.com/view/photo/photo/public/p2152134700.jpg'
+//      ]
+//    });
+                
+            }
+            function share(title,link,imgUrl){
+                wx.ready(function(){
+                    wx.onMenuShareTimeline({
+                        title: title, // 分享标题
+                        link: link, // 分享链接,将当前登录用户转为puid,以便于发展下线
+                        imgUrl: imgUrl, // 分享图标
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        },
+                        trigger: function (res) {
+//                            alert("分享到朋友圈按钮点击");        
+                        },
+                        fail: function (res) {
+//                            alert(JSON.stringify(res));
+                        }
+                    });
+                    
+                    wx.onMenuShareAppMessage({
+                        title: title, // 分享标题
+                        desc: title, // 分享描述
+                        link: link, // 分享链接
+                        imgUrl: imgUrl, // 分享图标
+                        type: 'link', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                    
+                    wx.onMenuShareQQ({
+                        title: title, // 分享标题
+                        desc: title, // 分享描述
+                        link: link, // 分享链接
+                        imgUrl: imgUrl, // 分享图标
+                        success: function () { 
+                           // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                           // 用户取消分享后执行的回调函数
+                        }
+                    });
+                    
+                    wx.onMenuShareWeibo({
+                        title: title, // 分享标题
+                        desc: title, // 分享描述
+                        link: link, // 分享链接
+                        imgUrl: imgUrl, // 分享图标
+                        success: function () { 
+                           // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                    wx.onMenuShareQZone({
+                        title: title, // 分享标题
+                        desc: title, // 分享描述
+                        link: link, // 分享链接
+                        imgUrl: imgUrl, // 分享图标
+                        success: function () { 
+                           // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                });
+                wx.error(function(res){
+//                    console.log(res);
+//                    alert(JSON.stringify(res));
+                });
+            }
+        </script>
+        <link rel="stylesheet" href="./Public/global.css">
+        <style>
+            #selectsex{  overflow: hidden; }
+            #selectprice{  overflow: hidden; }
+            #selectarea{  overflow: hidden; }  
+            .ui-border-t{}
+            .ui-border-tb .more{background-color: #f4f4f4; margin: -15px 0px 15px 0px !important; }
+            .ui-list li{margin: 0;padding: 0;}
+            .pic{margin: 5px;}
+            .pic .tag{position: absolute; background-image: url("./Public/Kmic/tag.png");
+                background-repeat: no-repeat;background-size: 40px auto;  top: 20px; width: 100px; color: white; font-size: 12px;
+            padding-left: 8px; z-index: 10;}
+            .pic .tagVoice{position: absolute; background-image: url("./Public/Kmic/tag.png");
+                background-repeat: no-repeat;background-size: 40px auto;  top: 40px; width: 100px; color: white; font-size: 12px;
+            padding-left: 8px; z-index: 10;}
+            
+            .pic .tag A:link {
+            color: #ffffff;
+           }
+           .pic .tag A:visited {
+            COLOR: #ffffff;
+           }
+           .pic .tag A:hover {
+            COLOR: #ffffff;
+           }
+           .pic .tag A:active {
+            COLOR: #ffffff;  
+           }
+            
+            
+            .d1{background-image: url("./Public/Kmic/d1.png"); background-repeat: no-repeat;background-size: auto 18px;
+            padding-left: 20px; background-position-y: 2px;}
+            .d2{background-image: url("./Public/Kmic/d2.png"); background-repeat: no-repeat;background-size: auto 18px;
+            padding-left: 20px; background-position-y: 2px;}
+            .d3{background-image: url("./Public/Kmic/d3.png"); background-repeat: no-repeat;background-size: auto 18px;
+            padding-left: 20px; background-position-y: 2px;  }
+            .d4{background-image: url("./Public/Kmic/d4.png"); background-repeat: no-repeat;background-size: auto 18px;
+            padding-left: 20px; background-position-y: 2px;  }
+            .dt{background-image: url("./Public/Kmic/arrowUp.png"); background-repeat: no-repeat; background-position-y: 6px;
+            background-position-x: 62px; background-size: auto 5px; width: 65px;}
+            
+            .f_windown 
+                { 
+                /*border:1px solid red;*/   
+                position:fixed;
+                top: -1px;
+                
+                /*bottom:0px;*/ 
+                left:0px; 
+                right:0px; 
+                margin:auto auto; 
+                height:100%; 
+                width:100%; z-index: 105; 
+            } 
+            .f_windown .bg{
+                position: absolute;
+                height:100%; 
+                width:100%; 
+                -moz-opacity:0.8; /* Moz + FF 透明度20%*/
+                opacity: 0.8; /* 支持CSS3的浏览器（FF 1.5也支持）透明度20%*/
+                bottom:0; 
+                background-color:#000000; z-index: -1; 
+            }
+            .ui-scroller #f_close{position: absolute; margin: 2px 5px 5px 5px; right: 0; top: 5px; }
+            .f_windown .title{background-color: #ff629a; color: white; padding: 5px;
+            }
+            .ui-scroller {width:auto; overflow:hidden; background-color: #f4f4f4;
+                          height: 100%;
+            }
+            .ui-scroller .c1{background-color: #ffffff; color: #989898; padding: 10px;}
+            .ui-scroller .c2{background-color: #ffffff; color: #989898; padding: 10px; margin-top: 10px; }
+            /*.ui-scroller li {margin-bottom:10px;}*/
+            
+            #clear{clear:both; height: 0;}
+            textarea {
+                border:0;background:none;
+                margin-top: 5px;
+                width: 100%;height: 85%;
+            }
+            .subImg li img{
+                height: 100px; margin: 0; padding: 0;
+            }
+            .subImg ul{margin: 5px;padding: 0; overflow:hidden;}
+            .subImg li{
+                float: left; margin:0 5px 5px 0; padding: 5px 5px 0 5px; background-color: white; border: 1px #989898 solid;
+            }
+            .subImgMore {
+                position: absolute; right: 0; background-color: lightgray; height: 104px;line-height: 52px; padding: 5px; border-right: #ffffff 5px solid;
+            }
+            
+            .subVideo ul{margin: 5px;padding: 0; overflow:hidden;}
+            .subVideo li{
+                width: 43px; height: 43px; float: left; margin:0 5px 5px 5px;  
+                background-image: url('./Public/Kmic/video.png'); background-repeat: no-repeat; background-position: center; background-size: 43px 43px;
+            }
+            .subVideoMore {
+                float: left;background-color: lightgray; height: 33px;line-height: 17px; padding: 5px; border-right: #ffffff 5px solid;
+            }
+            .msg{background-color:white; margin:0px 0px 5px 0px; width: 100%; padding: 8px 0px 0px 0px;}
+            .pic{overflow: hidden; width: 104px; height: 130px;
+            background-color: black;
+            }
+            .pic .inner{display: inline-block;
+    position: relative;
+    right: -50%;}
+            .pic img { 
+                /*max-width:100%;height:auto;*/ 
+                max-height: 150px;  vertical-align: middle;
+                /*width:expression(this.width > 104 ? "104px" : this.width);*/
+                height:expression(this.height > 150 ? "150px" : this.height);
+                position: relative;
+    left: -50%;
+/*            max-height:130px; 
+ max-width:104px; 
+ width:expression(this.width > 104 && this.height < this.width ? 104: true); 
+ height:expression(this.height > 130 ? 130: true);*/
+            }
+            body{font-family:"Microsoft YaHei",微软雅黑}
+            .menu{ font-size: 15px;}
+            .menu li{ border-right: 1px solid #dedede; }
+            .menu li:nth-child(4){border-right:0px;}     
+            .tab{ position: absolute; width: 100%; top:50px;  left: 0; background: #FFF;display: none; z-index: 10;}
+            .tab ul{ padding:0px; margin: 0px; }
+            .tab li {  border-bottom: 1px solid #d8d8d8;  border-left:0px !important; height: 49px; width: 100%; padding:0px 12px; line-height: 49px; text-align: left !important; display: box; -webkit-box-align:inherit  !important;}
+            #selectsex li{ border-right: 0px !important; }
+            #selectprice li{ border-right: 0px !important; }
+            #selectarea li{ border-right: 0px !important; }    
+            .ui-list-info{ padding-top: 0px; -webkit-box-pack:inherit  !important; padding: 12px 15px 0px 5px;}
+            .ui-list-info p{ padding: 3px 0px 3px 23px; font-size: 13px; }
+            .ui-list-info h4{ font-size: 14px !important; font-weight:bold; color: #333; width: 78%; margin-bottom: 10px;}
+            .pic{ -webkit-border-radius:3px; margin:  10px;}
+            .pic_more{ font-size: 15px !important; margin-top: 5px;}
+            #bg{ background-color: #000000; position: fixed; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.5; display: none; z-index: 2;}
+             .ui-footer{ height: 40px;}
+            .la_button{background-image: url("./Public/Kmic/la_button.jpg"); background-repeat: no-repeat; background-position: center center; background-size: auto 100%; height: 20px; border-top: 1px solid #ebebeb;  margin-top: 80px;}    
+            .lx_textarea{ font-size: 13px; padding: 5px; margin: 8px 8px 0px 8px;}
+            .lx_button{ background-color: #fdca39; font-size: 15px; color: #000;  text-align: center; padding: 3px; float: left;}
+            .list_button{ background-color: #ff629a; font-size: 15px; color: #FFF; border-radius: 3px; text-align: center; padding: 5px 8px; }
+            .wxheadurl img{ height: 50px; width: 50px; border-radius: 50%; border: 2px solid #dedede; }
+            .fl{ float: left;}
+            .fr{ float: right;}
+            .cl{ clear: both; height: 0px; overflow: hidden;}
+
+            .zc_list:nth-child(odd){ float: left; }
+            .zc_list:nth-child(even){ float: right; }
+            .list a{ color: #666;}
+            .user_list{ padding: 15px 10px;}
+            .wxheadurl{ margin: 0px 12px 0px 0px;}
+            .wx_name_w{ }
+            .wx_name { font-size: 15px; max-width: 95px; margin-bottom: 5px; overflow: hidden; height: 25px;}
+            .wx_city{ color:#a9a9a9; font-size: 13px;}
+            .wx_sex1 img,.wx_sex2 img{ width: 18px; float: left; margin: 1px 3px 0px 0px;}
+            .wx_sex0{ background-color: #ffa4b9; padding: 0px 8px 0px 5px; margin: 0px 0px 0px 5px; font-size: 12px; line-height: 22px; color: #FFF; border-radius: 3px;}
+            .wx_sex1{ background-color: #6fbbdf; padding: 0px 8px 0px 5px; margin: 0px 0px 0px 5px; font-size: 12px; line-height: 22px; color: #FFF; border-radius: 3px;}
+            .wx_sex2{ background-color: #ffa4b9; padding: 0px 8px 0px 5px; margin: 0px 0px 0px 5px; font-size: 12px; line-height: 22px; color: #FFF; border-radius: 3px;}
+            .lxwm{ text-align: right;}
+            .lxwm img{ border-radius :0px 0px 0px 20px; width: 80px; }
+            .pic_list{ padding: 0px 10px ;}
+            .pic_list li{ border: 1px solid #dedede; border-radius: 3px;  width: 22%; float: left; margin: 0px 1%; text-align: center; height: 90px; overflow: hidden; border-radius: 3px; display: table-cell; background-size:100% auto;  background-color: #f4f4f4; background-position: center center;  }
+      
+            .price{ line-height: 22px; color: #a9a9a9; font-size: 14px; color: #ff5998;}
+            .price img{ width: 18px; float: left; margin: 3px 5px 0px 0px; }
+            .head{ padding: 15px 0px; background-color: #FFF; position: fixed; width: 100%; z-index: 10; left: 0; top: 0;}
+            .head ul{ margin: 0px; padding: 0px;}
+            .head li{ float: left; width: 25%; text-align: center;}
+            .select li{ width: 100% !important; text-align: center; border-left: 1px solid #999; font-size: 15px; }
+            #selectall li{ border-left:0px !important; }
+            .zc_list{ color: #666; width: 98%;  background-size: 100%; background-repeat: no-repeat; background-color: #eeeeee; background-position: top; padding-bottom: 46px; height: 180px; overflow: hidden; position: relative; margin-bottom: 20px !important;}
+            .zc_list_iso{ background-color: #FFF; position: absolute; bottom: 0; width: 100%; font-size: 14px; padding: 2px 2%;}
+            .plrt{ padding: 60px 10px;}
+            .bgw{ background-color: #FFF;}
+            .nk_name{ height: 22px; font-size: 15px; overflow: hidden; padding: 2px 0px;}
+            .city{ line-height: 22px; color: #b6b6b6;}
+            .city img{ margin: 5px 3px 0px 0px; float: left; width: 12px;}
+            .footNav{  position: fixed; width: 100%; z-index: 10; bottom: 0; padding-top: 5px;}
+            .footNav li { width:33.33%;  float: left; text-align: center; font-size: 14px;}
+            .footNav li a{ color: #333;}
+            .footNav li img{ width: 40px; }
+            #loading{ position: fixed; bottom: 0;}
+            .w50{ width: 50%;}
+             .gl:nth-child(odd){ float: left; }
+            .gl:nth-child(even){ float: right; }
+            .list_menu{ position: absolute; z-index: 1; width: 47%; margin-left: 3px;}
+            .msg_email{ position: fixed; width: 80%; margin: 0px auto; left: 0; right: 0; top: 30%; z-index: 3;}
+            .w100{ width:100%;}
+            .email_button{ margin-right: 2px;}
+            .loading .ui-loading-block{top:40%; width: 130px; left: 0; right: 0; margin: auto;}
+            /*height="130" width="104"*/
+            {$cssCode}
+        </style>
+    </head>
+    <body>
+        <div class=" bgw plrt">
+        <div class="f_windown" style="display:none;">
+           
+                <div class="ui-scroller">
+                    <div id="f_close"><img src="./Public/Kmic/close.png" width="30"/></div>
+                    <iframe frameborder="0" src="" style="width:100%;height:100%;" id="Frm_Main"></iframe> 
+                    
+                </div>
+            </div> 
+        
+        
+        <div class="head">
+            <ul>
+                <li><div class="select" id="selectall"><ul><li>{$Think.lang.L_NEW}</li></ul></div></li>
+                <li><div class="select" id="selectarea"><ul><li>{$Think.lang.L_AREA}</li></ul></div></li>          
+                <li><div class="select" id="selectsex"><ul><li>{$Think.lang.L_SEX}</li><div class="tab"><ul><li>{$Think.lang.L_SEX_M}</li><li>{$Think.lang.L_SEX_F}</li><li>不限</li><div class="cl"></div></ul><div class="la_button"></div></div></ul></div></li>
+                <li><div class="select" id="selectprice"><ul><li>{$Think.lang.L_PRICE}</li><div class="tab"><ul><li>1K以下</li><li>1K-3K</li><li>3K-5K</li><li>不限</li><div class="cl"></div></ul><div class="la_button"></div></div></ul></div></li>
+            </ul>
+            <div class="cl"></div>
+        </div>
+      
+        
+        
+        <input type="hidden" name="openid" value="{$Think.get.openid}" />
+ 
+
+        <section class="ui-container">
+            <!--
+                <ul class="ui-list ui-border-tb">
+                    <li>
+                        <section class="ui-input-wrap ui-border-t" style="width:100%;">
+                        <div class="ui-input ui-border-radius">
+                            <input type="text"  name="search" value="" placeholder="输入名字">
+                        </div>
+                        <button class="ui-btn search">搜索</button>
+                    </section>
+                    </li>
+                </ul>
+            -->
+
+            <ul class="ui-list ui-border-tb list">
+
+
+
+            </ul>
+            <div class="cl"></div>
+
+        <div class="user_view bgeee">
+  
+            <div class="user_view_close" onclick="user_view_close();">X</div>
+        <div class="col-xs-12 mb10 bgw pb10">
+            <div class="wx_user ptm20 ">
+                <div class="wx_user_head col-xs-4 mb5"></div>
+                <div class="col-xs-12">
+                    <div class="wx_user_name mb5"><span class="mmname">名字</span> <span class="ml15 mmsex"><img width="18" src="./Public/Kmic/mzindex_05.jpg"> <img width="18" src="./Public/Kmic/user_03.jpg"></span></div>
+                    <div class="wx_user_mh mb5 col999">麦麦号： <span class="mmhao"></span> <div class="pull-right"><img width="18" src="./Public/Kmic/map.jpg"> <span class="mmcity"></span></div></div>
+                </div> 
+                 <div class="clearfix"></div>
+            </div> 
+            
+            <div class="row">
+            <div class="col-xs-3 pr0 autio">TA的声音</div>
+            <div class="col-xs-9 pl0">            
+                <div class="aplay"> 
+                <div id="player1" class="aplayer"></div> 
+         
+                </div>
+            </div>
+            </div>    
+        </div>     
+      
+        <div class="col-xs-12 bgw ptm20 mb10">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="web_title"><span class="bl2px"></span> 基本信息</div>
+                </div>
+            </div>
+            
+            <div class="user_info">
+                <div class="row">
+                    <div class="col-xs-3 col999">身高</div>
+                    <div class="col-xs-9 pl0 stature"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>
+
+                 <div class="row">
+                    <div class="col-xs-3 col999">工作单位</div>
+                    <div class="col-xs-9 pl0 organization"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>
+
+                <div class="row">
+                    <div class="col-xs-3 col999">毕业学校</div>
+                    <div class="col-xs-9 pl0 school"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>
+
+                <div class="row">
+                    <div class="col-xs-3 col999">主持经验</div>
+                    <div class="col-xs-9 pl0 experience"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>      
+                
+                <div class="row">
+                    <div class="col-xs-3 col999 ">曾获荣誉</div>
+                    <div class="col-xs-9 pl0 honour"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>  
+
+                <div class="row">
+                    <div class="col-xs-3 col999">期望酬劳</div>
+                    <div class="col-xs-9 pl0 price"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>              
+                
+                <div class="row">
+                    <div class="col-xs-3 col999">擅长语言</div>
+                    <div class="col-xs-9 pl0 language"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>                 
+        </div>    
+        </div>
+        
+        <div class="col-xs-12 bgw ptm20 mb10">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="web_title"><span class="bl2px"></span> 形象展示</div>
+                </div>
+            </div>
+            <div class="row mb10 xx">
+           
+            </div>
+            
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="web_title_f">个人介绍</div>
+                    <div class="col999 user_desio info"></div>
+                </div>
+            </div>     
+        </div>  
+        
+        <div class="col-xs-12 bgw ptm20 mb10">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="web_title"><span class="bl2px"></span> 活动经历</div>
+                </div>
+            </div>  
+            
+            <div class="activity">
+
+            </div>
+        </div>
+            
+            
+        </div>
+        </div>  
+        <div class="loading">
+            <div class="ui-loading-block showV">
+                <div class="ui-loading-cnt">
+                    <i class="ui-loading-bright"></i>
+                    <p>正在加载中...</p>
+                </div>
+            </div>
+    
+        </section>
+        <div class="cl"></div>
+        </div>
+            <div class="footNav bgw">
+                <ul>
+                    <li><a href="?m=web&c=index&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27_18.jpg"><br>通告</a></li>
+                    <li><a href="?m=web&c=index&a=artist&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27_20_b.jpg"><br>麦主</a></li>
+                    <li><a href="?m=Center&c=Profile&a=index&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27_a.jpg"><br>我的</a></li>
+                </ul>
+            </div>  
+
+        
+         <div id="bg"></div>
+         <div class="more msg_email"></div>
+        <script src="./Public/frozenui/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/frozenui/js/frozen.js"></script>
+        <script>
+            var el;
+            var page = 0;
+            var level = '{$Think.session.level}';
+            
+            var totalheight = 0;     //定义一个总的高度变量
+            var isLoading = 0;
+            var where = new Array();
+            var isEnd = 0;
+            
+            if ($.session.get('selectArea')!=null) {
+                page=0;
+                where['area'] = $.session.get('selectArea');
+                $('.list').html('');
+                getPage();
+            }else{
+                getPage();
+            }
+            
+            function loaddata()
+            { //下拉加载
+                totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());     //浏览器的高度加上滚动条的高度 
+
+                if ($(document).height() <= totalheight)     //当文档的高度小于或者等于总的高度的时候，开始动态加载数据
+                { 
+                    //加载数据
+            //        $("#container").append("我是新加载出来的数据<br/>");
+                    if (isLoading == 0 && isEnd != 1) {
+                        page++;
+                        getPage(page,where);
+                    }
+
+                } 
+            } 
+
+            $(window).scroll( function() { 
+                loaddata();
+            }); 
+
+            function getPage(){
+                var string = '';
+                for (value in where){
+                    if (where[value] != null) {
+                        string += value+'='+where[value]+',';
+                    }
+                }
+                console.log('string');  
+//                return; 
+                $.ajax({
+                    type: 'GET',
+                    url: "?m=Web&a=artistList",
+                    data: {'page':page,'where':string},
+                    complete:function(result){
+//                        el.loading("hide");
+                        $('.showV').fadeOut();
+                    },
+                    success: function(result){
+//                        el.loading("hide");    
+                        $.each(result, function(i,val){
+                            
+                            
+                            var time = getDateDiff(val.time);
+                            var sex = val.sex==1?'{$Think.lang.L_SEX_M}':'{$Think.lang.L_SEX_F}';
+                            
+                            var price = parseInt(val.price) < 1?'面谈':'￥'+parseInt(val.price);
+                            
+                            var language = '';
+                            for(var key in val.language){
+                                language += val.language[key]+',';
+                            }
+                            
+                            var industry = '';
+                            for(var key in val.industry){
+                                industry += val.industry[key]+',';
+                            }
+                            
+                            var skill = '';
+                            for(var key in val.skill){
+                                skill += val.skill[key]+',';
+                            }
+                            
+                            
+                            var additional=[];
+                            for(var key in val.additional){
+                                if (val.additional[key]['type']==1) {
+                                    additional.push(val.additional[key]['value']);
+                                }
+                               
+                            }
+                            
+                            var additionalVideo=[];
+                            for(var key in val.additional){
+                                if (val.additional[key]['type']==2) {
+                                    additionalVideo.push(val.additional[key]['value']);
+                                }
+                               
+                            }
+                            
+                            
+                            var img_url = './Public/Kmic/noPic.png';
+                            if (additional.length > 0) {
+                                img_url = additional[0];
+                            }
+                            
+                            var city ='';
+                            if (val.city.length >1) {
+                                city = val.city;
+                            }else{
+                                city = val.province;
+                            }
+                            
+                            var contact = '';
+                            if (val.mob != null) {
+                                contact += '电话:'+val.mob+' ';
+                            }
+                            if (val.qq != null) {
+                                contact += 'QQ:'+val.qq+' ';
+                            }
+                            if (val.email != null) {
+                                contact += 'Email:'+val.email+' ';
+                            }
+                            if (val.wx != null) {
+                                contact += '微信:'+val.wx+' ';
+                            }
+                            var vip = '';
+                            if (val.level > 5) {
+                                vip = '<div class="tag">V I P</div>';
+                            }if (val.level == 3) {
+                                vip = '<div class="tag">V I P</div>';
+                            }else if (val.level == 2) {
+                                vip = '<div class="tag"><a href="?m=center&c=profile&a=verify&openid={$Think.get.openid}">认证</a></div>';
+                            }
+                            
+                            var tagVoice = '';
+                            for(var key in val.additional){
+                                if (val.additional[key]['type']==3) {
+                                    tagVoice = '<div class="tagVoice">录音</div>';
+                                }
+                               
+                            }
+                            
+                            var name = '';
+                            if (val.name == null) {
+                                name = '-';
+                            }else if (val.name == '') {
+                                name = '-';
+                            }else{
+                                name = val.name;
+                            }
+ 
+                            var strVar_html ='';
+                            if (level == '10') {
+                                 strVar_html ='<div class="lx_button" onclick="deleteData('+val.id+')">删除Id:'+val.uid+'</div>';
+                             }
+                            
+                            var additionalImg ="";
+                          
+
+                            
+                            if (val.additional.length >1) {
+                                additionalImg = val.additional[0].value;
+                            }else{
+                                additionalImg = img_url;
+                            }
+                            
+                            var strVar = "";
+                                strVar += "<div class=\"w50 gl\">"
+                                strVar += "<div class=\"list_menu \">"
+                                strVar += "<div class=\"w50 fl\">"+strVar_html+"<\/div>";
+                                strVar += '<div class=\"w50 fr\"><div class="lxwm"><div class="email_button" onclick="more('+val.id+',\''+val.uid+'\');"><img src="./Public/Kmic/yaoqibut.jpg"></div></div><\/div>';
+                                strVar += "<\/div>"
+                                strVar += "<div class =\"zc_list\" onclick=\"user_view('"+val.uid+"')\">\n"; 
+                               // strVar += '<a href="?m=Center&c=Profile&a=userView&openid='+obj_wx.openid+'">'
+                                strVar += " <img class=\"w100\" src=\""+val.headimgurl +"\"";
+                              // strVar += '</a>'
+                                strVar += " <li>\n";
+
+                                strVar += " <div class=\"zc_list_iso\">\n";
+                                strVar += " <div class=\"nk_name\">"+name+"<\/div>\n";
+                                strVar += " <div class=\"fl city\"><img src=\"./Public/Kmic/city_ico.jpg\">"+val.city+"<\/div>\n";
+                                strVar += " <div class=\"fr price\">"+price+"<\/div>\n";
+                                strVar += " <div class=\"cl\"><\/div>\n";
+                                strVar += " <\/div>   \n";
+                                strVar += " <\/li>\n";
+                                strVar += " <\/div>\n";
+                                strVar += "<\/div>"
+                                $('.list').append(strVar);
+/*  
+                            $('.list').append('<li class="" id="l'+val.id+'"><div class="user_list"><div class="wxheadurl fl"><img src="'+val.wx_info.headimgurl+'" /></div><div class="fl wx_name_w"><div class="wx_name fl">'+name+'</div>'+sex_b+'<div class="cl"></div><div class="wx_city">'+city+'</div></div><div class="lxwm fr"><div class="email_button" onclick="more('+val.id+',\''+val.uid+'\');"><img src="./Public/Kmic/yaoqibut.jpg"></div></div><div class="cl"></div></div>\n\
+                        </div><div class="pic_list" onclick="open_f(\''+val.wx_info.nickname+'\',\''+price+'\',\''+time+'\',\''+val.id+'\',\''+val.constellation+'\',\''+additional+'\',\''+val.style+'\',\''+val.school+'\',\''+val.organization+'\',\''+contact+'\',\''+additionalVideo+'\',\''+val.uid+'\');"> <ul></li>'+list_tu_html+'<ul><div class="cl"></div><div class="price"><img src="./Public/Kmic/q1.jpg">'+price+'</div></div>\n\
+                    </li>'+html+'');
+                    */
+                        });
+                        
+                        $(".list").find("#loading").remove(); 
+                        
+                        if (result.length>0) {
+                            $(".list").append('<li class="ui-border-t" id="loading"><img src="Public/Images/loading.gif" width="50"/></li>');
+                        }else{
+                            $(".list").append('<li class="ui-border-t" id="loading">没有更多</li>');
+                            isEnd = 1;
+                        }
+                        isLoading = 0;
+                        $('.showV').fadeOut();
+                    },
+                    beforeSend: function(){
+//                        el=$.loading({
+//                            content:'加载中...',
+//                        })
+                    $('.showV').fadeIn();
+                    },
+                    dataType: 'json'
+                }); 
+            }
+            
+            //
+            
+            //
+            var listArr = new Array();
+            
+            function more(id,uid){
+                $("#bg").css('display','block');
+                ga('send', 'event', 'artist', 'more', id);
+               var html = '<div class="ui-border-t more" id="m'+id+'"><div class="msg">\n\
+                <div class=" ui-border lx_textarea"><textarea placeholder="在这里输入留言内容 最多输入140字" id="t'+id+'"></textarea>\n\
+                <font size="2" color="gray">请不要发垃圾广告与反动言论,用户举报将永久封号.</font></div>\n\
+                <button class="lx_button w100" onclick="send('+id+','+uid+')">发送\n\</button></div></div>';
+                $(".msg_email").html(html);
+               
+            }
+            
+            
+            function send(id,uid){
+//                console.log($("#t"+id).val());
+                if ($("#t"+id).val() == '') {
+                    alert('信息不能为空');
+                    return;
+                }
+                ga('send', 'event', 'artist', 'message', id);
+                var fromuid = "{$Think.session.id}";
+                $.ajax({
+                    type: 'POST',
+                    url: "?m=web&a=messages",
+                    data: {'fromuid':fromuid,'touid':uid,'msg':$("#t"+id).val(),'action':'send'},
+                    success: function(result){
+                        if (result.error==0) {
+                            alert('发送成功');
+                            $("#bg").css('display','none');
+                        }else{
+                            alert(result.msg);
+                        }
+                        
+                        
+                        $('#m'+id).remove();
+                    },
+                    dataType: 'json'
+                  });    
+                  
+                
+            }
+//            function more(id,other_desc,honour,language,industry,constellation,skill,age,uid){
+//                if (age == 0) {
+//                    age = '保密';
+//                }
+////                console.log(skill);
+//                if (listArr['l'+id] != id) {
+//                            //previewImage
+//                    var html = '<li class="ui-border-t more" id="m'+id+'">\n\
+//                    <div class="ui-list-info" style="margin: 0 5px 0 5px;">\n\
+//                        <h4 class="ui-nowrap">个人介绍</h4>\n\
+//                        <p style="">'+unescape(other_desc)+'</p>\n\
+//                        <h4 class="ui-nowrap">年龄</h4>\n\
+//                        <p style="">'+age+'</p>\n\
+//                        <h4 class="ui-nowrap">星座</h4>\n\
+//                        <p style="">'+constellation+'</p>\n\
+//                        <h4 class="ui-nowrap">曾获荣誉</h4>\n\
+//                        <p>'+unescape(honour)+'</p>\n\
+//                        <h4 class="ui-nowrap">擅长语言</h4>\n\
+//                        <p>'+language.substring(0,language.length-1)+'</p>\n\
+//                        <h4 class="ui-nowrap">行业偏向</h4>\n\
+//                        <p>'+industry.substring(0,industry.length-1)+'</p>\n\
+//                        <h4 class="ui-nowrap">才艺</h4>\n\
+//                        <p>'+skill.substring(0,skill.length-1)+'</p>\n\
+//                    ';
+//                     html +='</div>\n\
+//                    </li>';
+//            
+//                    $('#l'+id).after(html);
+//                    listArr['l'+id] = id; 
+//                    
+//                    $('#'+id).css('background-image','url("./Public/Kmic/arrowDown.png")');
+//                }else{
+//                    listArr['l'+id] = -1; 
+//                    $('#'+id).css('background-image','url("./Public/Kmic/arrowUp.png")');
+//                    $('#m'+id).remove();
+//                }
+//            }
+            $("#bg").click(function(){
+                 $(".msg_email").css("display","none");
+                  $("#bg").css("display","none");
+            })
+            $("#selectsex .tab li").click(function(){
+
+                    page=0;
+                    if ($(this).index() == 0) {
+                        where['sex'] = 1;
+                    }else if ($(this).index() == 1) {
+                        where['sex'] = 2;
+                    }if ($(this).index() == 2) {
+                        where['sex'] = null;
+                    }
+                    $('.list').html('');
+                    getPage();
+                
+            })
+            
+ 
+            $('#selectprice').click(function(){
+                if ($('#selectprice .tab').css("display")=='none') {
+                    $('#selectprice .tab').css("display","block");
+                    $('#bg').css("display","block");
+                }else if ($('#selectprice .tab').css("display")=='block') {
+                    $('#selectprice .tab').css("display","none");
+                     $('#bg').css("display","none");
+                }
+                $('#selectsex .tab').css("display","none");
+                $('#selectarea').css("overflow","hidden");
+            });
+            
+            $("#selectprice .tab li").click(function(){
+        
+                    page=0;
+                    if ($(this).index() == 0) {
+                        where['price'] = '1';
+                    }else if ($(this).index() == 1) {
+                        where['price'] = '1-3';
+                    }if ($(this).index() == 2) {
+                        where['price'] = '3-5';
+                    }if ($(this).index() == 3) {
+                        where['price'] = '0';
+                    }
+                    $('.list').html('');
+                    getPage();
+                
+            })
+            $("#selectarea li").click(function(){
+                if ($(this).index()>0) {
+                    page=0;
+                    where['area'] = $(this).html();
+                    $('.list').html('');
+                    getPage();
+                }
+            })
+            $("#selectall").click(function(){
+                where = new Array();
+                $('.list').html('');
+                getPage();
+            })
+            //
+            $('#selectsex').click(function(){
+                if ($('#selectsex .tab').css("display")=='none') {
+                    $('#selectsex .tab').css("display","block");
+                    $('#bg').css("display","block");
+                }else if ($('#selectsex .tab').css("display")=='block') {
+                    $('#selectsex .tab').css("display","none");
+                    $('#bg').css("display","none");
+                }
+                
+            $('#selectprice .tab').css("display","none");
+                $('#selectarea').css("overflow","hidden");
+            });   
+            
+            
+
+            $('#selectarea').click(function(){
+//                if ($(this).css("overflow")=='hidden') {
+//                    $(this).css("overflow","visible");
+//                }else if ($(this).css("display")=='block') {
+//                    $(this).css("overflow","hidden");
+//                }
+//                $('#selectsex').css("overflow","hidden");
+//                $('#selectprice').css("overflow","hidden");
+
+                $.session.set('returnUrl', '?m=web&a=artist&openid={$Think.get.openid}');
+                location.href= '?m=web&a=area';
+            });
+            
+            var moreAdditionalStrsCurrent = '';
+            var moreAdditionalStrs = '';
+            function open_f(title,price,time,id,constellation,additional,style,school,organization,contact,additionalVideo,uid){
+                ga('send', 'event', 'artist', 'page', id);
+                $('.f_windown').css('display','block');
+                
+                var url = 'http://'+window.location.host+'/?m=web&a=artistProfiles&uid='+uid+'&openid={$Think.get.openid}'; 
+                $('#Frm_Main').attr("src",url);  
+                
+                var additionalStrs= new Array(); //定义一数组 
+                additionalStrs=additional.split(",");
+                var additionalHtml = '';
+
+                if (additionalStrs.length > 0 && additionalStrs[0]!='') {
+                    for(var key in additionalStrs){
+                        additionalHtml += '<li><a href="javascript:previewImage(\''+additionalStrs[key]+'\',\''+additionalStrs+'\');" ><img src="'+additionalStrs[key]+'" /></a></li>';
+                    }
+                }
+                moreAdditionalStrsCurrent = additionalStrs[0];
+                share(title+'的资料','http://'+window.location.host+'/?m=web&a=artistProfiles&uid='+uid,'http://'+window.location.host+'/'+moreAdditionalStrsCurrent);
+
+                return;
+                
+                $('.ui-scroller .title').html(title);
+                $('.ui-scroller .price').html(price);
+                $('.ui-scroller .time').html(time);
+                $("input[name='style']").val(style)
+                $("input[name='school']").val(school)
+                $("input[name='organization']").val(organization)
+                $("input[name='contact']").val(contact);
+                
+                
+                //
+//                console.log(additional);
+                
+                moreAdditionalStrs = additionalStrs;
+                $('.subImg').html(additionalHtml);
+//                console.log('http://www.kmic168.com/?m=web&a=artistProfiles&uid='+uid); 
+                //
+                
+                var additionalStrs= new Array(); //定义一数组 
+                additionalStrs=additionalVideo.split(",");
+                var additionalHtml = '';
+                console.log(additionalStrs);
+                if (additionalStrs.length > 0 && additionalStrs[0]!='') {
+                    for(var key in additionalStrs){
+                        additionalHtml += '<li onclick="reviewVideo(\''+additionalStrs[key]+'\');"></li>';
+                    }
+                }
+                $('.subVideo').html(additionalHtml);
+                
+            }
+            $('.subImgMore').click(function(){
+                previewImage(moreAdditionalStrsCurrent,''+moreAdditionalStrs+'');
+            });
+            $('#f_close').click(function(){
+                $('.f_windown').css('display','none');
+            });
+            
+            
+            (function() {
+                var scroll = new fz.Scroll('.ui-scroller', {
+                    scrollY: true
+                });
+
+                // scroll.scrollTo(0, 200);
+
+                // 若 offsetX 和 offsetY 都是 true，则滚动到元素位于屏幕中央的位置；
+                scroll.scrollToElement("li:nth-child(3)", 1000, true, true);
+
+            })();
+            
+            function html_decode(str)   
+            {   
+                var s = "";   
+                if (str.length == 0) return "";   
+                s = str.replace(/&gt;/g, "&");   
+                s = s.replace(/&lt;/g, "<");   
+                s = s.replace(/&gt;/g, ">");   
+                s = s.replace(/&nbsp;/g, " ");   
+                s = s.replace(/&#39;/g, "\'");   
+                s = s.replace(/&quot;/g, "\"");   
+                s = s.replace(/<br>/g, "\n");   
+                return s;   
+            }
+            
+            
+            function reviewVideo(video){
+                window.location.href=video;
+            }
+            
+            function deleteData(id){
+                
+                if(confirm("确定要删除数据吗？"))
+                {
+                    $.ajax({
+                    type: 'GET',
+                    url: "?m=web&a=deleteArtistData",
+                    data: {'id':id,'openid':$("input[name='openid']").val()},
+                    success: function(result){
+                        alert('删除成功,重进页面后会消除记录.');
+                    },
+                    dataType: 'json'
+                  }); 
+                    console.log(id);
+                }
+            }
+            
+            $('.search').click(function(){
+                ga('send', 'event', 'artist', 'search', $("input[name='search']").val());
+                var search = $("input[name='search']").val();
+                if (search == '') {
+                    alert('信息不能为空');
+                    return;
+                }
+                where = new Array();
+                page = 0;
+                where['keyword'] = search;
+                $('.list').html('');
+                getPage(page,where);
+                $("input[name='search']").val('');
+            });
+            
+            
+            
+           function user_view_close(){
+               document.documentElement.style.overflow='auto'
+               $('.user_view_close').css('display','none');
+               $('.user_view').css('display','none');
+           }
+          function user_view(uid){
+              $('.user_view_close').css('display','block');
+              $('.showV').fadeIn();
+             var url = "?m=Center&c=Profile&a=userView&uid="+uid
+             $.ajax({
+                cache: true,
+                type: "POST",
+                url:url,
+                data:$('#dosubmit').serialize(),// 序列号formid
+                async: false,
+                dataType: 'json',
+                error: function(request) {
+                    
+                    alert('提交超时，请稍候再试！');
+                    $('.showV').fadeOut();
+                },
+                success: function(data) {
+                    
+                   console.log(data);
+                    if (data.error == 0) {
+                        $(".mmname").text(data.name);
+                        $(".mmhao").text(data.id);
+                        $(".mmcity").text(data.city);
+                        var sex_html = "";
+                        if(data.sex=="1"){
+                            sex_html += '<img width="18" src="./Public/Kmic/mzindex_b_09.jpg">'
+                        }else if(data.sex=="2"){
+                            sex_html += '<img width="18" src="./Public/Kmic/mzindex_05.jpg">'
+                        }
+                        if(data.level>"0"){
+                            sex_html += '<img width="18" src="./Public/Kmic/user_03.jpg">'
+                        }
+                        $(".mmsex").html(sex_html);
+                        
+                        var headimgurl = '<img class="img-circle b1999" width="80" height="80" src="'+data.headimgurl+'">'
+                        $(".wx_user_head").html(headimgurl);
+                        
+                        var ap1 = new APlayer({
+                            element: document.getElementById('player1'),
+                            narrow: false,
+                            autoplay: false,
+                            showlrc: false,
+                            music: {
+                                title: '',
+                                author: '',
+                                url: data.video,
+                                pic: ''
+                            }
+                        })
+                        ap1.init()
+                       
+                        $(".experience").text(data.experience);
+                        $(".honour").text(data.honour);
+                        $(".info").text(data.info);
+                        $(".language").text(data.language);
+                        $(".organization").text(data.organization);
+                        $(".price").text(data.price);
+                        $(".school").text(data.school);
+                        $(".stature").text(data.stature);
+                        
+                        var xx_html ="";                    
+                        for (var i=0;i<data.xx.img.length;i++){
+                            xx_html +='<div class="col-xs-4"><a href="'+data.xx.img[i].value+'"> <img src="'+data.xx.img[i].value+'" class="img-responsive"></a></div>'
+                        }
+                        $(".xx").html(xx_html);
+                        
+                        var activity_html = "";
+                        
+                        var activity_img_c = "";
+                            for (var i=0;i<data.activity.length;i++){
+                                
+                                activity_html += " <div class=\"web_title_f2\">"+data.activity[i].title+"<\/div>\n";
+                                activity_html += " <div class=\"col999 mb10\">"+data.activity[i].time+"<\/div>\n";
+                                activity_html += " <div class=\"row mb20 activityimg\">\n";
+                                if(data.activity[i].video ==""){
+                                     activity_html += " <div class=\"col-xs-4\"><img src=\"./Public/Kmic/none.jpg\" class=\"img-responsive\"><\/div>\n";
+                                }else{
+                                     activity_html += " <div class=\"col-xs-4\"><a href=\""+data.activity[i].video+"\"><img src=\"./Public/Kmic/video.jpg\" class=\"img-responsive\"></a><\/div>\n";
+                                }
+                            
+                               if(data.activity[i].img.length > "5"){
+                                   activity_img_c = "5"
+                               }else{
+                                   activity_img_c = data.activity[i].img.length;
+                               }
+                               
+                                for(var v=0;v<activity_img_c;v++){
+                                     activity_html += " <div class=\"col-xs-4\"><a href=\""+data.activity[i].img[v].value+"\"><img src=\""+data.activity[i].img[v].value+"\" class=\"img-responsive\"></a><\/div>\n";
+                                }          
+                                activity_html += "  <\/div> \n";
+                                activity_html += "  <div class=\"boder1px mb10\"><\/div>\n";
+      
+                        }
+                        $(".activity").html(activity_html);
+                        
+        
+                    }
+                    document.documentElement.style.overflow='hidden'
+                    $('.showV').fadeOut();
+                    $('.user_view').css("display","block");
+                }
+            });  
+        };    
+          var openid = '{$Think.get.openid}';
+
+        </script>
+     <!--    <script src="./Public/UnionInfo.js"></script> -->
+        <script src="./Public/ga.js"></script>
+       <script src="./Public/dist/APlayer.min.js"></script>  
+    </body>
+</html>

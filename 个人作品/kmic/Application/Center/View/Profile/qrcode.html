@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>主持卡</title>
+
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <link rel="stylesheet" href="./Public/Profile/css/frozen.css">
+        <link rel="stylesheet" href="./Public/css/index.css">
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <script src="./Public/jquery.min.js"></script>
+        <script src="./Public/js/qrcode.min.js"></script>
+
+        <script src="./Public/wxmenu.js"></script>
+        <style>
+            body {
+                background-color: #ffcc03;
+            }
+            .artist-card {
+                background-color: #ffcc03;
+            }
+
+            .qrcodeImg img {
+                max-width: 100%;
+            }
+
+            .long-press {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body ontouchstart>
+        <input type="hidden" name="openid" value="{$Think.get.openid}" />
+        <input type="hidden" name="uid" value="{$uid}" />
+        
+        <!-- <header class="detail-header">
+            <div class="back"></div>
+            <div class="header-title">
+                <p>主持卡</p>
+            </div>
+        </header> -->
+        <section class="artist-card" >
+            <div id="qrcode" style="width:183px; height:183px; margin-top:15px;"></div>
+            <div class="qrcodeImg" style="text-align: center;"><img src=""/></div>
+        </section>
+        <img class="long-press" src="./QRcode/btn.png" alt="长按">
+        <script>
+            var openid = $("input[name='openid']").val();
+            var uid = $("input[name='uid']").val();
+            var qrcode = new QRCode(document.getElementById("qrcode"), {
+                width : 183,
+                height : 183
+            });
+
+            function makeCode() {      
+                var elText = "http://www.kmic168.com/?m=web&a=artistPage&uid="+uid;
+                qrcode.makeCode(elText);
+            }
+            makeCode();
+
+            $('.pay').click(function(){
+                location.href= '?m=Center&c=Profile&a=member&action=pay';
+            });
+            $('.index').click(function(){
+                location.href= '?m=Center&c=Profile';
+            });
+            $("#qrcode").hide();
+            setTimeout(function(){
+                $.ajax({
+                    type: 'GET',
+                    url: "?m=Center&c=index&a=getQRcode",
+                    data: {"openid": openid,
+                            "qrcode": $("#qrcode img").attr('src')},
+                    success: function(result) {
+                        console.log(result);
+                        $('.qrcodeImg img').attr('src', result.msg);
+                    },
+                    dataType: 'json'
+                }); 
+            },50)
+        
+        </script>
+    </body>
+</html>

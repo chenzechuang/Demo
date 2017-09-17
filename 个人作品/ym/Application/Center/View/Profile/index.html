@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>用户中心</title>
+        <script src="./Public/Profile/js/lib/zeptojs/zepto.min.js"></script>
+        <script src="./Public/Profile/js/frozen.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        <link rel="stylesheet" href="./Public/Profile/css/frozen.css">
+        <script src="./Public/Profile/js/frozen.js"></script>
+        
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>   
+        <link rel="stylesheet" href="./Public/Kmic/css/index.css">
+    </head>
+    <body class="bgeee" ontouchstart><input type="hidden" name="openid" value="{$Think.get.openid}" />
+        
+        <div class="col-xs-12 bgw mb10">
+            <div class="wx_user ptm20">
+                <div class="wx_user_head col-xs-4 mb5"><img class="img-circle b1999" width="80" height="80" src="{$headimgurl}"></div>
+                <div class="col-xs-12">
+                    <div class="wx_user_name mb5">{$name}</div>
+                    <div class="wx_user_mh mb5 col999">麦麦号： {$user_id}</div>
+                </div> 
+                <div class="col-xs-12"><a class="pull-right button_fj" href="?m=Center&c=profile&a=userset&openid={$Think.get.openid}">设置</a></div>     
+                <div class="clearfix"></div>
+            </div> 
+        </div>     
+        
+        <div class="clearfix"></div>
+        
+        <div class="col-xs-12 mb10 bgw">
+            <div class="user_list">
+                <ul>
+                    <li><a href="?m=Center&c=profile&a=edit&openid={$Think.get.openid}"><img src="./Public/Kmic/user_07.jpg"> 基本信息</a></li>
+                    <li><a href="?m=Center&c=Profile&a=setMessage&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27_06.jpg"> 我的资料</a></li>
+                    <li><a href="?m=Center&c=Profile&a=setCount&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27_08.jpg"> 个人介绍</a></li>                 
+                </ul>
+            </div>
+        </div> 
+        
+        <div class="clearfix"></div>      
+ 
+        <div class="col-xs-12 mb10 bgw">
+            <div class="user_list">
+                <ul>
+                    <li><a href="?m=web&a=recordVoice&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27_10.jpg"> 我的声音</a></li>
+                    <li><a href="?m=Center&c=Profile&a=setImg&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27_12.jpg"> 我的相册</a></li>
+                    <li><a href="?m=Center&c=Profile&a=setActivity&openid={$Think.get.openid}"><img src="./Public/Kmic/user_18.jpg"> 活动经历</a></li>                 
+                </ul>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>      
+ 
+        <div class="col-xs-12 mb10 bgw">
+            <div class="user_list">
+                <ul>
+                    <li><a href="?m=Center&c=Profile&a=userView&uid={$uid}"><img src="./Public/Kmic/user_27_16.jpg">预览全部</a></li>               
+                </ul>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="h80"></div> 
+        <div class="footNav bgw">
+            <div class="col-xs-4"><a href="?m=web&c=index&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27_18.jpg"><br>通告</a></div>
+            <div class="col-xs-4"><a href="?m=web&c=index&a=artist&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27_20.jpg"><br>麦主</a></div>
+            <div class="col-xs-4"><a href="?m=Center&c=Profile&a=index&openid={$Think.get.openid}"><img src="./Public/Kmic/user_27.jpg"><br>我的</a></div>
+        </div>
+        <!--?m=Center&c=Profile&a=qrcode-->
+        <script>
+        
+        $('.upgrade').click(function(){
+            location.href= "?m=Center&c=Profile&a=member";
+        });
+        
+//        $('.check').click(function(){
+//            location.href= '?m=Center&c=Profile&a=qrcode';
+//        });
+        $('.ui-header .ui-btn').click(function(){
+            
+        });
+        
+        <eq name="Think.get.show" value="qrcode">
+        qrcode();
+            </eq>
+        
+        $('.qrcode').click(function(){
+            qrcode();
+        });
+        
+        function qrcode(){
+            var el;
+            $.ajax({
+                type: 'GET',
+                url: "?m=Center&c=Index&a=getQRcode",
+                data: {'openid':$("input[name='openid']").val()},
+                success: function(result){
+//                    location.href= '?m=Center&c=Profile&a=qrcode';
+                    el.loading("hide");
+                    $(".ui-dialog").dialog("show");
+                    $(".ui-dialog").on("dialog:action",function(e){
+//                        console.log(e.index)
+//                            alert(e.index);
+//                        location.href= '?m=Center&c=Profile&a=qrcode';
+                        if (e.index ==1) {
+                            ga('send', 'event', 'profile', 'qrcode', $("input[name='openid']").val());
+                            location.href= '?m=Center&c=Profile&a=qrcode';
+                        }else if(e.index ==0){
+                            $(".ui-dialog").dialog("hide");
+                        }
+                    });
+                },
+                beforeSend: function(){
+                    el=$.loading({
+                        content:'加载中...',
+                    })
+                },
+                dataType: 'html'
+            }); 
+        }
+        
+        
+        
+        function checkOrder(order){
+            $.ajax({
+                type: 'POST',
+                url: "?m=center&c=profile&a=checkOrder",
+                data: {'order':order},
+                success: function(result){
+                    if (result.state==0) {
+                        if(confirm("支付未完成,继续支付吗？"))
+                        {
+                            location.href= 'http://www.kmic168.com/index.php/wxJsapi/?openid={$Think.get.openid}&type=';
+                        }
+                      
+                    }else if (result.state==4) {
+                    }else{
+                        alert('支付成功，您已经是会员了！谢谢您的支持！');
+                        location.href= '?m=Center&c=Profile&a=member&openid={$Think.get.openid}';
+                    }
+                },
+                dataType: 'json'
+            });  
+        }
+        
+        /*
+        <gt name="pendingOrder" value="1">
+            checkOrder('{$pendingOrder}');
+        </gt> */
+        </script>
+        <script src="./Public/ga.js"></script>
+        
+        
+        <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+            <script>
+              // Initialize Firebase
+              var config = {
+                apiKey: "AIzaSyBN0Fgb-04vjbdGDiOtyAQs-SL8p3msXqo",
+                authDomain: "kmic-ca200.firebaseapp.com",
+                databaseURL: "https://kmic-ca200.firebaseio.com",
+                storageBucket: "kmic-ca200.appspot.com",
+              };
+              
+
+            var openid = '{$Think.get.openid}';
+            </script>
+        <!--  <script src="./Public/UnionInfo.js"></script>  -->
+    </body>
+</html>

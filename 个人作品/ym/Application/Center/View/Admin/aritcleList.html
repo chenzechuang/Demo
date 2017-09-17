@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>管理后台</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+        <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+        <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+        <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+        <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>        
+        <link href="Public/admin/css/dashboard.css" rel="stylesheet">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">管理后台</a>
+                </div>
+                <include file="./Public/admin/navbar.html" keywords="1" />
+            </div>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3 col-md-2">
+                    <include file="./Public/admin/menu.html" keywords="1" />
+                </div>
+                <!--正式内容开始-->
+                <div class="col-sm-9 col-md-10  main">
+                    <h1 class="page-header">列表管理</h1> 
+                    <P><a class="btn btn-danger" href="{:U(aritcleAdd)}">添加</a></p>                
+                    <table id="table" ></table> 
+                </div>
+                <!--正式内容结束-->
+            </div>
+        </div>
+
+        <!-- 模态框（Modal）-->
+        <div class="modal fade  in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="width: 800px; line-height: 25px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            详细信息
+                        </h4>
+                    </div>
+                    <div class="bodyTb">
+
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>        
+
+        <script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/bootstrap-table.min.js"></script>
+        <script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/locale/bootstrap-table-zh-CN.min.js"></script>
+        <script type="text/javascript">
+
+            $('#table').bootstrapTable({
+                url: './index.php?m=Center&c=Admin&a=aritcleListData&type={$Think.get.type}',
+                dataType: "json",
+
+                silentSort: true,
+                pagination: true,
+                pageSize: 20,
+                search: true,
+                showExport: true,
+                filterControl: true,
+                pageList: [10, 25, 50, 100],
+                showRefresh: true, //是否显示刷新按钮
+                clickToSelect: true, //是否启用点击选中行
+                uniqueId: "ID", //每一行的唯一标识，一般为主键列
+                minimumCountColumns: 2, //最少允许的列数
+                showColumns: true, //列选择按钮
+                /*
+                 *                 pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                 search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                 strictSearch: true,
+                 showColumns: true,                  //是否显示所有的列
+                 showRefresh: true,                  //是否显示刷新按钮
+                 minimumCountColumns: 2,             //最少允许的列数
+                 clickToSelect: true,                //是否启用点击选中行
+                 height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                 uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+                 showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
+                 cardView: false,                    //是否显示详细视图
+                 detailView: false,                   //是否显示父子表
+                 */
+                columns: [{
+                        field: 'id',
+                        title: 'id',
+                        align: 'center',
+                        valign: 'middle'
+                    }, {
+                        field: 'cover',
+                        title: '文章图片',
+                        align: 'center',
+                        valign: 'middle',
+                        formatter: function (value, row, index) {
+                            var i = '<a target="_blank" href="' + row.cover + '"><img width="120" src="' + row.cover + '" /> </a>';
+                            return i
+                        },
+                        width: '10%'
+                    }, {
+                        field: 'uid',
+                        title: '用户ID',
+                        align: 'center',
+                        valign: 'middle'
+
+                    }, {
+                        field: 'title',
+                        title: '栏目',
+                        align: 'center',
+                        valign: 'middle'
+                    }, {
+                        field: 'content',
+                        title: '内容',
+                        align: 'center',
+                        valign: 'middle',
+                        width: '35%'
+
+                    }, {
+                        field: 'praise',
+                        title: '赞',
+                        align: 'center',
+                        valign: 'middle'
+                    }, {
+                        field: 'sort',
+                        title: '排序',
+                        align: 'center',
+                        valign: 'middle'
+                    }, {
+                        field: 'comments',
+                        title: '留言',
+                        align: 'center',
+                        valign: 'middle'
+                    }, {
+                        field: 'log_time',
+                        title: '创建时间',
+                        align: 'center',
+                        valign: 'middle',
+                        width: '100'
+                    }, {
+                        field: 'option',
+                        title: '编辑',
+                        align: 'center',
+                        valign: 'middle',
+                        formatter: function (value, row, index) {
+
+                            var x = '<a data-toggle="modal" data-target="#myModal" onclick="articInfo(' + JSON.stringify(row).replace(/"/g, '&quot;') + ')">详细信息</a> | ';
+                            if(row.type == "1"){
+                                if (row.transformation == "0") {
+                                    var a = '<a href="./index.php?m=Center&c=Admin&a=aritcleList&audio=' + row.id + '" >' + '转换</a> | ';
+                                } else if (row.transformation == "1") {
+                                    var a = '<a href="#" >已转换</a> | ';
+                                } else if (row.transformation == "2") {
+                                    var a = '<a href="#" >转换中</a> | ';
+                                }
+                            }else{
+                                var a = "";
+                            }
+
+
+                            if (row.edition == 0) {
+                                var v = '<a href="./index.php?m=Center&c=Admin&a=aritcleList&aid=' + row.id + '&edition=1" >' + '隐藏</a> | ';
+                            } else {
+                                var v = '<a href="./index.php?m=Center&c=Admin&a=aritcleList&aid=' + row.id + '&edition=0" >' + '显示</a> | ';
+                            }
+                            var s = '<a href="./index.php?m=Center&c=Admin&a=aritcleList&sort=' + row.id + '" >' + '提升</a> | ';
+                            var e = '<a href="./index.php?m=Center&c=Admin&a=aritcleList&edit=' + row.id + '" >' + '编辑</a> | ';
+                            var d = '<a href="./index.php?m=Center&c=Admin&a=delete&table=aritcle&did=' + row.id + '">删除</a> ';
+                            return x + v + a + s + d;
+                        }
+                    }
+                ]
+            });
+
+            function articInfo(val) {
+                console.log(val);
+                var audio = eval("(" + val.pics + ")");
+                
+                if (val.type =="1"){
+                    var otherHtml = '';
+                        otherHtml += "<div class=\"col-md-12 text-center form-group\">\n";
+                        otherHtml += "	<audio src=\"" + audio[0].pic + "\" controls=\"true\"><\/audio>\n";
+                        otherHtml += "<\/div>\n";
+                }else{
+                    var otherHtml = '';
+                    if(audio.length>0){
+                        otherHtml += "<div class=\"col-md-12 text-center form-group\">\n";
+                        for(var a=0; a<audio.length;a++){
+                            otherHtml += "<a  href="+audio[a].pic+"><img width='120' style='margin:5px;' src ="+audio[a].pic+"></a>";
+                        }
+                        otherHtml += "<\/div>\n";    
+                    }    
+                }
+
+
+                var strVar = "";
+                strVar += "<div class=\"form-group\">\n";
+                strVar += "	<div class=\"col-md-5 text-right\">\n";
+                strVar += "		文章内容：\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<div class=\"col-md-7 text-left\">\n";
+                strVar += "		" + val.content + "\n";
+                strVar += "	<\/div>\n";
+                strVar += "<\/div>\n";
+                strVar += "<div class=\"form-group\">\n";
+                strVar += "	<div class=\"col-md-5 text-right\">\n";
+                strVar += "		节目标签：\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<div class=\"col-md-7 text-left\">\n";
+                strVar += "		" + val.title + "\n";
+                strVar += "	<\/div>\n";
+                strVar += "<\/div>\n";
+                strVar += "<div class=\"form-group\">\n";
+                strVar += "	<div class=\"col-md-5 text-right\">\n";
+                strVar += "		作者：\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<div class=\"col-md-7 text-left\">\n";
+                strVar += "		" + val.name + "\n";
+                strVar += "	<\/div>\n";
+                strVar += "<\/div>\n";
+                strVar += "<div class=\"col-md-12 text-center form-group \">\n";
+                strVar += "	<img height='220' src ='" + val.cover + "'>\n";
+                strVar += "<\/div>\n";
+                strVar += ""+otherHtml+"";
+                strVar += "<div class=\"form-group\">\n";
+                strVar += "	<div class=\"col-md-5 text-right\">\n";
+                strVar += "		操作：\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<div class=\"col-md-7 text-left\">\n";
+                strVar += "		<a class=\"btn-danger btn\" onClick=praise(" + val.id + ") href=\"#\">点赞<\/a>";
+                strVar += "	<\/div>\n";
+                strVar += "<\/div>\n";
+                strVar += "<div class=\"form-group\">\n";
+                strVar += "	<div class=\"col-md-12 text-center\">\n";
+                strVar += "		<hr>\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<div class=\"text-center modal-header\">\n";
+                strVar += "		<h4>手动回复<\/h4>\n";
+                strVar += "	<\/div>\n";
+                strVar += "<\/div>\n";
+                strVar += "<div class=\"form-group\">\n";
+                strVar += "	<div class=\"col-md-5 text-right\">\n";
+                strVar += "		回复ID：\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<div class=\"col-md-5 text-left\">\n";
+                strVar += "		<input class=\"form-control\" id=\"commentid\" name=\"\">\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<div class=\"col-md-2\">\n";
+                strVar += "		<a class=\"btn-danger btn\" onClick='robot()' href=\"#\">随机机器人<\/a>\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<div class=\"clearfix\">\n";
+                strVar += "	<\/div>\n";
+                strVar += "<\/div>\n";
+                strVar += "<div class=\"form-group\">\n";
+                strVar += "	<div class=\"col-md-5 text-right\">\n";
+                strVar += "		回复内容：\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<div class=\"col-md-7 text-left\">\n";
+                strVar += "		<textarea class=\"form-control\" id=\"commentcontent\" name=\"\"><\/textarea>\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<div class=\"clearfix\">\n";
+                strVar += "	<\/div>\n";
+                strVar += "<\/div>\n";
+                strVar += "<div class=\"form-group\">\n";
+                strVar += "	<div class=\"col-md-5 text-right\">\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<div class=\"col-md-7 text-left\">\n";
+                strVar += "		<a onclick=comment(" + val.uid + "," + val.artic_create_time + ") class=\"btn-danger btn\" href=\"#\">确定回复<\/a>\n";
+                strVar += "	<\/div>\n";
+                strVar += "	<div class=\"clearfix\">\n";
+                strVar += "	<\/div>\n";
+                strVar += "<\/div>\n";
+                strVar += "<div class=\"clearfix\">\n";
+                strVar += "<\/div>\n";
+                $(".bodyTb").html(strVar);
+
+            }
+
+            function comment(userid, create_time) {
+                var commentid = $("#commentid").val();
+                var commentcontent = $("#commentcontent").val();
+                $.ajax({
+                    type: "POST",
+                    url: "index.php?m=api&c=article&a=comment",
+                    dataType: "json",
+                    data: {
+                        userid: commentid,
+                        create_time: create_time,
+                        comment_type: "0",
+                        commented_uid: userid, //文章创建uid
+                        comment_content: commentcontent
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if (data.state == "0") {
+                            alert('评论成功!');
+                        } else {
+                            alert('评论失败');
+                        }
+                    }
+
+                })
+            }
+
+            function praise(articeID) {
+                $.ajax({
+                    type: "POST",
+                    url: "index.php?m=Center&c=Admin&a=praise",
+                    dataType: "json",
+                    data: {
+                        articeID: articeID
+                    },
+                    success: function (data) {
+                        alert(data.msg);
+                    }
+                })
+            }
+
+            var row = "";
+            var dataVAL = "";
+            function robot() {
+                if (row) {
+                    var munber = Math.floor(Math.random() * row);
+                    var randuserID = dataVAL[munber].id
+                    $("#commentid").val(randuserID);
+                } else {
+                    $.ajax({
+                        type: "GET",
+                        url: "index.php?m=Center&c=user&a=getRobot",
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                            dataVAL = data;
+                            row = data.length;
+                            var munber = Math.floor(Math.random() * row);
+                            var randuserID = data[munber].id
+                            $("#commentid").val(randuserID);
+                        }
+                    })
+                }
+            }
+
+        </script>
+    </body>
+</html>

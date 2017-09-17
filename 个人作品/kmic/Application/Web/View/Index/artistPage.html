@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>主持人详情</title>
+
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <!--<script src="./Public/wxmenu.js"></script>-->
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css"> 
+        <!-- <link href="./Public/css/fsgallery.css" rel="stylesheet"> -->
+        <link rel="stylesheet" href="./Public/awesome/font-awesome.min.css">  
+        <link rel="stylesheet" href="./Public/js/PhotoSwipe/photoswipe.css">
+        <link rel="stylesheet" href="./Public/js/Scrollbar/jquery.mCustomScrollbar.css">
+        <link rel="stylesheet" href="./Public/css/index.css">
+
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script type="text/javascript">
+            var img = '{$headimgurl}';
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wxf20953cc201449dd', // 必填，公众号的唯一标识
+                timestamp: '{$Think.session.timestamp}', // 必填，生成签名的时间戳
+                nonceStr: '{$Think.session.nonceStr}', // 必填，生成签名的随机串
+                signature: '{$signature}',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+        
+            wx.ready(function(){
+                wx.onMenuShareTimeline({
+                    title: '{$name}', // 分享标题
+                    link: 'http://www.kmic168.com/?m=web&a=artistPage&uid={$uid}', // 分享链接,将当前登录用户转为puid,以便于发展下线
+                    desc: '找主持，上开麦',
+                    imgUrl: img, // 分享图标
+                    success: function () { 
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                        // 用户取消分享后执行的回调函数
+                    },
+                    trigger: function (res) {
+        
+                    },
+                    fail: function (res) {
+                    }
+                });
+                
+                wx.onMenuShareAppMessage({
+                    title: '{$name}', // 分享标题
+                    desc: '找主持，上开麦', // 分享描述
+                    link: 'http://www.kmic168.com/?m=web&a=artistPage&uid={$uid}', // 分享链接
+                    imgUrl: img, // 分享图标
+                    type: 'link', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () { 
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+            });
+        </script>
+    </head>
+
+    <body onload="loadMessage('{$uid}');"><input type="hidden" name="openid" value="{$Think.get.openid}" />
+
+        <!-- header -->
+        <header class="detail-header">
+            <div class="back">
+            </div>
+
+            <div class="header-title">
+                <p>详情</p>
+            </div>            
+        </header>
+
+        <!-- 弹窗 -->
+        <div class="f_windown1">
+            <div class="bg"></div>
+            <div class="ui-scroller">
+                <div id="f_close1"><img src="./Public/Kmic/close.png" width="30"/></div>
+                <div class="f_close_line"></div>
+                <div class="windown-info">
+                    <p>请输入您的留言</p>
+                    <div class="message" contenteditable></div>
+                    <p class="tips">请不要发垃圾广告与反动言论,用户举报将永久封号.</p>
+                    <a class="send-message" href="javascript:;">发送</a>
+                </div>
+            </div>
+        </div> 
+
+        <!-- section -->
+        <section class="artist-detail">
+
+            <!-- 头部 -->
+            <div class="col-xs-12 detail-item info-title">
+                <img class="img-circle head-img">
+                <div class="detail-title-content">
+                    <span class="artist-name"></span>
+                    <span class="artist-id"></span>
+                </div>
+            </div>
+
+            <!-- 形象照 -->
+            <div class="col-xs-12 detail-item info-img">
+                <div class="item">
+                    形象照
+                </div>
+                <div id="artist_img">
+                    <ul id="Gallery" class="gallery">
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 个人信息 -->
+            <div class="col-xs-12 detail-item artist-detail-title">
+                个人信息
+            </div>  
+            
+            <div class="col-xs-12 detail-item info-message">
+                
+                <div class="row item">
+                    <div class="col-xs-3">身高</div>
+                    <div class="col-xs-9 stature text"></div>
+                </div>
+                <hr>  
+                <div class="row item">
+                    <div class="col-xs-3">从业年限</div>
+                    <div class="col-xs-9 experience text"></div>
+                </div>
+                <hr> 
+                <div class="row item">
+                    <div class="col-xs-3">工作单位</div>
+                    <div class="col-xs-9 organization text"></div>
+                </div>
+                <hr> 
+                <div class="row item">
+                    <div class="col-xs-3">毕业学校</div>
+                    <div class="col-xs-9 school text"></div>
+                </div>
+
+            </div>  
+
+            <div class="col-xs-12 detail-item info-textarea">
+                <div class="row item">
+                    <div class="col-xs-3">曾获荣誉</div>
+                    <div class="col-xs-9 honour text"></div>
+                </div>
+                <hr> 
+                <div class="row item">
+                    <div class="col-xs-3">个人介绍</div>
+                    <div class="col-xs-9 info text"></div>
+                </div>
+            </div>
+
+            <!-- 声音 -->
+            <div class="col-xs-12 detail-item artist-detail-title">
+                TA的声音
+            </div> 
+            <div class="col-xs-12 detail-item info-voice">
+                
+                <div class="voice">
+                    <a href="#">点击播放</a>
+                    <audio id="mp3Btn"  src="">
+                    </audio>
+                </div>
+            </div>     
+
+
+            <!-- 主持经历 -->  
+            <div class="col-xs-12 detail-item artist-detail-title">
+                主持经历
+            </div>            
+            <div class="col-xs-12 info-activity">
+            </div>
+        </section>
+        
+        <!-- 底部 -->
+        <div class="detail-item-enroll artist-contact">
+                <div class="price">
+                    期望酬劳：
+                </div>
+                <div class="signup">
+                    
+                </div>
+            </div>
+        </div>
+
+        <div id="img-box"></div>
+        
+      
+        
+<!--         <script>
+    slider._data.content.push({
+        href: "#",
+        pic: "./Public/img/pic_1.jpg",
+        title:''
+    })
+    console.log(slider._data.content);
+</script> -->
+        
+        <script src="./Public/ga.js"></script>
+        <script src="./Public/timeFormat.js"></script>
+        <script src="./Public/jquery.min.js"></script>
+        <script src="./Public/js/PhotoSwipe/klass.min.js"></script>
+        <script src="./Public/js/PhotoSwipe/code.photoswipe.jquery-3.0.5.min.js"></script>
+        <!-- <script src="./Public/js/lightbox.js"></script>
+        <script src="./Public/js/imagelightbox.min.js"></script> -->
+        <script src="./Public/js/Scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+
+        <script src="./Public/js/index.js"></script>
+        <script>
+            $('.back').click(function() {
+                var mine = window.location.href.indexOf('mine');
+                if (mine != -1) {
+                   window.history.back();
+                } else {
+                    window.location.href = './?m=web&c=index&a=artist&openid={$Think.get.openid}&back'
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>基本资料</title>
+        <link rel="stylesheet" href="./Public/Kmic/css/index.css">
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">   
+        <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="col-xs-12 ptm20">
+            <form id="dosubmit" action="">
+            <div class="user_info mb20">
+                <div class="row">
+                    <div class="col-xs-3 col999">身高</div>
+                    <div class="col-xs-9 pl0"><input type="text" class="stature" name="stature" value="{$detail.stature}"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>
+
+                 <div class="row">
+                    <div class="col-xs-3 col999">工作单位</div>
+                    <div class="col-xs-9 pl0"><input type="text"  class="organization" name="organization" value="{$detail.organization}"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>
+
+                <div class="row">
+                    <div class="col-xs-3 col999">毕业学校</div>
+                    <div class="col-xs-9 pl0"><input type="text"  class="school" name="school" value="{$detail.school}"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>
+
+                <div class="row">
+                    <div class="col-xs-3 col999">主持经验</div>
+                    <div class="col-xs-9 pl0"><input type="text"  class="experience" name="experience" value="{$detail.experience}"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>      
+                
+                <div class="row">
+                    <div class="col-xs-3 col999">曾获荣誉</div>
+                    <div class="col-xs-9 pl0"><input type="text"  class="honour" name="honour" value="{$detail.honour}"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>  
+
+                <div class="row">
+                    <div class="col-xs-3 col999">期望酬劳</div>
+                    <div class="col-xs-9 pl0"><input type="text"  class="price" name="price" value="{$detail.price}"></div>
+                    <div class="clearfix"></div>                 
+                </div>
+                <div class="boder1px"></div>              
+                
+                <div class="row">
+                    <div class="col-xs-3 col999">擅长语言</div>
+                    <div class="col-xs-9 pl0"></div>
+                    <div class="laung_list"></div>
+                    <div class="clearfix"></div> 
+                    <div class="col-xs-12">
+                         <div class="setmassage">
+                            <ul class='tag language'>
+                                <li class="ui-label">普通话</li>
+                                <li class="ui-label">粤语</li>
+                                <li class="ui-label">英语</li>
+                                <li class="ui-label">日语</li>
+                                <li class="ui-label">韩语</li>
+                                <li class="ui-label">法语</li>
+                                <li class="ui-label">其他</li>
+                            </ul>
+                             <input type="hidden" name="language" value="" />
+                             <input type="hidden" name="openid" value="{$Think.get.openid}" />
+                        </div>
+                    </div>
+                </div>    
+        </div> 
+            </form>
+            <div class="button_wbut text-center msg_subtim">提交</div>
+        </div>
+        
+        <script>
+    
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url:"?m=Center&c=Profile&a=setMessage&action=msg&openid={$Think.get.openid}",
+                data:$('#dosubmit').serialize(),// 序列号formid
+                async: false,
+                dataType: 'json',
+                error: function(request) {
+                    alert('提交超时，请稍候再试！');
+                },
+                success: function(data) {
+                    console.log(data);
+                    if (data.error == 0) {
+                        $(".stature").val(data.stature);
+                        $(".organization").val(data.organization);
+                        $(".school").val(data.school);
+                        $(".experience").val(data.experience);
+                        $(".honour").val(data.honour);
+                        $(".price").val(data.price);                 
+                        var obj = eval('(' + data.language + ')');
+                        //var arr = Object.keys(obj);                  
+                        for (var i=0;i<Object.keys(obj).length;i++){
+                              $(".setmassage li").eq(Object.keys(obj)[i]).addClass('selected colw');                        
+                         }    
+                    }
+                }
+            });
+                
+            var langArr = new Array();
+            {$jsLanguage}
+            $("input[name='language']").val(langArr.join("-"));
+            $(".language li").click(function () {
+                var i = langArr.indexOf($(this).html());
+                if(i != -1) {
+                    langArr.splice(i, 1);
+                    $(this).removeClass("selected");
+                    $(this).removeClass("colw");
+                }else{
+                    langArr[$(this).index()]=$(this).html();
+                    $(this).addClass("selected"); 
+                    $(this).addClass("colw");
+                }
+                $("input[name='language']").val(langArr.join("-"));
+            });
+            
+            $(".msg_subtim").click(function(){            
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url:"?m=Center&c=Profile&a=addMessage&action=msg",
+                    data:$('#dosubmit').serialize(),// 序列号formid
+                    async: false,
+                    dataType: 'json',
+                    error: function(request) {
+                        alert('提交超时，请稍候再试！');
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data.error == 0) {
+                            alert('发布成功！');
+                          //  window.location.href="?m=web&a=profiles&openid={$Think.get.openid}";
+                        }else if (data.error == 1) {
+                            alert(data.msg);
+                        }
+                    }
+                });
+                
+            });
+
+        </script>
+    </body>
+</html>
+
