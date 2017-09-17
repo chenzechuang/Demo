@@ -57,6 +57,11 @@ $(document).ready(function() {
   
 });
 
+$(function() {
+  $('.banner .front').delay(4000).animate({width: '384px'});
+  $('.banner .next').delay(8000).animate({width: '216px'});
+});
+
 $(document).ready(function() {
   $('.newworld-logo').hover(function() {
     $(this).css({

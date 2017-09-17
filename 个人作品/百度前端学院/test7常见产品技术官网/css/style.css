@@ -101,42 +101,52 @@
   left: 116px;
 }
 
-@-webkit-keyframes type {
-  0% { 
-    width: 0;
-  }
+@keyframes typing {
+  from { width: 0 }
 }
 
-@keyframes type {
-  0% {
-    width: 0;
-  }
+@keyframes caret {
+  50% { border-right: .05em solid; }
 }
 
 .banner .banner-text1 {
-  width: 368px;
+  width: 8.8em;
+  font-family: Consolas, Monaco, monospace;
   white-space: nowrap;
   overflow: hidden;
-  -webkit-animation: type 3s steps(16, end) 0s 1;
-  animation: type 3s steps(16, end) 0s 1;
-  height: 96px;
-  line-height: 96px;
-  font-size: 46px;
+  margin: 25px 0;
+  font-size: 3em;
+  border-right: .05em solid transparent;
+  animation: typing 4s steps(16),
+             caret 0.25s steps(1) 16;
 }
 
-.banner .banner-text2 {
-  width: 320px;
+.banner .banner-text2 p {
+  font-family: Consolas, Monaco, monospace;
   white-space: nowrap;
   overflow: hidden;
-  -webkit-animation: type 3s steps(20, end) 0s 1;
-  animation: type 3s steps(20, end) 0s 1;
-  height: 64px;
+  height: 32px;
   line-height: 32px;
-  font-size: 22px;
+  font-size: 1.5em;
   margin-left: 8px;
+  overflow: hidden;
+  border-right: .05em solid transparent;
+}
+
+.banner .banner-text2 .front {
+  width: 0;
+  animation: typing 4s 4s steps(16),
+             caret .25s 4s steps(1) 16;
+}
+
+.banner .banner-text2 .next {
+  width: 0;
+  animation: typing 2.25s 8s steps(9),
+             caret .25s 8s steps(1) 9;
 }
 
 .banner .banner-button {
+  width: 360px;
   margin-top: 60px;
   margin-left: 8px;
   background: #e74f4d;
