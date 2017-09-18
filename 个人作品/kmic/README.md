@@ -1,3 +1,4 @@
+之前在公司是在gitlab更新代码到自己的分支上，故在github上没有记录。gitlab地址：https://gitlab.com/finderCZC
 ## 项目名称
   - 开麦微信公众平台   主持人O2O平台
 ## 项目介绍
