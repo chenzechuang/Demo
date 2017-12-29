@@ -1,0 +1,103 @@
+{
+  "startPage": 1,
+  "finalPage": 12,
+  "size": 5,
+  "totalRows": 59,
+  "resources": [
+    {
+      "id": 40,
+      "title": "题目名称1",
+      "createTime": "2017-12-05",
+      "rightOptions": [
+        "sdsdsd",
+        "sdsda"
+      ],
+      "errorOptions": [
+        "sdsdsd",
+        "sdsdsd"
+      ],
+      "answerWord": "sd",
+      "creatorId": "123",
+      "description": "这是一道什么题",
+      "type": 1,
+      "status": 0,
+      "dept": "所有"
+    },
+    {
+      "id": 41,
+      "title": "题目名称2",
+      "createTime": "2017-12-05",
+      "rightOptions": [
+        "sdsdsd",
+        "sdsda"
+      ],
+      "errorOptions": [
+        "sdsdsd",
+        "sdsdsd"
+      ],
+      "answerWord": "sd",
+      "creatorId": "123",
+      "description": "这是一道什么题",
+      "type": 1,
+      "status": 0,
+      "dept": "所有"
+    },
+    {
+      "id": 42,
+      "title": "题目名称3",
+      "createTime": "2017-12-05",
+      "rightOptions": [
+        "sdsdsd",
+        "sdsda"
+      ],
+      "errorOptions": [
+        "sdsdsd",
+        "sdsdsd"
+      ],
+      "answerWord": "sd",
+      "creatorId": "123",
+      "description": "这是一道什么题",
+      "type": 1,
+      "status": 0,
+      "dept": "所有"
+    },
+    {
+      "id": 43,
+      "title": "题目名称3",
+      "createTime": "2017-12-05",
+      "rightOptions": [
+        "sdsdsd",
+        "sdsda"
+      ],
+      "errorOptions": [
+        "sdsdsd",
+        "sdsdsd"
+      ],
+      "answerWord": "sd",
+      "creatorId": "123",
+      "description": "这是一道什么题",
+      "type": 1,
+      "status": 0,
+      "dept": "所有"
+    },
+    {
+      "id": 46,
+      "title": "sad ",
+      "createTime": "2017-12-05",
+      "rightOptions": [
+        "sad sad ",
+        "sad  ds"
+      ],
+      "errorOptions": [
+        "sad d sa",
+        "sad sa d"
+      ],
+      "answerWord": "",
+      "creatorId": null,
+      "description": "",
+      "type": 2,
+      "status": 0,
+      "dept": "所有"
+    }
+  ]
+}

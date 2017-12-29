@@ -1,0 +1,273 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <title>考试模块</title>
+
+        <!-- Path to Framework7 Library CSS-->
+        <!--     <link rel="stylesheet" href="/vistor/resources/css/framework7.ios.min.css">
+        <link rel="stylesheet" href="/vistor/resources/css/framework7.ios.colors.min.css">
+         -->
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrapValidator.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="font-awesome/4.2.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+        <!-- <link rel="stylesheet" href="css/layer.css"> -->
+        <link rel="stylesheet" href="css/index.css" />
+
+        <script src="https://unpkg.com/vue"></script>
+        <script src="js/jquery-1.12.3.min.js"></script>
+        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+        <script src="js/bootstrapValidator.min.js"></script>
+        <script src="js/layer.js"></script>
+        <script src="js/index.js"></script>
+        <script>
+          //localStorage.removeItem("userid");
+          //localStorage.removeItem("username");
+        </script>
+	
+    </head>
+
+    <body>
+        <div id="page-wrapper" class="">
+            <div id="page-container" class="header-fixed-top sidebar-visible-lg-full">
+                <!-- Main Container -->
+                <div id="main-container" class="container">
+                    <!-- Page content -->
+                    <div id="page-content" class="row">
+                        <!-- 页头开始 -->
+
+                        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+                            <el-menu-item index="1">首页</el-menu-item>
+                            <el-submenu index="2">
+                                <template slot="title">考试管理</template>
+                                <el-menu-item index="2-1">试卷管理</el-menu-item>
+                                <el-menu-item index="2-2">考卷管理</el-menu-item>
+                                <el-menu-item index="2-3">题目管理</el-menu-item>
+                            </el-submenu>
+                            <el-submenu index="3">
+                                <template slot="title">系统管理</template>
+                                <el-menu-item index="3-1">权限管理</el-menu-item>
+                                <el-menu-item index="3-2">目录管理</el-menu-item>
+                                <el-menu-item index="3-3">日志管理</el-menu-item>
+                            </el-submenu>
+
+                            <el-menu-item index="4">登录</el-menu-item>
+                        </el-menu>
+                        <!-- 页头结束 -->
+                        
+                        <div class="block">
+                            <div class="timerContent">
+                                <div class="timer">
+                                    剩余时间：
+                                </div>
+                            </div>
+                            <div class="test-container">
+                                
+                                <h2></h2>
+                                <form class="content">
+                                    
+                                </form>
+
+                                <div class="submit">
+                                    <button class="btn btn-primary submitBtn">提交问卷</button>
+                                </div>
+                                
+                                <div class="listContent">
+                                </div>
+
+                                
+
+                                <!-- <div class="progressContent">
+                                    <div class="progressBg">
+                                        <div class="progressNum">
+                                            0%
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div> -->  
+                            </div>
+
+                            <div class="data-container">
+                                
+                                <h2></h2>
+                                
+                            </div>
+
+                            <div class="test-list">
+                                <el-row type="flex" justify="space-around">
+                                    
+                                    <div class="handle-box">
+                                        <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
+                                        <el-button type="primary" icon="search" @click="search">搜索</el-button>
+                                    </div>
+
+                                </el-row>
+                                <el-table :data="data" style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
+                                    <el-table-column type="expand">
+                                      <template slot-scope="props">
+                                        <el-form label-position="left" inline class="demo-table-expand">
+                                            <el-form-item label="试卷 ID">
+                                                <span>{{ props.row.id }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="考试限时">
+                                                <span>{{ props.row.testTime }}分钟</span>
+                                            </el-form-item>    
+                                            <el-form-item label="创建人">
+                                                <span>{{ props.row.creatorName }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="创建时间">
+                                                <span>{{ props.row.createTime }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="最后修改人">
+                                                <span>{{ props.row.finalUpdateName }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="最后修改时间">
+                                                <span>{{ props.row.finalUpdateTime }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="开始考试时间">
+                                                <span>{{ props.row.startTime }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="结束考试时间">
+                                                <span>{{ props.row.endTime }}</span>
+                                            </el-form-item> 
+                                            <el-form-item label="试卷总分">
+                                                <span>{{ props.row.totalPoint }}分</span>
+                                            </el-form-item>
+                                            <el-form-item label="试卷及格分">
+                                                <span>{{ props.row.passPoint }}分</span>
+                                            </el-form-item>
+                                        </el-form>
+                                      </template>
+                                    </el-table-column>
+
+                                    <el-table-column label="试卷名称" prop="name">
+                                    </el-table-column>
+
+                                    <el-table-column label="部门" prop="deptType">
+                                    </el-table-column>
+
+                                    <el-table-column label="描述" prop="description">
+                                    </el-table-column>
+
+                                    <el-table-column label="操作">
+                                        <template slot-scope="scope">
+                                            <el-button type="danger" size="small" @click="handleDo(scope.$index, scope.row)">测试</el-button>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                                <div class="pagination pull-right">
+                                    <el-pagination
+                                            @current-change ="handleCurrentChange"
+                                            background
+                                            layout="prev, pager, next"
+                                            :total="totalRows"
+                                            :page-size="size">
+                                    </el-pagination>
+                                </div>
+                            </div>
+
+                        </div>  
+                        
+                    </div>
+                    <!-- END Main Container -->
+                </div>
+                <!-- END Page Container -->
+            </div>
+            <footer id="footer" class="copyright">
+                <p>© 高新兴集团股份有限公司 IT流程体系部 </p>
+                <p>© Gosuncn Technology Group Co.,Ltd.</p>
+                <p>All rights reserved.</p>
+            </footer>
+        </div>
+
+        <script type="text/javascript">
+            new Vue({
+                el: '#page-wrapper',
+                data() {
+                    return {
+                        activeIndex: '1',
+                        url: 'http://192.168.18.205/exam-api/exam/page',
+                        tableData: [],
+                        cur_page: 1,
+                        size: 9,
+                        totalRows: 10,
+                        select_word: '',
+                        is_search: false
+                  }
+                },
+                created(){
+                    this.getData();
+                },
+                computed: {
+                    data(){
+                        const self = this;
+                        if (self.tableData.length > 0) {
+                            return self.tableData.filter(function(d) {
+                                if (d.name.indexOf(self.select_word) > -1 || d.deptType.indexOf(self.select_word) > -1 || d.description.indexOf(self.select_word) > -1) {
+                                      return d;
+                                }
+                            })
+                        }
+                        
+                    },
+                    username(){
+                        let username = localStorage.getItem('ms_username');
+                        return username ? username : this.name;
+                    }
+                },
+                methods: {
+                    handleSelect(key, keyPath) {
+                        console.log(key, keyPath)
+                        if (key == "1") {
+                           location.href = "test.html";
+                        } else if (key == "2-1") {
+                            location.href = "index.html";
+                        } else if (key == "3") {
+                            location.href = "index.html";
+                        } else if (key == "4") {
+                            location.href = "login.html"
+                        } 
+                    },
+                    handleCurrentChange(val){
+                        this.cur_page = val;
+                        this.getData();
+                    },
+                    getData(){
+                        let self = this;
+                        $.ajax({
+                            method: 'get',
+                            url: self.url,
+                            data: {offset: self.cur_page, size: self.size},
+                            success: function(res) {
+                                self.totalRows = res.totalRows;
+                                self.tableData = res.resources;
+                            }
+                        });
+                      // self.$axios.post(self.url, {page:self.cur_page}).then((res) => {
+                      //     self.tableData = res.list;
+                      // })
+                    },
+                    search(){
+                        this.is_search = true;
+                    },
+                    handleDo(index, row) {
+                        doTest(row.id, this)
+                    },
+                    handleSelectionChange(val) {
+                        this.multipleSelection = val;
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

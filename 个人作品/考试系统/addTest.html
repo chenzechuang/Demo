@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <title>高新兴-客户来访系统</title>
+
+        <!-- Path to Framework7 Library CSS-->
+        <!--     <link rel="stylesheet" href="/vistor/resources/css/framework7.ios.min.css">
+        <link rel="stylesheet" href="/vistor/resources/css/framework7.ios.colors.min.css">
+         -->
+        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+        <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrapValidator.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/mobiscroll.custom-3.0.0-beta4.min.css">
+        <link rel="stylesheet" href="font-awesome/4.2.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="css/plugins.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/jquery-1.12.3.min.js"></script>
+        <script src="js/mobiscroll.custom-3.0.0-beta4.min.js"></script>
+        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="js/bootstrapValidator.min.js"></script>
+        <script src="js/zh_CN.js"></script>
+        <style>
+            html{min-height: 100%;}
+            body{font-size: 16px;}
+            
+            .block {
+                text-align: center;
+            }
+            
+        </style>
+        <script>
+          //localStorage.removeItem("userid");
+          //localStorage.removeItem("username");
+          
+        </script>
+    
+    </head>
+
+    <body class="">
+        <div id="page-wrapper" class="">
+            <div id="page-container" class="header-fixed-top sidebar-visible-lg-full">
+                <!-- Main Container -->
+                <div id="main-container">
+                    <!-- Page content -->
+                    <div id="page-content" style="min-height: 528px;">
+                        <!-- 页头开始 -->
+                        <div class="content-header">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="header-section">
+                                        <h1>知识考察</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="clearfix" id="toolbar">
+                            <input type="text" id="keyword" class="form-control" style="float: right;width: 15%;height:35px;margin-top: 5px;">
+                            <div class="searchCondition">
+                                <label>排序：</label>
+                                <select class="form-control" id="order" style="width:100px;display: inline-block;">
+                                    <option value="0">创建日期</option>
+                                    <option value="1">回复日期</option>
+                                </select>
+                            </div>
+                            <div class="searchCondition" style="padding:0 0 0 10px;">
+                                <select class="form-control" id="personStatus" style="width:85px;display: inline-block;">
+                                    <option value="0">创建人</option>
+                                    <option value="1">回复人</option>
+                                </select>：
+                                <input type="text" name="" id="personName" class="form-control" style="display: inline-block;width: 100px;">
+                                <i class="iconfont icon-cross" style="font-size: 9px;cursor: pointer;position: relative;left:-25px;" id="nullBtn-person"></i>
+                                <input type="hidden" id="personId">
+                            </div>
+                            <div class="searchCondition">
+                                <select class="form-control" id="hasReplied" style="width:115px;display: inline-block;">
+                                    <option value="true">回复数&gt;=0</option>
+                                    <option value="false">回复数为0</option>
+                                </select>
+                            </div>
+                            <div class="searchCondition">
+                                <label>状态：</label>
+                                <select class="form-control" id="status" style="width:85px;display: inline-block;">
+                                    <option value="1">未关闭</option>
+                                    <option value="2">已关闭</option>
+                                    <option value="3">已删除</option>
+                                </select>
+                            </div>
+                            <div class="searchCondition">
+                                <label>模块：</label>
+                                <input type="text" id="moduleName" class="form-control" style="display: inline-block;width: 150px;">
+                                <i class="iconfont icon-cross" style="font-size: 9px;cursor: pointer;position: relative;left:-25px;" id="nullBtn-module"></i>
+                                <input type="hidden" id="moduleId">
+                            </div>
+                        </div> -->
+                        <!-- 页头结束 -->
+                        <div class="block" style="padding:0;margin:0;">
+                            <div style="padding:10px 20px;">
+                                <!-- <div id="tableList_wrapper" class="dataTables_wrapper form-inline no-footer">
+                                    <table id="tableList" class="table table-striped table-vcenter table-hover dataTable no-footer" width="100%" role="grid" aria-describedby="tableList_info" style="width: 100%;">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 421px;">标题</th>
+                                                <th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 150px;">模块目录</th>
+                                                <th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 100px;">回复数</th>
+                                                <th class="sorting_disabled text-center" rowspan="1" colspan="1" style="width: 150px;">最后回复</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="odd">
+                                                <td valign="top" colspan="4" class="dataTables_empty">表中数据为空</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div> -->
+                                
+                                
+                            </div>
+                        </div>                       
+                        <footer id="footer">
+                            <p>© 高新兴集团股份有限公司 IT流程体系部 </p>
+                            <p>© Gosuncn Technology Group Co.,Ltd.</p>
+                            <p>All rights reserved.</p>
+                        </footer>
+                    </div>
+                    <!-- END Main Container -->
+                </div>
+                <!-- END Page Container -->
+            </div>
+
+            <!-- END Page Wrapper -->
+            <!-- jQuery, Bootstrap, jQuery plugins and Custom JS code -->
+            <script type="text/javascript" src="https://g.alicdn.com/dingding/dingtalk-pc-api/2.7.0/index.js"></script>
+            <script src="js/ding.js"></script>
+            <script src="js/plugins.js"></script>
+            <script src="js/app.js"></script>
+            <!-- Load and execute javascript code used only in this page -->
+            <script>
+                $('.addTest').click(function(event) {
+                    $.ajax({
+                        url: './addTest.html',
+                        type: 'Get',
+                        dataType: 'html',
+                        success: function (data) {
+                            console(data);
+                        }
+                    })
+
+                });
+            </script>
+        </div>
+
+    </div>
+
+    <script>
+    // $(document).ready(function(){
+    
+    //   var agentId=null;
+    //   var corpId=null;
+    //   var timeStamp =null;
+    //   var nonceStr=null;
+    //   var signature =null;
+    //   $.ajax({
+    //         type:"get",
+    //         async: false, 
+    //         url:'https://ding.gosuncn.com:444/getConfig?signUrl='+window.location.href,
+    //         dataType:'jsonp',
+    //         jsonp: "callback",
+    //         jsonpCallback:'getConfig',
+    //       success:function(data){
+    //           console.log(data);
+            
+    //           agentId = data.agentid;
+    //         corpId =data.corpId;
+    //         timeStamp = data.timeStamp;
+    //         nonceStr= data.nonceStr;
+    //         signature =data.signature;
+            
+    //         console.log("corpId"+corpId);
+    //         console.log("signature"+signature);
+            
+    //         DingTalkPC.config({
+    //                 agentId :agentId,
+    //                 corpId : corpId,
+    //                 timeStamp :timeStamp,
+    //                 nonceStr :nonceStr,
+    //                 signature :signature,
+    //                 jsApiList : [ 'runtime.permission.requestAuthCode','biz.contact.choose','device.notification.alert' ]
+    //             });
+            
+            
+    //             DingTalkPC.ready(function() {
+                    
+    //                 if(localStorage.getItem("userid")==null) {
+    
+    //                     DingTalkPC.runtime.permission.requestAuthCode({
+    //                             corpId: corpId,
+    //                             onSuccess: function (info) {
+                                    
+    //                              $.ajax({
+    //                                 type:"get",
+    //                                 async: false, 
+    //                                 url:'https://ding.gosuncn.com:444/getUserInfo?code=' + info.code + '&corpid='
+    //                                 + corpId,
+    //                                 dataType:'jsonp',
+    //                                 jsonp: "callback",
+    //                                 jsonpCallback:'getUserInfo',
+    //                                     success: function (data) {
+    //                                         console.log(data);
+    //                                         var info =data;
+                                        
+    //                                         $("#sqr").val(info.name);
+    //                                         $("#sqrid").val(info.userid);
+                                            
+    //                                         localStorage.setItem("username", info.name);
+    //                                         localStorage.setItem("userid", info.userid);
+
+    //                                     },
+    //                                     error: function (error) {
+                                            
+    //                                         console.log(errorType + ', ' + error);
+    //                                     }
+    //                                 });
+
+    //                             },
+    //                             onFail: function (err) {
+    //                                 console.log('fail: ' + JSON.stringify(err));
+    //                             }
+    //                         });
+    //                     }else{
+                            
+    //                     }
+    //             })
+
+    //             DingTalkPC.error(function(err) {
+    //                 console.log('error: ' + JSON.stringify(err.errorCode));
+                    
+    //                     $.ajax({
+    //                     type:"get",
+    //                     async: false, 
+    //                     url:'https://ding.gosuncn.com:444/error',
+    //                     dataType:'jsonp',
+    //                     jsonp: "callback",
+    //                     jsonpCallback:'getConfig',
+    //                     complete:function(data){
+    //                         location.reload();
+    //                     }
+    //                     })
+    //             });
+            
+    //       }
+        
+    //   })
+             
+    // })
+    
+    // if(localStorage.getItem("userid")==null){
+
+    // } else{
+    //   $("#sqrid").val(localStorage.getItem("userid"));
+    //   $("#sqr").val(localStorage.getItem("username"));
+    // }
+
+      //在此拿到权限验证配置所需要的信息
+
+
+    </script>
+    <script src="https://g.alicdn.com/dingding/dingtalk-pc-api/2.4.8/index.js"></script>
+    
+    <script>
+      // $("#bfry").on("click",function(){
+      //   DingTalkPC.biz.contact.choose({
+      //     startWithDepartmentId: 0, //-1表示打开的通讯录从自己所在部门开始展示, 0表示从企业最上层开始，(其他数字表示从该部门开始:暂时不支持)
+      //     multiple: false, //是否多选： true多选 false单选； 默认true
+      //     //users: [String, String, ...], //默认选中的用户列表，userid；成功回调中应包含该信息
+      //     corpId: 'dingbb7bd3d75122ab97', //企业id
+      //     max: 1, //人数限制，当multiple为true才生效，可选范围1-1500
+      //     onSuccess: function(data) {
+      //     console.log(data[0]);
+      //       $("#bfry").val(data[0].name);
+      //       $("#bfryid").val(data[0].emplId);
+
+      //     },
+      //     onFail : function(err) {
+      //       // alert(err);
+      //     }
+      //   });
+      // })
+    </script>
+  </body>
+</html>
