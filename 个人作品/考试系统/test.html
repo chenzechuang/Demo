@@ -42,13 +42,13 @@
                     <div id="page-content" class="row">
                         <!-- 页头开始 -->
 
-                        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+                        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64"
+                            text-color="#fff" active-text-color="#ffd04b">
                             <el-menu-item index="1">首页</el-menu-item>
                             <el-submenu index="2">
                                 <template slot="title">考试管理</template>
                                 <el-menu-item index="2-1">试卷管理</el-menu-item>
-                                <el-menu-item index="2-2">考卷管理</el-menu-item>
-                                <el-menu-item index="2-3">题目管理</el-menu-item>
+                                <el-menu-item index="2-2">题目管理</el-menu-item>
                             </el-submenu>
                             <el-submenu index="3">
                                 <template slot="title">系统管理</template>
@@ -56,7 +56,7 @@
                                 <el-menu-item index="3-2">目录管理</el-menu-item>
                                 <el-menu-item index="3-3">日志管理</el-menu-item>
                             </el-submenu>
-
+                        
                             <el-menu-item index="4">登录</el-menu-item>
                         </el-menu>
                         <!-- 页头结束 -->
@@ -232,8 +232,8 @@
                            location.href = "test.html";
                         } else if (key == "2-1") {
                             location.href = "index.html";
-                        } else if (key == "3") {
-                            location.href = "index.html";
+                        } else if (key == "2-2") {
+                            location.href = "questions.html";
                         } else if (key == "4") {
                             location.href = "login.html"
                         } 
@@ -249,6 +249,8 @@
                             url: self.url,
                             data: {offset: self.cur_page, size: self.size},
                             success: function(res) {
+                                console.log(res);
+                                
                                 self.totalRows = res.totalRows;
                                 self.tableData = res.resources;
                             }
@@ -261,7 +263,247 @@
                         this.is_search = true;
                     },
                     handleDo(index, row) {
-                        doTest(row.id, this)
+                        let self = this;
+                        self.$confirm('你确定要测试吗?', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            $.ajax({
+                                url: '/exam-api/exam/' + row.id + '/open',
+                                type: 'get',
+                                success: function (result) {
+                                    console.log(result);
+                                    
+                                    $.ajax({
+                                        url: url + '/exam-api/paper/info/' + result.examPaperId,
+                                        type: 'get',
+                                        success: function (result) {
+                                            console.log(result);
+                                            
+                                            $('.test-container').show();
+                                            $('.listContent').show();
+                                            $('.timerContent').show();
+                                            $('.test-list').hide();
+                                            $('.test-container h2').html(result.examName);
+                                            $('.test-container .questions').remove();
+                                            var left_time = (new Date(result.endTime) - new Date()) / 1000  + 30;
+                                            var examPaperId = result.examPaperId;
+                                            var btnGroup = "<div class=\"btn-group-vertical\" role=\"group\">"
+                                            var options = "";
+                                            var options_wrap = "";
+                                            var selectArr = [];
+                                            $.each(result.questionPapers, function (index, val) {
+                                                if (val.type == 1 || val.type == 2) {
+                                                    if (val.selectItems != null) {
+                                                        selectArr = val.selectItems;
+                                                    } else {
+                                                        selectArr = [];
+                                                    }
+                                                } else if (val.type == 4) {
+                                                    if (val.answerWord == null) {
+                                                        val.answerWord = "";
+                                                    }
+                                                    selectArr = val.answerWord.split("-&-");
+                                                } else {
+                                                    selectArr = val.answerWord;
+                                                }
+                                                options += "<div class=\"questions\" id=" + val.questionId + ">\n";
+                                                options_wrap = addOptions(val.type, index, val.title, val.score, selectArr, val.options, val.id);
+                                                options += options_wrap;
+                                                options += "<\/div>";
+
+                                                btnGroup += "<a href=\"javascript:;\" class=\"btn btn-default\">" + (index + 1) + "</a>"
+
+                                            });
+
+                                            $('.test-container .content').append(options);
+                                            
+                                            if (left_time < 0) {
+                                                $('.test-container input').attr({
+                                                    disabled: true
+                                                });
+                                                $('.timer').html('剩余时间：00分钟00秒');
+                                                $('.submitBtn').html("答题时间到").attr("disabled", true);
+                                            } else {
+                                                $('.test-container input').attr({
+                                                    disabled: false
+                                                });
+                                            }
+                                            $('.test-container textarea').attr('disabled', false);
+                                            btnGroup += "<\/div>";
+                                            $('.listContent').append(btnGroup);
+
+                                            $('.questions input[type="checkbox"]').click(function () {
+                                                if (!$(this).parents('.questions').find(':checked').length == 1) {
+                                                    return false;
+                                                }
+                                            });
+
+                                            $('.questions input,.questions textarea').change(function () {
+                                                var question = $(this).parents('.questions');
+                                                var qs_type = question.find('.qs-type').html();
+                                                var questionId = question.attr("id");
+                                                var answersArr = [];
+                                                var answers = "";
+
+                                                if (qs_type == "单选" || qs_type == "多选") {
+                                                    var rightOptions = question.find('input:checked');
+
+                                                    $.each(rightOptions, function (index, val) {
+                                                        answersArr.push(($(this).next().html().split("、")[1]));
+                                                    });
+                                                    answers = answersArr.join("-&-");
+                                                } else if (qs_type == "填空") {
+                                                    $.each(question.find('.qs-content input'), function (index, val) {
+                                                        if ($(this).val() == "") {
+                                                            answersArr.push("null");
+                                                        } else {
+                                                            answersArr.push($(this).val());
+                                                        }
+                                                    });
+                                                    answers = answersArr.join("-&-")
+                                                } else {
+                                                    answers = question.find('input').val();
+                                                }
+
+                                                $.ajax({
+                                                    url: url + '/exam-api/paper/answer',
+                                                    type: 'post',
+                                                    data: {
+                                                        "examPaperId": examPaperId,
+                                                        "questionId": questionId,
+                                                        "answer": answers
+                                                    },
+                                                    success: function (res) {
+                                                        console.log(res);
+                                                    }
+                                                })
+                                                var index = $(this).parents('.questions').index();
+                                                $('.listContent a').eq(index).addClass('btn-primary').removeClass('btn-default');
+                                            });
+                                            $('.listContent a').click(function () {
+                                                var a_index = $(this).index();
+                                                var b_top = $('.questions').eq(a_index).offset().top - 100;
+                                                $(window).scrollTop(b_top);
+                                            })
+                                            var t1 = setInterval(function () {
+                                                if (left_time <= 0) {
+                                                    clearInterval(t1);
+                                                    $('.test-container input').attr({
+                                                        disabled: true
+                                                    });
+                                                    $('.submitBtn').html("答题时间到").attr("disabled", true)
+                                                    $('.timer').html('剩余时间：00分钟00秒');
+                                                    return;
+                                                }
+                                                if ((left_time - 1) % 60 == 0) {
+                                                    $('.timer').css('fontWeight', 'bold');
+                                                } else {
+                                                    $('.timer').css('fontWeight', 'normal');
+                                                }
+
+                                                if ((left_time - 1) / 60 <= 5) {
+                                                    $('.timer').css('fontSize', '16px');
+                                                }
+                                                left_time -= 1;
+                                                var minutes = checkTime(parseInt(left_time / 60, 10));//计算剩余的分钟
+                                                var seconds = checkTime(parseInt(left_time % 60, 10));//计算剩余的秒数
+                                                $('.timer').html('剩余时间：' + minutes + '分钟' + seconds + '秒');
+                                            }, 1000);
+                                        }  
+                                    });
+                                   
+                                    // 答题 - 提交问卷
+                                    $('.submitBtn').click(function () {
+
+                                        for (var i = 0; i < $('.questions').length; i++) {
+                                            var hasInput = $('.questions').eq(i);
+                                            var hasInput_type = hasInput.find('.qs-type').html();
+                                            if (hasInput_type == "单选" || hasInput_type == "多选") {
+
+                                                if (hasInput.find('input:checked').length == 0) {
+                                                    self.$confirm('有试题为空，确定提交吗?', '提示', {
+                                                        confirmButtonText: '确定',
+                                                        cancelButtonText: '取消',
+                                                        type: 'warning'
+                                                    }).then(() => {
+                                                        self.$message({
+                                                            type: 'info',
+                                                            message: '提交成功！'
+                                                        });
+                                                        setTimeout(() => {
+                                                            location.href = "index.html";
+                                                        }, 500);
+                                                    }).catch(() => {
+                                                        self.$message({
+                                                            type: 'info',
+                                                            message: '已取消提交'
+                                                        });
+                                                    });
+                                                    return false;
+                                                }
+                                            } else if (hasInput_type == "填空" || hasInput_type == "简答") {
+                                                var array = hasInput.find('input');
+                                                for (let index = 0; index < array.length; index++) {
+                                                    const element = array.eq(index);
+                                                    if (element.val() == "") {
+                                                        self.$confirm('有试题为空，确定提交吗?', '提示', {
+                                                            confirmButtonText: '确定',
+                                                            cancelButtonText: '取消',
+                                                            type: 'warning'
+                                                        }).then(() => {
+                                                            self.$message({
+                                                                type: 'info',
+                                                                message: '提交成功！'
+                                                            });
+                                                            setTimeout(() => {
+                                                                location.href = "index.html";
+                                                            }, 500);
+                                                        }).catch(() => {
+                                                            self.$message({
+                                                                type: 'info',
+                                                                message: '已取消提交'
+                                                            });
+                                                        });
+                                                        return false;
+                                                    }
+                                                }
+
+
+                                            }
+
+                                        }
+
+                                        self.$confirm('确定提交吗?', '提示', {
+                                            confirmButtonText: '确定',
+                                            cancelButtonText: '取消',
+                                            type: 'warning'
+                                        }).then(() => {
+                                            self.$message({
+                                                type: 'info',
+                                                message: '提交成功！'
+                                            });
+                                            setTimeout(() => {
+                                                location.href = "index.html";
+                                            }, 500);
+                                        }).catch(() => {
+                                            self.$message({
+                                                type: 'info',
+                                                message: '已取消提交'
+                                            });
+                                        });
+                                    })
+                                
+                                }
+                            });
+
+                        }).catch(() => {
+                            self.$message({
+                                type: 'info',
+                                message: '已取消测试'
+                            });
+                        });
                     },
                     handleSelectionChange(val) {
                         this.multipleSelection = val;

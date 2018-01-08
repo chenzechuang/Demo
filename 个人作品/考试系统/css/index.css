@@ -19,7 +19,6 @@ body{font-size: 16px; background: #efefef;height: 100%;}
 
 .block {
     position: relative;
-    padding: 30px;
     margin-bottom: 50px;
 }
 
@@ -99,6 +98,7 @@ body{font-size: 16px; background: #efefef;height: 100%;}
 .previous-item {
     background: #fff;
     padding: 0.53333rem;
+    margin-top: 20px;
     box-shadow: 0 0 .5rem #aaa;
 }
 
@@ -193,6 +193,8 @@ body{font-size: 16px; background: #efefef;height: 100%;}
 
 .listContent .btn-group-vertical {
     position: fixed;
+    height: 75%;
+    overflow-y: scroll;
 }
 
 .listContent a {
@@ -263,8 +265,8 @@ body{font-size: 16px; background: #efefef;height: 100%;}
     border: 1px solid #ccc;
 }
 
-.shadow {
-    display: none;
+.shadow,
+.shadow1 {
     position: fixed;
     left: 0;
     top: 0;
@@ -272,6 +274,10 @@ body{font-size: 16px; background: #efefef;height: 100%;}
     width: 100%;
     height: 100%;
     background: rgba(85, 85, 85, 0.7)
+}
+
+.shadow {
+    display: none;
 }
 
 .add-qs-dialog {
@@ -311,11 +317,14 @@ body{font-size: 16px; background: #efefef;height: 100%;}
     border: #ccc 1px solid;
 }
 
-.addTitle label,
-.addScore label {
+.add-qs-dialog label {
     white-space: nowrap;
     color: #777;
     font-weight: normal;
+}
+
+.add-qs-dialog .addTitle textarea {
+    max-width: 100%;
 }
 
 .add-qs-dialog .tips {
@@ -372,13 +381,19 @@ body{font-size: 16px; background: #efefef;height: 100%;}
     background-color: #ccc;
 }
 
+.addBtnGroup,
 .publish,
 .edit,
+.correct,
 .submit {
-    margin-top: 20px;
     text-align: center;
 }
 
+.publish,
+.edit,
+.correct {
+    margin-top: 20px;
+}
 
 #testLibModel .options {
     margin-right: 100px;
@@ -426,19 +441,6 @@ body{font-size: 16px; background: #efefef;height: 100%;}
     }
 }
 
-@media (max-width: 768px) {
-    .navbar {
-        margin-bottom: 0; 
-    }
-    .questions {
-        padding: 0;
-        
-    }
-    .questions:hover {
-        border: 1px solid #fff;
-    }
-
-}
 #ssds{
     background: repeating-linear-gradient(#8eb7f5, #5374b5 50%, #8eb7f5 100%);
     box-shadow: inset rgba(255,254,255,0.6) 0.3em 0.3em 1em, inset rgba(255,254,255,0.6) -0.3em -0.3em 1em;    
@@ -447,7 +449,7 @@ body{font-size: 16px; background: #efefef;height: 100%;}
 .handle-input {
     width: 300px;
     display: inline-block;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 .demo-table-expand {
@@ -470,4 +472,22 @@ body{font-size: 16px; background: #efefef;height: 100%;}
     height: 35px;
     line-height: 35px;
     background-color: #fff;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        margin-bottom: 0; 
+    }
+    .questions {
+        padding: 0;
+        
+    }
+    .questions:hover {
+        border: 1px solid #fff;
+    }
+
+    .demo-table-expand .el-form-item {
+        width: 100%;
+    }
+
 }

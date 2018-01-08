@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>考试模块</title>
+
+    <!-- Path to Framework7 Library CSS-->
+    <!--     <link rel="stylesheet" href="/vistor/resources/css/framework7.ios.min.css">
+        <link rel="stylesheet" href="/vistor/resources/css/framework7.ios.colors.min.css">
+         -->
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/daterangepicker-bs3.css" rel="stylesheet">
+    <link href="css/bootstrapValidator.min.css" rel="stylesheet">
+    <link href="font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/layer.css"> -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="css/index.css" />
+    <script src="https://unpkg.com/vue"></script>
+    <script src="js/jquery-1.12.3.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script type="text/javascript" src="js/moment.js">
+    </script>
+    <script type="text/javascript" src="js/daterangepicker.js"></script>
+    <script src="js/bootstrapValidator.min.js"></script>
+    <script src="js/echarts.common.min.js"></script>
+    <script src="js/layer.js"></script>
+    <script src="js/index.js"></script>
+    <script>
+          //localStorage.removeItem("userid");
+          //localStorage.removeItem("username");
+    </script>
+
+</head>
+
+<body>
+    <div id="page-wrapper" class="">
+        <div id="page-container" class="header-fixed-top sidebar-visible-lg-full">
+            <!-- Main Container -->
+            <div id="main-container" class="container">
+                <!-- Page content -->
+                <div id="page-content" class="row">
+                    <!-- 页头开始 -->
+
+                    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64"
+                        text-color="#fff" active-text-color="#ffd04b">
+                        <el-menu-item index="1">首页</el-menu-item>
+                        <el-submenu index="2">
+                            <template slot="title">考试管理</template>
+                            <el-menu-item index="2-1">试卷管理</el-menu-item>
+                            <el-menu-item index="2-2">题目管理</el-menu-item>
+                        </el-submenu>
+                        <el-submenu index="3">
+                            <template slot="title">系统管理</template>
+                            <el-menu-item index="3-1">权限管理</el-menu-item>
+                            <el-menu-item index="3-2">目录管理</el-menu-item>
+                            <el-menu-item index="3-3">日志管理</el-menu-item>
+                        </el-submenu>
+
+                        <el-menu-item index="4">登录</el-menu-item>
+                    </el-menu>
+                    <div class="block">
+                        <div class="edit-container">
+                            <h2></h2>
+                            <div class="content">
+
+                            </div>
+                            <div class="correct">
+                                <button class="btn btn-primary correctBtn">计算总分</button>
+                            </div>
+                        </div>
+                        <div class="test-list">
+                            <el-row type="flex" justify="space-around" align="middle">
+
+                                <div class="handle-box">
+                                    <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
+                                    <el-button type="primary" icon="search" @click="search">搜索</el-button>
+                                </div>
+
+                                <!-- <div class="add-qs">
+                                    <el-button type="warning" @click="correctAll">批量修改所有答卷客观题</el-button>                                   
+                                </div> -->
+                            </el-row>
+                            <el-table :data="data" style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
+                                <el-table-column type="expand">
+                                    <template slot-scope="props">
+                                        <el-form label-position="left" inline class="demo-table-expand">
+                                            <el-form-item label="答题人ID">
+                                                <span>{{ props.row.id }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="成绩">
+                                                <span>{{ props.row.grade }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="单选题数量">
+                                                <span>{{ radioCount }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="单选题答对数">
+                                                <span>{{ props.row.radioCount }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="多选题数量">
+                                                <span>{{ checkboxCount }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="多选题答对数">
+                                                <span>{{ props.row.multiselectCount }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="填空题数量">
+                                                <span>{{ blankCount }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="填空题答对数">
+                                                <span>{{ props.row.completionCount }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="问答题数量">
+                                                <span>{{ answerCount }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="问答题答对数">
+                                                <span>{{ props.row.essayQuestionCount }}</span>
+                                            </el-form-item>
+
+                                        </el-form>
+                                    </template>
+                                </el-table-column>
+
+                                <el-table-column label="答题人" prop="name" show-overflow-tooltip align="center">
+                                </el-table-column>
+
+                                <el-table-column label="开始答题时间" prop="startTime" align="center">
+                                </el-table-column>
+
+                                <el-table-column label="操作" align="center">
+                                    <template slot-scope="scope">
+                                        <el-button size="small" @click="handleCorrect(scope.$index, scope.row)">批改</el-button>
+                                        <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                            <div class="pagination pull-right">
+                                <el-pagination @current-change="handleCurrentChange" background layout="prev, pager, next" :total="totalRows" :page-size="size">
+                                </el-pagination>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="previous-container">
+                        </div>    -->
+
+                </div>
+                <!-- END Main Container -->
+            </div>
+            <!-- END Page Container -->
+        </div>
+        <footer id="footer" class="copyright">
+            <p>© 高新兴集团股份有限公司 IT流程体系部 </p>
+            <p>© Gosuncn Technology Group Co.,Ltd.</p>
+            <p>All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- END Page Wrapper -->
+    <!-- jQuery, Bootstrap, jQuery plugins and Custom JS code -->
+    <!-- <script type="text/javascript" src="https://g.alicdn.com/dingding/dingtalk-pc-api/2.7.0/index.js"></script> -->
+
+
+
+    <script>
+        new Vue({
+            el: '#page-wrapper',
+            data() {
+                return {
+                    activeIndex: '2-2',
+                    url: 'http://192.168.18.205',
+                    tableData: [],
+                    cur_page: 1,
+                    size: 9,
+                    totalRows: 10,
+                    select_word: '',
+                    is_search: false,
+                    type: '',
+                    option: '',
+                    submit: true,
+                    id: 0,
+                    radioCount: 0,
+                    checkboxCount: 0,
+                    blankCount: 0,
+                    answerCount: 0
+                }
+            },
+            created() {
+                this.getData();
+            },
+            computed: {
+                data() {
+                    const self = this;
+                    if (self.tableData.length > 0) {
+                        return self.tableData.filter(function (d) {
+                            if (d.name.indexOf(self.select_word) > -1 || d.deptType.indexOf(self.select_word) > -1 || d.description.indexOf(self.select_word) > -1) {
+                                return d;
+                            }
+                        })
+                    }
+
+                },
+                username() {
+                    let username = localStorage.getItem('ms_username');
+                    return username ? username : this.name;
+                }
+            },
+            methods: {
+                handleSelect(key, keyPath) {
+                    console.log(key, keyPath)
+                    if (key == "1") {
+                        location.href = "test.html";
+                    } else if (key == "2-1") {
+                        location.href = "index.html";
+                    } else if (key == "2-2") {
+                        location.href = "questions.html";
+                    } else if (key == "3") {
+                        location.href = "index.html";
+                    } else if (key == "4") {
+                        location.href = "login.html"
+                    }
+                },
+                handleCurrentChange(val) {
+                    this.cur_page = val;
+                    this.getData();
+                },
+                getData() {
+                    let self = this;
+                    let id = window.location.search.substring(5);
+                    self.id = id;
+                    
+                    $.ajax({
+                        method: 'get',
+                        url: "/exam-api/paper/exam/"+ id +"/page",
+                        data: { offset: self.cur_page, size: self.size },
+                        success: function (res) {
+                            $.ajax({
+                                type: "get",
+                                url: "/exam-api/exam/" + id,
+                                success: function (res) {
+                                    let data = res.exam;
+                                    self.radioCount = data.radioCount;
+                                    self.checkboxCount = data.multiselectCount;
+                                    self.blankCount = data.completionCount;
+                                    self.answerCount = data.essayQuestionCount;
+                                }
+                            });
+                            let test_time = 0;
+                            $.each(res.resources, function (index, val) {
+                                test_time = (new Date(val.endTime) - new Date(val.startTime)) / 60000;
+                                val.testTime = test_time + "分钟";
+                            });
+
+                            console.log(res);
+                            
+                            self.totalRows = res.totalRows;
+                            self.tableData = res.resources;
+                        }
+                    });
+                    // self.$axios.post(self.url, {page:self.cur_page}).then((res) => {
+                    //     self.tableData = res.list;
+                    // })
+                },
+                search() {
+                    this.is_search = true;
+                },
+                hideShadow() {
+                    this.addQ = false;
+                },
+                addChoice() {
+                    addChoice(this.type);
+                },
+                formatter(row, column) {
+                    return row.address;
+                },
+                filterTag(value, row) {
+                    return row.tag === value;
+                },
+                // correctAll() {
+                //     let self = this;
+                //     self.$confirm('确认批改所有答卷客观题?', '提示', {
+                //         confirmButtonText: '确定',
+                //         cancelButtonText: '取消',
+                //         type: 'warning'
+                //     }).then(() => {
+                //         $.ajax({
+                //             url: '/exam-api/paper/' + self.id + '/object/check',
+                //             type: 'get',
+                //             success: function (result) {
+                //                 self.$message({
+                //                     type: 'success',
+                //                     message: '批改成功！'
+                //                 });
+                //             }
+                //         });
+
+                //     }).catch(() => {
+                //         self.$message({
+                //             type: 'info',
+                //             message: '已取消编辑'
+                //         });
+                //     });
+                // },
+                handleCorrect(index, row) {
+                    let self = this;
+                    self.$confirm('你确定要批改吗?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        $.ajax({
+                            url: '/exam-api/paper/correct/' + row.id,
+                            type: 'post',
+                            dataType: 'json',
+                            success: function (data) {
+                                console.log(data);
+
+                                var examQs = data.questionPapers;
+
+                                $('.test-list').hide();
+                                $('.edit-container').show();
+
+                                $('.edit-container .questions').remove();
+                                var qs = "";
+                                var qsId = [];
+                                var selectArr = [];
+                                var rightArr = {};
+                                $.each(examQs, function (index, val) {
+                                    qsId.push(val.id);
+                                    if (val.type == 1 || val.type == 2) {
+                                        if (val.selectItems != null) {
+                                            selectArr = val.selectItems;
+                                        } else {
+                                            selectArr = [];
+                                        }
+                                    } else if (val.type == 4) {
+                                        if (val.answerWord == null) {
+                                            val.answerWord = "";
+                                        }
+                                        selectArr = val.answerWord.split("-&-");
+                                    } else {
+                                        selectArr = val.answerWord;
+                                    }
+
+                                    qs += "<div class=\"questions\">\n";
+                                    options_wrap = addOptions(val.type, index, val.title, val.score, selectArr, val.options, val.id);
+                                    qs += options_wrap;
+                                    qs += "<p class=\"correct\">正确答案：【" + val.rightItems.join(" & ") + "】<\/div>\n";
+                                    qs += "<\/div>";
+
+                                });
+                                $('.content').append(qs);
+                                $('.qs-control').remove();
+                                $('.qs-options input').attr('disabled', true);
+                                $('.correct').click(function () {
+                                    self.$confirm('你确定要计算总分吗?', '提示', {
+                                        confirmButtonText: '确定',
+                                        cancelButtonText: '取消',
+                                        type: 'warning'
+                                    }).then(() => {
+                                        $.ajax({
+                                            url: '/exam-api/paper/caculate/' + row.id,
+                                            type: 'post',
+                                            dataType: 'json',
+                                            success: function (data) {
+                                                window.location.href ="exam.html?eid="+data.examId;
+                                            }
+                                        })
+                                    }).catch(() => {
+                                        self.$message({
+                                            type: 'info',
+                                            message: '已取消计算'
+                                        });
+                                    });
+                                });
+                            }
+                        })
+                    }).catch(() => {
+                        self.$message({
+                            type: 'info',
+                            message: '已取消批改'
+                        });
+                    });
+                },
+                handleDelete(index, row) {
+                    let self = this;
+                    self.$confirm('确认删除该问题?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        $.ajax({
+                            url: '/exam-api/question/' + row.id + '/0',
+                            type: 'post',
+                            success: function (result) {
+                                self.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 500)
+
+                            }
+                        });
+
+                    }).catch(() => {
+                        self.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+                },
+                handleSelectionChange(val) {
+                    this.multipleSelection = val;
+                }
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>

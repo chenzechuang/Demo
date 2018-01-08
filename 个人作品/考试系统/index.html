@@ -11,17 +11,17 @@
         <!--     <link rel="stylesheet" href="/vistor/resources/css/framework7.ios.min.css">
         <link rel="stylesheet" href="/vistor/resources/css/framework7.ios.colors.min.css">
          -->
-        <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
-        <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <script src="js/flexible.js"></script>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/daterangepicker-bs3.css" rel="stylesheet">
         <link href="css/bootstrapValidator.min.css" rel="stylesheet">
         <link href="font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <!-- <link rel="stylesheet" href="css/layer.css"> -->
         <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
         <link rel="stylesheet" href="css/index.css" />
-        <script src="https://unpkg.com/vue"></script>
+        <script src="js/vue"></script>
         <script src="js/jquery-1.12.3.min.js"></script>
-        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="bootstrap.min.js"></script>
         <script src="https://unpkg.com/element-ui/lib/index.js"></script>
         <script type="text/javascript" src="js/moment.js">
         </script>
@@ -51,8 +51,7 @@
                             <el-submenu index="2">
                                 <template slot="title">考试管理</template>
                                 <el-menu-item index="2-1">试卷管理</el-menu-item>
-                                <el-menu-item index="2-2">考卷管理</el-menu-item>
-                                <el-menu-item index="2-3">题目管理</el-menu-item>
+                                <el-menu-item index="2-2">题目管理</el-menu-item>
                             </el-submenu>
                             <el-submenu index="3">
                                 <template slot="title">系统管理</template>
@@ -147,13 +146,23 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    <div class="questions" v-for="(qs, index) in questions">
+                                        <div v-html="qs.content"></div>
+                                        <div class="qs-control">
+                                            <ul>
+                                                <li class="qs-del" onclick="delQs(this)">删除</li>
+                                                <li class="qs-edit" @click="editQs(this, index)">编辑</li>
+                                            </ul>
+                                        </div>
+                                    </div>
 
                                     <div class="add">
                                         <div class="add-option">
-                                            <button class="btn btn-primary addRadio">单选</button>
-                                            <button class="btn btn-primary addCheckbox">多选</button>
-                                            <button class="btn btn-primary addBlank">填空</button>
-                                            <button class="btn btn-primary addQA">问答</button>
+                                            <button class="btn btn-primary" @click="addQs(1)">单选</button>
+                                            <button class="btn btn-primary" @click="addQs(2)">多选</button>
+                                            <button class="btn btn-primary" @click="addQs(4)">填空</button>
+                                            <button class="btn btn-primary" @click="addQs(5)">问答</button>
                                             <button class="btn btn-primary fromTestLib">从题库导入</button>
                                         </div>
                                         <div class="add-item">
@@ -181,53 +190,40 @@
                                     </div> 
                                 </div>
 
-                                <div class="shadow">
-                                    <div class="add-qs-dialog">
-                                        <div class="close">
-                                            <span class="close-btn">X</span>
-                                        </div>
-                                        <p class="tips">分别在下面的输入框中输入问题的名称以及选项</p>
-                                        <div>
-                                            <form class="form-horizontal">
-                                                <div class="form-group addTitle">
-                                                    <label for="name" class="text-left col-sm-2 control-label">问题标题</label>
-                                                    <div class="col-sm-10">
-                                                        <textarea type="text" class="form-control choiceTitle" id="name" placeholder="请输入名称"></textarea> 
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group addScore">
-                                                    <label for="score" class="text-left col-sm-2 control-label">问题分数</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" class="form-control choiceScore" id="score">
-                                                    </div>
-                                                </div>
-                                            </form>
-
-
-                                            <table class="table addOption">
-                                                
-                                            </table>
-                                        </div>
-                                        <div class="alterItem">
-                                            <button class="btn btn-default deleteChoice">减少选项</button>
-                                            <button class="btn btn-default addChoice">增加选项</button>
-                                        </div>
+                                <el-dialog title="在下面的输入框中输入问题详情" :visible.sync="addQ" @open="show">
+                                    <el-form ref="form" :model="form" label-width="80px" size="mini">
+                                        <el-form-item  label="问题标题" prop="name" :rules="[ { required: true, message: '请输入问题标题', trigger: 'blur' }]">
+                                            <el-input v-model="form.name" class="name"></el-input>
+                                        </el-form-item>
+                                        <el-form-item label="问题描述">
+                                            <el-input v-model="form.desc" class="desc"></el-input>
+                                        </el-form-item>
+                                        <el-form-item label="所属部门" prop="dept" :rules="[ { required: true, message: '请输入问题所属部门', trigger: 'blur' }]">
+                                            <el-input v-model="form.dept" class="dept">
+                                                <template slot="append">部</template>
+                                            </el-input>
+                                        </el-form-item>
+                                        <el-form-item label="问题分数" prop="score" :rules="[ { required: true, message: '请输入问题分数', trigger: 'blur' }]">
+                                            <el-input v-model="form.score" class="score">
+                                                <template slot="append">分</template>
+                                            </el-input>
+                                        </el-form-item>
+                                        <input type="hidden" v-model="form.id">
+                                    </el-form>
+                                    <table class="table addOption" v-html="option">
                                         
-                                        <hr>
-                                        <div class="addBtnGroup">
-                                            <button class="btn btn-primary continue">继续添加</button>
-                                            <button class="btn btn-success previous">预览</button>
-                                            <button class="btn btn-success save">保存</button>
-                                        </div>
-                                        <div class="add-option">
-                                            <button class="btn btn-primary addRadio">单选</button>
-                                            <button class="btn btn-primary addCheckbox">多选</button>
-                                            <button class="btn btn-primary addBlank">填空</button>
-                                            <button class="btn btn-primary addQA">问答</button>
-                                        </div>
+                                    </table>
+                                    <div class="alterItem" v-if="type=='1' || type== 2">
+                                        <button class="btn btn-default" onclick="delChoice()">减少选项</button>
+                                        <button class="btn btn-default" @click="addChoice">增加选项</button>
                                     </div>
-                                </div>
+
+                                    <hr>
+                                    <div class="addBtnGroup">
+                                        <button class="btn btn-primary" v-if="submit" @click="isOpen && qsSubmit('form')">提交</button>
+                                        <button class="btn btn-success" v-if="!submit" @click="isOpen && qsSubmit('form')">保存</button>
+                                    </div>
+                                </el-dialog>
 
                                 <div class="publish">
                                     <button class="btn btn-primary publishBtn">发布问卷</button>
@@ -244,7 +240,7 @@
                             </div>
 
                             <div class="test-list">
-                                <el-row type="flex" justify="space-around">
+                                <el-row type="flex" justify="space-around" align="middle">
                                     
                                     <div class="handle-box">
                                         <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
@@ -306,6 +302,7 @@
                                         <template slot-scope="scope">
                                             <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                                             <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                                            <el-button size="small" type="primary" @click="toExam(scope.$index, scope.row)">查看答卷</el-button>
                                         </template>
                                     </el-table-column>
                                 </el-table>
@@ -329,30 +326,7 @@
                 </div>
                 <!-- END Page Container -->
             </div>
-            <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                            <h4 class="modal-title" id="myModalLabel">请选择需要搜索的知识库模块</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div id="nestable" class="dd" data-action="expand" style="width:100%; padding:20px;">
-                                <ol class="dd-list" id="libraryList">
-                                    <li class="dd-item">
-                                        <div class="dd-handle" data-id="0">模块目录</div>
-                                    </li>
-                                    <ol class="dd-list" data-id="0" >
-                                    </ol>
-                                </ol>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="saveMId">确认</button>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+
             <footer id="footer" class="copyright">
                 <p>© 高新兴集团股份有限公司 IT流程体系部 </p>
                 <p>© Gosuncn Technology Group Co.,Ltd.</p>
@@ -382,8 +356,23 @@
                         size: 9,
                         totalRows: 10,
                         select_word: '',
-                        is_search: false
-                  }
+                        is_search: false,
+                        type: '',
+                        index: 0,
+                        option: '',
+                        content: '<p>sss</p>',
+                        addQ: false,
+                        submit: true,
+                        form: {
+                            domains: [{
+                                value: ''
+                            }]
+                        },
+                        isOpen: false,
+                        questions: [
+                            {content: ''}
+                        ]
+                    }
                 },
                 created(){
                     this.getData();
@@ -405,13 +394,15 @@
                         return username ? username : this.name;
                     }
                 },
-                 methods: {
+                methods: {
                     handleSelect(key, keyPath) {
                         console.log(key, keyPath)
                         if (key == "1") {
                            location.href = "test.html";
                         } else if (key == "2-1") {
                             location.href = "index.html";
+                        } else if (key == "2-2") {
+                            location.href = "questions.html";
                         } else if (key == "3") {
                             location.href = "index.html";
                         } else if (key == "4") {
@@ -445,6 +436,134 @@
                     },
                     filterTag(value, row) {
                         return row.tag === value;
+                    },
+                    addQs(type) {
+                        this.submit = true;
+                        this.type = type;
+                        this.addQ = true;
+                        this.form = {};
+                        var choice_list = addQs(type);
+                        this.option = choice_list;
+                    },
+                    editQs(that, index) {
+                        let self = this;
+                        
+                         self.$confirm('确定编辑吗', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            self.addQ = true;
+
+                            self.form = {};
+                            var edit_index = index - 1;
+                            var edit_question = $('.edit-container .questions').eq(edit_index);
+                            self.index = edit_index;
+
+                            var edit_type = edit_question.find('.qs-type').html();
+                            self.type = edit_type;
+                            
+                            self.form.score = edit_question.find('.score').val();
+                            self.form.desc = edit_question.find('.desc').val();
+                            self.form.dept = edit_question.find('.dept').val();
+                            self.form.name = edit_question.find('.title-text').html();
+                            
+
+                            var rightIndex = [];
+                            var right_list = edit_question.find('input:checked');
+                            
+                            var option_label = edit_question.find('label');
+                            var edit_length = edit_question.find('.qs-options').length;
+                            if (edit_type == "单选" || edit_type == "多选") {
+                                var option_list = [];
+                                $.each(right_list, function (index, val) {
+                                    rightIndex.push($(this).parent().index() - 1);
+                                });
+                                console.log(rightIndex);
+                                
+                                $.each(option_label, function (index, val) {
+                                    option_list.push(this.innerHTML.split('、')[1]);
+                                });
+                                var choice_list = addQs(edit_type, edit_length, rightIndex, option_list);
+                            } else if (edit_type == "填空") {
+                                $.each(edit_question.find('input'), function (index, val) {
+                                    rightIndex.push($(this).val());
+                                });
+                                var choice_list = addQs(edit_type, edit_length, rightIndex);
+                            }
+
+                            self.option = choice_list;
+                            self.submit = false;
+                        });
+                        
+                        
+                    },
+                    show() {
+                        let self = this;
+                        self.$nextTick(function () {
+                            self.isOpen = true;
+                        })
+                    },
+                    qsSubmit(formName) {
+                        let self = this;
+                        self.$refs[formName].validate((valid) => {
+                            if (valid) {
+                                if (checkQs()) {
+                                    self.$confirm('确定提交吗', '提示', {
+                                        confirmButtonText: '确定',
+                                        cancelButtonText: '取消',
+                                        type: 'warning'
+                                    }).then(() => {
+                                        self.form.info = {
+                                            "score": self.form.score,
+                                            "desc": self.form.desc,
+                                            "dept": self.form.dept,
+                                        }
+                                        let options_wrap = "";
+                                        if (self.submit) {
+                                            options_wrap = addOptions(self.type, null, self.form.name, self.form.info);
+                                            let options = options_wrap;
+                                            self.questions.push({content: options});
+                                            self.addQ = false;
+                                        } else {
+                                            options_wrap = addOptions(self.type, self.index, self.form.name, self.form.info);
+                                            let options = options_wrap;
+                                            self.questions.splice(self.index+1, 1, { content: options });
+                                            self.addQ = false;
+                                        }
+                                        var totalScore = 0;
+                                        
+                                        setTimeout(() => {
+                                            $.each($('.qs-score'), function (index, val) {
+                                                console.log($(this).html().split('分')[0]);
+                                                totalScore += parseInt($(this).html().split('分')[0]);
+                                            });
+                                            $('input[name="totalPoint"]').val(totalScore);
+
+                                            var asc = function (a, b) {
+                                                return $(a).find('.qs-index').html() > $(b).find('.qs-index').html() ? 1 : -1;
+                                            }
+                                            var sortEle = $('.questions').sort(asc);
+                                            $('.edit-container .questions').remove();
+                                            $('.add').before(sortEle)
+                                        }, 0);
+                                        
+                                    }).catch(() => {
+                                        self.$message({
+                                            type: 'info',
+                                            message: '已取消提交'
+                                        });
+
+                                    });
+                                }
+                            } else {
+                                console.log('提交失败!!');
+                                return false;
+                            }
+                        });
+                    },
+                    addChoice() {
+                        addChoice(this.type);
                     },
                     handleAdd() {
                         addTest(this);
@@ -483,6 +602,9 @@
                     },
                     handleSelectionChange(val) {
                         this.multipleSelection = val;
+                    },
+                    toExam(index, row) {
+                        location.href = "exam.html"+"?eid="+row.id;
                     }
                 }
             })
