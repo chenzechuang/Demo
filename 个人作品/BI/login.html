@@ -1,0 +1,271 @@
+﻿<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5shiv.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+    <link href="static/h-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="static/h-ui.admin/css/H-ui.login.css" rel="stylesheet" type="text/css" />
+    <link href="static/h-ui.admin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css" />
+    <!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+    <title>后台登录 - H-ui.admin v3.1</title>
+    <meta name="keywords" content="H-ui.admin v3.1,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
+    <meta name="description" content="H-ui.admin v3.1，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+</head>
+
+<body>
+    <input type="hidden" id="TenantId" name="TenantId" value="" />
+    <div class="loginWraper">
+        <div id="loginform" class="loginBox">
+            <form class="form form-horizontal" action="index.html" method="post">
+                <div class="row cl">
+                    <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
+                    <div class="formControls col-xs-8">
+                        <input id="username" name="username" type="text" placeholder="账户" class="input-text size-L">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
+                    <div class="formControls col-xs-8">
+                        <input id="password" name="password" type="password" placeholder="密码" class="input-text size-L">
+                    </div>
+                </div>
+                <div class="row cl">
+                    <div class="formControls col-xs-8 col-xs-offset-3">
+                      <label for="online">
+                        <input type="checkbox" name="online" id="online" value="">
+                        记住账号密码</label>
+                    </div>
+                </div>
+                <div class="row cl">
+                    <div class="formControls col-xs-8 col-xs-offset-3">
+                        <button type="reset" class="btn btn-default radius size-L">&nbsp;重&nbsp;&nbsp;&nbsp;&nbsp;置&nbsp;</button>
+                        <button class="btn btn-success radius size-L login">&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="footer">Copyright 你的公司名称 by H-ui.admin v3.1</div>
+    <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript">
+        var username = '';
+        var password = '';
+        username = window.localStorage.getItem("username");
+        password = window.localStorage.getItem("password");
+
+        if (username != null && password != null){
+            $('#username').val(username);
+            $("#password").val(password);
+        }else{
+            //console.log("false!");
+        }
+        $('.login').click(function() {
+            if ($('#online').is(":checked")) {
+                username = $('#username').val();
+                password = $('#password').val();
+                window.localStorage.setItem("username", username);
+                window.localStorage.setItem("password", password);
+            } else {
+                window.localStorage.removeItem("username");
+                window.localStorage.removeItem("password");
+            }
+            
+            location.href = "index.html"
+        })
+    </script>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <meta name=”renderer” content=”webkit” />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>高新兴决策分析平台</title>
+        <script src="http://bi.gosuncn.com:80/js/jquery-1.11.3.min.js" ></script>
+        <script src="http://bi.gosuncn.com:80/js/jquery.backstretch.min.js" ></script>
+        <script src="http://bi.gosuncn.com:80/js/jQuery.md5.js"></script>
+        <link rel="stylesheet" href="http://bi.gosuncn.com:80/css/css?family=Roboto:400,100,300,500">
+        <link rel="stylesheet" href="http://bi.gosuncn.com:80/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://bi.gosuncn.com:80/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://bi.gosuncn.com:80/css/form-elements.css">
+        <link rel="stylesheet" href="http://bi.gosuncn.com:80/css/style.css">
+        <link rel="shortcut icon" href="http://bi.gosuncn.com:80/ico/logo.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://bi.gosuncn.com:80/ico/logo.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://bi.gosuncn.com:80/ico/logo.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://bi.gosuncn.com:80/ico/logo.png">
+        <link rel="apple-touch-icon-precomposed" href="http://bi.gosuncn.com:80/ico/logo.png">
+        HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
+        WARNING: Respond.js doesn't work if you view the page via file://
+        [if lt IE 9]>
+        <script src="http://bi.gosuncn.com:80/js/html5shiv.js"></script>
+        <script src="http://bi.gosuncn.com:80/js/respond.min.js"></script>
+        <![endif]
+        <script>
+    $(document).ready(function() {
+        $.backstretch("http://bi.gosuncn.com:80/img/1.jpg");
+        
+        if(navigator.userAgent.indexOf("Chrome")
+            <0){
+            
+            //window.location.href="browser.html";
+        }
+        
+        
+        var userid=null;
+        var userpw=null;
+        
+        //userid=window.localStorage.getItem("userid");
+        //userpw=window.localStorage.getItem("userpw");
+        if (userid!=null&&userpw!=null){
+            $('#form-username').val(userid);
+            $("#form-password").val(userpw);
+        }else{
+            //console.log("false!");
+        }
+        
+        
+         $('.login-form input[type="text"], .login-form input[type="password"], .login-form textarea').on('focus', function() {
+        $(this).removeClass('input-error');
+    });
+    
+$("#btn").on("click",function(){
+        check();
+        
+        
+    })
+ 
+$('#form-password').keydown(function(e){
+if(e.keyCode==13){
+    check();
+}
+}); 
+
+    
+    
+function check(){
+    var username='';
+    var password='';
+    username=$('#form-username').val();
+    //password=$.md5($("#form-password").val()).toUpperCase();
+    password=$("#form-password").val();
+    //alert(username);
+    //console.log(password);
+    url='http://bi.gosuncn.com:80/ReportServer?op=fs_load&cmd=sso&';
+    url=url+'fr_username='+username+'&fr_password='+password;
+    //console.log(url);
+    $.ajax({
+        type:'POST',
+        url:url,
+        dataType:"jsonp",  
+        success:function(data) {  
+            console.log(data);
+            if(data.status=="success"){
+                //window.localStorage.setItem("userid",username);
+                //window.localStorage.setItem("userpw",$("#form-password").val());
+                //window.location.href="http://bi.gosuncn.com:80/check?p_id="+username+"&link="+data.url;
+                 window.location=data.url;
+            }
+            else{
+                
+                alert("用户名或密码错误！");
+            }
+        },  
+        error : function(data) {  
+            alert("异常！");  
+
+            
+        }  
+    })
+}   
+    
+        
+        
+        
+        
+    })
+
+            </script>
+
+
+        </head>
+        <body>
+            Top content
+            <div class="top-content">
+                <div class="inner-bg">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-8 col-sm-offset-2 text">
+                                <div class="description">
+                                    <p>
+                                     
+                                    
+                                </p>
+                            
+                                </div>
+                        
+                            </div>
+                    
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3 form-box">
+                                <div class="form-top">
+                                    <div class="form-top-center">
+                                        <h3>高新兴决策分析平台</h3>
+                                    
+                                
+                                    </div>
+                                
+                            
+                                </div>
+                                <div class="form-bottom">
+                                    <form role="form" action="" method="post" class="login-form">
+                                        <div class="form-group">
+                                            <label   class="sr-only" for="form-username">用户名</label>
+                                            <input type="text" name="form-username" placeholder="用户名..." autocomplete=off class="form-username form-control" id="form-username">
+                                    
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="sr-only" for="form-password">密码</label>
+                                            <input type="password" name="form-password" placeholder="密码..." autocomplete=off class="form-password form-control" id="form-password">
+                                    
+                                        </div>
+                                        <input type="button"  id="btn" class="btn" value="登  录" />
+                                   
+                                
+                                    </form>
+                            
+                                </div>
+                        
+                            </div>
+                    
+                        </div>
+                 
+                
+                    </div>
+            
+                </div>
+            
+        
+            </div>
+
+
+
+        </body>
+
+    </html> -->
